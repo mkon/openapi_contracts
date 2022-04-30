@@ -1,6 +1,4 @@
-require 'active_support/isolated_execution_state' # required by array somehow
-require 'active_support/core_ext/array'
-require 'active_support/core_ext/module'
+require 'active_support/core_ext'
 require 'json-schema'
 
 module OpenapiContracts

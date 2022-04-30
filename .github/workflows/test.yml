@@ -1,0 +1,25 @@
+name: Test
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  push:
+    branches: [main]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        activesupport: ['6.1', '7.0']
+        ruby: ['2.6', '2.7', '3.0']
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: 2.7
+        bundler-cache: true
+      env:
+        ACTIVESUPPORT: ${{ matrix.activesupport }}
+    - name: Rspec
+      run: bundle exec rspec

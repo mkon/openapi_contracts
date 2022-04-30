@@ -6,14 +6,14 @@ Gem::Specification.new do |s|
   s.version     = ENV.fetch 'VERSION', '0.1.0'
   s.authors     = ['mkon']
   s.email       = ['konstantin@munteanu.de']
-  s.homepage    = 'https://github.com/mkon/openapi_response_validator'
+  s.homepage    = 'https://github.com/mkon/openapi_contracts'
   s.summary     = 'Openapi schemas as API contracts'
   s.license     = 'MIT'
   s.required_ruby_version = '>= 2.6', '< 4'
 
   s.files = Dir['lib/**/*', 'README.md']
 
-  s.add_dependency 'activesupport', '>= 5', '< 8'
+  s.add_dependency 'activesupport', '>= 6.1', '< 8'
   s.add_dependency 'json-schema'
 
   s.add_development_dependency 'rack'
