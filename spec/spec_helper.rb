@@ -2,6 +2,8 @@ require 'rubygems'
 require 'bundler'
 Bundler.require :default, 'test'
 
+require 'rack'
+
 require 'simplecov'
 SimpleCov.start do
   add_filter '/spec'
