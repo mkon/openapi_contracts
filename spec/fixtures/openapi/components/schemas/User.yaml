@@ -1,0 +1,20 @@
+type: object
+properties:
+  id:
+    type: string
+    example: acd3751
+  type:
+    type: string
+  attributes:
+    type: object
+    properties:
+      email:
+        type: string
+    additionalProperties: false
+    required:
+      - email
+additionalProperties: false
+required:
+  - id
+  - type
+  - attributes

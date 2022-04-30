@@ -6,4 +6,6 @@ require 'simplecov'
 SimpleCov.start do
   add_filter '/spec'
 end
-SimpleCov.minimum_coverage 90
+SimpleCov.minimum_coverage 80
+
+FIXTURES_PATH = Pathname.new(__dir__).join('fixtures')

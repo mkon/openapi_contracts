@@ -1,0 +1,24 @@
+get:
+  tags:
+    - User
+  summary: Get User
+  description: Get User
+  operationId: get_user
+  responses:
+    '200':
+      description: OK
+      headers:
+        x-request-id:
+          schema:
+            type: string
+          required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                $ref: ../components/schemas/User.yaml
+            required:
+              - data
+            additionalProperties: false
