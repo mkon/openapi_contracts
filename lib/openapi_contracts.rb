@@ -1,5 +1,9 @@
-require 'active_support/core_ext'
+require 'active_support'
+require 'active_support/core_ext/array'
+require 'active_support/core_ext/module'
+
 require 'json-schema'
+require 'yaml'
 
 module OpenapiContracts
   autoload :Doc,      'openapi_contracts/doc'
