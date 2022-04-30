@@ -11,7 +11,7 @@ module OpenapiContracts
     delegate :dig, to: :@spec
 
     def response_for(path, method, status)
-      Response.new dig('paths', path, method, 'responses', status)
+      dig('paths', path, method, 'responses', status)&.then { |d| Response.new(d) }
     end
   end
 end

@@ -1,17 +1,6 @@
 require 'delegate'
 
 RSpec.describe 'RSpec integration' do
-  # TODO: Find a better way to work wiht both ActionDispatch and Rack::Test
-  # Rack::Test can not access request from response
-  class TestResponse < SimpleDelegator
-    attr_reader :request
-
-    def initialize(response, request)
-      @request = request
-      super response
-    end
-  end
-
   subject { TestResponse.new(last_response, last_request) }
 
   let(:last_response) { Rack::MockResponse.new(200, response_headers, JSON.dump(response_body)) }

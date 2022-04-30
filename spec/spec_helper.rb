@@ -8,6 +8,8 @@ require 'simplecov'
 SimpleCov.start do
   add_filter '/spec'
 end
-SimpleCov.minimum_coverage 80
+SimpleCov.minimum_coverage 100
+
+Dir[File.expand_path("support/**/*.rb", __dir__)].each { |f| require f }
 
 FIXTURES_PATH = Pathname.new(__dir__).join('fixtures')

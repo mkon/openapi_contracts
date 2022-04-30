@@ -12,10 +12,6 @@ module OpenapiContracts
       end
     end
 
-    def required_headers
-      headers.select(&:required?)
-    end
-
     def schema_for(content_type)
       @data.dig('content', content_type, 'schema')
     end

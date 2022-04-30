@@ -1,8 +1,7 @@
 RSpec.describe OpenapiContracts::Response do
   subject { doc.response_for(path, method, status) }
 
-  let(:doc) { OpenapiContracts::Doc.parse(openapi_dir) }
-  let(:openapi_dir) { FIXTURES_PATH.join('openapi') }
+  let(:doc) { OpenapiContracts::Doc.parse(FIXTURES_PATH.join('openapi')) }
 
   context 'with content-less responses' do
     let(:response) { doc.response_for('/health', 'get', '200') }

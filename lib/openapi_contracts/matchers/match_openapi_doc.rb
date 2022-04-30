@@ -10,14 +10,15 @@ module OpenapiContracts
         if status.is_a? Symbol
           @status = Rack::Utils::SYMBOL_TO_STATUS_CODE[status]
         else
-          @status = code
+          @status = status
         end
         self
       end
 
       def matches?(response)
         @response = response
-        http_status_matches? && [headers_match?, body_matches?].all?
+        response_documented? && http_status_matches? && [headers_match?, body_matches?].all?
+        @errors.empty?
       end
 
       def description
@@ -27,18 +28,18 @@ module OpenapiContracts
       end
 
       def failure_message
-        message = @errors.map { |e| "* #{e}" }.join("\n")
-        return message #unless @schema
-
-        message << "\n\nAllowed Schema:\n"
-        message << YAML.dump(@schema)
+        @errors.map { |e| "* #{e}" }.join("\n")
       end
 
       def failure_message_when_negated
-        'Expected to not match the Openapi Schema, but did'
+        'request matched the schema'
       end
 
       private
+
+      def response_desc
+        "#{@response.request.request_method} #{@response.request.path}"
+      end
 
       def response_spec
         @response_spec ||= @doc.response_for(@response.request.path, @response.request.request_method.downcase, @response.status.to_s)
@@ -53,8 +54,8 @@ module OpenapiContracts
           value = @response.headers[header.name]
           if value.blank?
             @errors << "Missing header #{header.name}" if header.required?
-          elsif !JSON::Validator.validate(header.schema, value)
-            @errors << "Header #{header.name} does not match schema"
+          elsif (errors = JSON::Validator.fully_validate(header.schema, value)).any?
+            @errors << "Header #{header.name} does not match: #{errors.to_sentence}"
           end
         end
         @errors.empty?
@@ -75,9 +76,7 @@ module OpenapiContracts
       end
 
       def body_matches?
-        if !response_spec
-          @errors << "Undocumented response with #{http_status_desc}"
-        elsif response_spec.no_content?
+        if response_spec.no_content?
           @errors << "Expected empty response body" if @response.body.present?
         elsif !response_spec.supports_content_type?(response_content_type)
           @errors << "Undocumented response with content-type #{response_content_type.inspect}"
@@ -86,6 +85,13 @@ module OpenapiContracts
           @errors += JSON::Validator.fully_validate(@schema, JSON(@response.body))
         end
         @errors.empty?
+      end
+
+      def response_documented?
+        return true if response_spec
+
+        @errors << "Undocumented request/response for #{response_desc.inspect} with #{http_status_desc}"
+        false
       end
     end
   end
