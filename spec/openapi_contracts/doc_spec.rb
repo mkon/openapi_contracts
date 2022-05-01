@@ -14,6 +14,6 @@ RSpec.describe OpenapiContracts::Doc do
     let(:method) { 'get' }
     let(:status) { '200' }
 
-    it { is_expected.to be_a(OpenapiContracts::Response) }
+    it { is_expected.to be_a(OpenapiContracts::Doc::Response) }
   end
 end

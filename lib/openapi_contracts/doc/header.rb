@@ -1,5 +1,5 @@
 module OpenapiContracts
-  class Header
+  class Doc::Header
     attr_reader :name
 
     def initialize(name, data)

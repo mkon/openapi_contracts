@@ -1,5 +1,5 @@
 module OpenapiContracts
-  class Response
+  class Doc::Response
     def initialize(data)
       @data = data
     end
@@ -8,7 +8,7 @@ module OpenapiContracts
       return @headers if instance_variable_defined? :@headers
 
       @headers = @data.fetch('headers', {}).map do |(k, v)|
-        Header.new(k, v)
+        Doc::Header.new(k, v)
       end
     end
 

@@ -1,5 +1,5 @@
 module OpenapiContracts
-  class Parser
+  class Doc::Parser
     def self.call(dir)
       new(dir).parse('openapi.yaml')
     end

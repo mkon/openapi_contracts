@@ -1,4 +1,4 @@
-RSpec.describe OpenapiContracts::Response do
+RSpec.describe OpenapiContracts::Doc::Response do
   subject { doc.response_for(path, method, status) }
 
   let(:doc) { OpenapiContracts::Doc.parse(FIXTURES_PATH.join('openapi')) }

@@ -1,5 +1,9 @@
 module OpenapiContracts
   class Doc
+    autoload :Header,   'openapi_contracts/doc/header'
+    autoload :Parser,   'openapi_contracts/doc/parser'
+    autoload :Response, 'openapi_contracts/doc/response'
+
     def self.parse(dir)
       new Parser.call(dir)
     end
@@ -8,7 +12,7 @@ module OpenapiContracts
       @spec = spec
     end
 
-    delegate :dig, to: :@spec
+    delegate :dig, :fetch, :[], to: :@spec
 
     def response_for(path, method, status)
       dig('paths', path, method, 'responses', status)&.then { |d| Response.new(d) }
