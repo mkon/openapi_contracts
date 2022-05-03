@@ -14,9 +14,9 @@ Gem::Specification.new do |s|
   s.files = Dir['lib/**/*', 'README.md']
 
   s.add_dependency 'activesupport', '>= 6.1', '< 8'
-  s.add_dependency 'json-schema'
+  s.add_dependency 'json-schema', '~> 2.8.1'
 
-  s.add_development_dependency 'rack'
-  s.add_development_dependency 'rspec'
-  s.add_development_dependency 'simplecov'
+  s.add_development_dependency 'rack', '~> 2.2.3'
+  s.add_development_dependency 'rspec', '~> 3.11.0'
+  s.add_development_dependency 'simplecov', '~> 0.21.2'
 end
