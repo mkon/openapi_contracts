@@ -50,10 +50,10 @@ RSpec.describe OpenapiContracts::Doc::Response do
       context 'when content_type is supprted' do
         let(:content_type) { 'application/json' }
 
-        it { is_expected.to be_a(Hash) }
+        it { is_expected.to be_a(OpenapiContracts::Doc::Schema) }
       end
 
-      context 'when content_type is not supprted' do
+      context 'when content_type is not supported' do
         let(:content_type) { 'application/text' }
 
         it { is_expected.to be nil }

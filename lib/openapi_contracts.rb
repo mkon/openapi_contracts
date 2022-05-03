@@ -1,8 +1,9 @@
 require 'active_support'
 require 'active_support/core_ext/array'
 require 'active_support/core_ext/module'
+require 'active_support/core_ext/string'
 
-require 'json-schema'
+require 'json_schemer'
 require 'yaml'
 
 module OpenapiContracts

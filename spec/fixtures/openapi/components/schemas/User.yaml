@@ -9,7 +9,7 @@ properties:
     type: object
     properties:
       email:
-        type: string
+        $ref: './Email.yaml'
     additionalProperties: false
     required:
       - email

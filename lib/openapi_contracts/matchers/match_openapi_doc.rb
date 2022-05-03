@@ -54,8 +54,8 @@ module OpenapiContracts
           value = @response.headers[header.name]
           if value.blank?
             @errors << "Missing header #{header.name}" if header.required?
-          elsif (errors = JSON::Validator.fully_validate(header.schema, value)).any?
-            @errors << "Header #{header.name} does not match: #{errors.to_sentence}"
+          elsif !JSONSchemer.schema(header.schema).valid?(value)
+            @errors << "Header #{header.name} does not match"
           end
         end
         @errors.empty?
@@ -82,9 +82,22 @@ module OpenapiContracts
           @errors << "Undocumented response with content-type #{response_content_type.inspect}"
         else
           @schema = response_spec.schema_for(response_content_type)
-          @errors += JSON::Validator.fully_validate(@schema, JSON(@response.body))
+          schemer = JSONSchemer.schema(@schema.schema.merge('$ref' => @schema.fragment))
+          schemer.validate(JSON(@response.body)).each do |err|
+            @errors << error_to_message(err)
+          end
         end
         @errors.empty?
+      end
+
+      def error_to_message(error)
+        if error.key?('details')
+          error['details'].to_a.map do |(key, val)|
+            "#{key.humanize}: #{val} at #{error['data_pointer']}"
+          end.to_sentence
+        else
+          "#{error['data'].inspect} at #{error['data_pointer']} does not match the schema"
+        end
       end
 
       def response_documented?

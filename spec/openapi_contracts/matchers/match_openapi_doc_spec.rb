@@ -60,7 +60,7 @@ RSpec.describe OpenapiContracts::Matchers::MatchOpenapiDoc do
 
     it 'behaves correctly' do
       expect(matcher.matches?(response)).to be false
-      expect(matcher.failure_message).to start_with "* The property '#/data/attributes' did not contain a required property of 'email' in schema"
+      expect(matcher.failure_message).to start_with "* Missing keys: [\"email\"] at /data/attributes"
     end
   end
 
@@ -69,7 +69,7 @@ RSpec.describe OpenapiContracts::Matchers::MatchOpenapiDoc do
 
     it 'behaves correctly' do
       expect(matcher.matches?(response)).to be false
-      expect(matcher.failure_message).to start_with "* The property '#/data/attributes' contains additional properties [\"other\"] outside of the schema when none are allowed in schema"
+      expect(matcher.failure_message).to start_with "* \"foo\" at /data/attributes/other does not match the schema"
     end
   end
 
@@ -78,7 +78,7 @@ RSpec.describe OpenapiContracts::Matchers::MatchOpenapiDoc do
 
     it 'behaves correctly' do
       expect(matcher.matches?(response)).to be false
-      expect(matcher.failure_message).to start_with "* The property '#/data/id' of type integer did not match the following type: string in schema"
+      expect(matcher.failure_message).to start_with "* 1 at /data/id does not match the schema"
     end
   end
 
