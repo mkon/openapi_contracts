@@ -18,6 +18,7 @@ jobs:
       with:
         ruby-version: ${{ matrix.ruby }}
         bundler-cache: true
+        cache-version: ${{ matrix.activesupport }}
       env:
         ACTIVESUPPORT: ${{ matrix.activesupport }}
     - name: Rspec
