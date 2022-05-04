@@ -1,5 +1,8 @@
 # OpenapiContracts
 
+[![Push & PR](https://github.com/mkon/openapi_contracts/actions/workflows/main.yml/badge.svg)](https://github.com/mkon/openapi_contracts/actions/workflows/main.yml)
+[![Gem Version](https://badge.fury.io/rb/openapi_contracts.svg)](https://badge.fury.io/rb/openapi_contracts)
+
 Use openapi documentation as an api contract.
 
 Currently supports OpenAPI documentation in the structure as used by [Redocly](https://github.com/Redocly/create-openapi-repo), but should also work for single file schemas.
@@ -45,8 +48,8 @@ It uses the `request.path`, `request.method`, `status` and `headers` on the test
 
 * The response is documented
 * Required headers are present
-* Documented headers match the schema (via json-schema)
-* The response body matches the schema (via json-schema)
+* Documented headers match the schema (via json_schemer)
+* The response body matches the schema (via json_schemer)
 
 ## Future plans
 
