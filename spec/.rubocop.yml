@@ -1,5 +1,8 @@
+inherit_from:
+  - ../.rubocop.yml
+
 require: rubocop-rspec
-inherit_from: ../.rubocop.yml
+
 
 Metrics/BlockLength:
   Enabled: false

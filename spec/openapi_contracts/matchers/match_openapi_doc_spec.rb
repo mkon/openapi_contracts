@@ -9,17 +9,17 @@ RSpec.describe OpenapiContracts::Matchers::MatchOpenapiDoc do
   let(:request_env) do
     {
       'PATH_INFO'      => '/user',
-      'REQUEST_METHOD' => 'GET',
+      'REQUEST_METHOD' => 'GET'
     }
   end
   let(:response_status) { 200 }
   let(:response_body) do
     {
       data: {
-        id: 'some-id',
-        type: 'user',
+        id:         'some-id',
+        type:       'user',
         attributes: {
-          email: 'name@me.example',
+          email: 'name@me.example'
         }
       }
     }
@@ -27,7 +27,7 @@ RSpec.describe OpenapiContracts::Matchers::MatchOpenapiDoc do
   let(:response_headers) do
     {
       'Content-Type' => 'application/json',
-      'X-Request-Id' => 'random-request-id',
+      'X-Request-Id' => 'random-request-id'
     }
   end
 
@@ -51,7 +51,8 @@ RSpec.describe OpenapiContracts::Matchers::MatchOpenapiDoc do
 
     it 'behaves correctly' do
       expect(matcher.matches?(response)).to be false
-      expect(matcher.failure_message).to start_with '* Header x-request-id does not match'
+      expect(matcher.failure_message).to start_with \
+        '* Header x-request-id does not match'
     end
   end
 
@@ -60,7 +61,8 @@ RSpec.describe OpenapiContracts::Matchers::MatchOpenapiDoc do
 
     it 'behaves correctly' do
       expect(matcher.matches?(response)).to be false
-      expect(matcher.failure_message).to start_with "* Missing keys: [\"email\"] at /data/attributes"
+      expect(matcher.failure_message).to start_with \
+        '* Missing keys: ["email"] at /data/attributes'
     end
   end
 
@@ -69,7 +71,8 @@ RSpec.describe OpenapiContracts::Matchers::MatchOpenapiDoc do
 
     it 'behaves correctly' do
       expect(matcher.matches?(response)).to be false
-      expect(matcher.failure_message).to start_with "* \"foo\" at /data/attributes/other does not match the schema"
+      expect(matcher.failure_message).to start_with \
+        '* "foo" at /data/attributes/other does not match the schema'
     end
   end
 
@@ -78,7 +81,8 @@ RSpec.describe OpenapiContracts::Matchers::MatchOpenapiDoc do
 
     it 'behaves correctly' do
       expect(matcher.matches?(response)).to be false
-      expect(matcher.failure_message).to start_with "* 1 at /data/id does not match the schema"
+      expect(matcher.failure_message).to start_with \
+        '* 1 at /data/id does not match the schema'
     end
   end
 
@@ -87,7 +91,8 @@ RSpec.describe OpenapiContracts::Matchers::MatchOpenapiDoc do
 
     it 'behaves correctly' do
       expect(matcher.matches?(response)).to be false
-      expect(matcher.failure_message).to eq '* Undocumented request/response for "GET /unknown" with http status OK (200)'
+      expect(matcher.failure_message).to eq \
+        '* Undocumented request/response for "GET /unknown" with http status OK (200)'
     end
   end
 
@@ -96,7 +101,8 @@ RSpec.describe OpenapiContracts::Matchers::MatchOpenapiDoc do
 
     it 'behaves correctly' do
       expect(matcher.matches?(response)).to be false
-      expect(matcher.failure_message).to eq '* Undocumented request/response for "GET /user" with http status No Content (204)'
+      expect(matcher.failure_message).to eq \
+        '* Undocumented request/response for "GET /user" with http status No Content (204)'
     end
   end
 
