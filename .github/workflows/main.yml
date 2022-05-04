@@ -39,3 +39,10 @@ jobs:
         cache-version: '7.0'
     - name: Rubocop
       run: bundle exec rubocop
+
+  openapi:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Validate openapi fixture
+      run: npx @redocly/openapi-cli lint spec/fixtures/openapi/openapi.yaml
