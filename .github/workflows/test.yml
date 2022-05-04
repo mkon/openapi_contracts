@@ -1,10 +1,8 @@
 name: Test
 
 on:
-  pull_request:
-    types: [opened, synchronize, reopened]
-  push:
-    branches: [main]
+  workflow_call:
+  workflow_dispatch:
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -14,7 +12,7 @@ jobs:
         activesupport: ['6.1', '7.0']
         ruby: ['2.7', '3.0']
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Set up Ruby
       uses: ruby/setup-ruby@v1
       with:

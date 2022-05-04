@@ -1,0 +1,10 @@
+name: Push & PR
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  push:
+    branches: [main]
+jobs:
+  test:
+    uses: ./.github/workflows/test.yml
