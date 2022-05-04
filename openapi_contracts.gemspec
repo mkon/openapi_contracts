@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
   s.homepage    = 'https://github.com/mkon/openapi_contracts'
   s.summary     = 'Openapi schemas as API contracts'
   s.license     = 'MIT'
-  s.required_ruby_version = '>= 2.6', '< 4'
+  s.required_ruby_version = '>= 2.7', '< 3.1'
 
   s.files = Dir['lib/**/*', 'README.md']
 
@@ -21,4 +21,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'rubocop', '1.28.2'
   s.add_development_dependency 'rubocop-rspec', '2.10.0'
   s.add_development_dependency 'simplecov', '~> 0.21.2'
+  s.metadata['rubygems_mfa_required'] = 'true'
 end

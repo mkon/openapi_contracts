@@ -1,3 +1,5 @@
+inherit_from: .rubocop_todo.yml
+
 AllCops:
   TargetRubyVersion: 2.7
   NewCops: enable
@@ -22,8 +24,6 @@ Style/Documentation:
 Style/FetchEnvVar:
   Enabled: false
 Style/FrozenStringLiteralComment:
-  Enabled: false
-Style/ModuleFunction:
   Enabled: false
 Style/PercentLiteralDelimiters:
   PreferredDelimiters:
