@@ -42,7 +42,11 @@ module OpenapiContracts
       end
 
       def response_spec
-        @response_spec ||= @doc.response_for(@response.request.path, @response.request.request_method.downcase, @response.status.to_s)
+        @response_spec ||= @doc.response_for(
+          @response.request.path,
+          @response.request.request_method.downcase,
+          @response.status.to_s
+        )
       end
 
       def response_content_type
@@ -77,7 +81,7 @@ module OpenapiContracts
 
       def body_matches?
         if response_spec.no_content?
-          @errors << "Expected empty response body" if @response.body.present?
+          @errors << 'Expected empty response body' if @response.body.present?
         elsif !response_spec.supports_content_type?(response_content_type)
           @errors << "Undocumented response with content-type #{response_content_type.inspect}"
         else

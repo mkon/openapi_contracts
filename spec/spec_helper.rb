@@ -10,6 +10,6 @@ SimpleCov.start do
 end
 SimpleCov.minimum_coverage 100
 
-Dir[File.expand_path("support/**/*.rb", __dir__)].each { |f| require f }
+Dir[File.expand_path('support/**/*.rb', __dir__)].sort.each { |f| require f }
 
 FIXTURES_PATH = Pathname.new(__dir__).join('fixtures')

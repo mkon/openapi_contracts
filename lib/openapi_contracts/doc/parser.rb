@@ -12,8 +12,7 @@ module OpenapiContracts
       abs_path = @dir.join(path)
       data = parse_file(abs_path, translate: false)
       data.deep_merge! merge_components
-      data = join_partials(abs_path.dirname, data)
-      data
+      join_partials(abs_path.dirname, data)
     end
 
     private
@@ -37,7 +36,7 @@ module OpenapiContracts
 
     def merge_components
       data = {}
-      Dir[File.expand_path("components/**/*.yaml", @dir)].each do |file|
+      Dir[File.expand_path('components/**/*.yaml', @dir)].each do |file|
         # pn = Pathname(file).relative_path_from(@dir)
         pointer = json_pointer(Pathname(file)).split('/')
         i = 0
@@ -58,7 +57,7 @@ module OpenapiContracts
       data.each_with_object({}) do |(key, val), m|
         if val.is_a?(Hash)
           m[key] = translate_paths(val, cwd)
-        elsif key == '$ref' && val !~ /^#\//
+        elsif key == '$ref' && val !~ %r{^#/}
           m[key] = json_pointer(cwd.join(val), '#/')
         else
           m[key] = val

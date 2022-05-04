@@ -10,14 +10,14 @@ RSpec.describe OpenapiContracts::Doc do
   describe '#at_path' do
     subject { doc.at_path(pointer) }
 
-    let(:pointer) { %w[components schemas User] }
+    let(:pointer) { %w(components schemas User) }
 
     it 'is a correctly initialized schema' do
       expect(subject).to be_a(OpenapiContracts::Doc::Schema)
       hash = subject.to_h
       expect(hash).to be_a(Hash)
       expect(hash['type']).to eq 'object'
-      expect(hash.dig('properties', 'attributes', 'required')).to eq %w[email]
+      expect(hash.dig('properties', 'attributes', 'required')).to eq %w(email)
     end
   end
 

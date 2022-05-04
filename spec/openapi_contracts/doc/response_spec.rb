@@ -56,7 +56,7 @@ RSpec.describe OpenapiContracts::Doc::Response do
       context 'when content_type is not supported' do
         let(:content_type) { 'application/text' }
 
-        it { is_expected.to be nil }
+        it { is_expected.to be_nil }
       end
     end
   end

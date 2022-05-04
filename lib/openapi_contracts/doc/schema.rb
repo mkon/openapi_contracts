@@ -20,7 +20,7 @@ module OpenapiContracts
     def to_h
       return @schema if path.nil? || path.empty?
 
-      @schema.dig *path
+      @schema.dig(*path)
     end
 
     def navigate(*sub_path)

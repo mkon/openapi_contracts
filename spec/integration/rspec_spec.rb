@@ -1,6 +1,6 @@
 require 'delegate'
 
-RSpec.describe 'RSpec integration' do
+RSpec.describe 'RSpec integration' do # rubocop:disable RSpec/DescribeClass
   subject { TestResponse.new(last_response, last_request) }
 
   let(:last_response) { Rack::MockResponse.new(200, response_headers, JSON.dump(response_body)) }
@@ -9,16 +9,16 @@ RSpec.describe 'RSpec integration' do
   let(:request_env) do
     {
       'PATH_INFO'      => '/user',
-      'REQUEST_METHOD' => 'GET',
+      'REQUEST_METHOD' => 'GET'
     }
   end
   let(:response_body) do
     {
       data: {
-        id: 'some-id',
-        type: 'user',
+        id:         'some-id',
+        type:       'user',
         attributes: {
-          email: 'name@me.example',
+          email: 'name@me.example'
         }
       }
     }
@@ -26,7 +26,7 @@ RSpec.describe 'RSpec integration' do
   let(:response_headers) do
     {
       'Content-Type' => 'application/json',
-      'X-Request-Id' => 'random-request-id',
+      'X-Request-Id' => 'random-request-id'
     }
   end
 
