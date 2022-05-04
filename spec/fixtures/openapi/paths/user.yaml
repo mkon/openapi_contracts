@@ -22,3 +22,5 @@ get:
             required:
               - data
             additionalProperties: false
+    '400':
+      description: Bad Request
