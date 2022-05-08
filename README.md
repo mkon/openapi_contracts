@@ -2,6 +2,7 @@
 
 [![Push & PR](https://github.com/mkon/openapi_contracts/actions/workflows/main.yml/badge.svg)](https://github.com/mkon/openapi_contracts/actions/workflows/main.yml)
 [![Gem Version](https://badge.fury.io/rb/openapi_contracts.svg)](https://badge.fury.io/rb/openapi_contracts)
+[![Depfu](https://badges.depfu.com/badges/8ac57411497df02584bbf59685634e45/overview.svg)](https://depfu.com/github/mkon/openapi_contracts?project_id=35354)
 
 Use openapi documentation as an api contract.
 
