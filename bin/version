@@ -1,0 +1,16 @@
+#!/bin/bash -le
+
+branch=`git rev-parse --abbrev-ref HEAD`
+version=`git describe --tags --match "v*" | sed -e "s/^v//"`
+ref=`git rev-parse --short HEAD`
+
+# 0.0.0-i-sha or 0.0-i-sha
+if [[ "$version" =~ ^([0-9]+)\.([0-9]+)\.([0-9]+)-([0-9]+)-([a-z0-9]+) ]]; then
+ minor=$((${BASH_REMATCH[3]}+1))
+ version="${BASH_REMATCH[1]}.${BASH_REMATCH[2]}.${minor}.${branch}.${BASH_REMATCH[4]}.$ref"
+elif [[ "$version" =~ ^([0-9]+)\.([0-9]+)-([0-9]+)-([a-z0-9]+) ]]; then
+ minor=1
+ version="${BASH_REMATCH[1]}.${BASH_REMATCH[2]}.${minor}.${branch}.${BASH_REMATCH[3]}.$ref"
+fi
+
+echo $version

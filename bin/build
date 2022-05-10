@@ -1,0 +1,3 @@
+#!/bin/bash -le
+
+VERSION=`bin/version` gem build openapi_contracts.gemspec
