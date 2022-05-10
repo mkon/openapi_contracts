@@ -1,0 +1,2 @@
+#!/bin/sh
+irb -I ./lib -r 'bundler' -r 'rubygems' -r 'openapi_contracts'

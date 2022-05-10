@@ -11,6 +11,8 @@ module OpenapiContracts
   autoload :Matchers, 'openapi_contracts/matchers'
 end
 
-RSpec.configure do |config|
-  config.include OpenapiContracts::Matchers
+if defined?(RSpec)
+  RSpec.configure do |config|
+    config.include OpenapiContracts::Matchers
+  end
 end

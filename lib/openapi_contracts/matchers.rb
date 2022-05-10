@@ -7,7 +7,3 @@ module OpenapiContracts
     end
   end
 end
-
-RSpec.configure do |config|
-  config.include OpenapiContracts::Matchers
-end
