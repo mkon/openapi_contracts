@@ -16,7 +16,7 @@ First parse your api documentation:
 
 ```ruby
 # This must point to the folder where the "openapi.yaml" file is
-$doc = OpenapiContracts::Doc.parse(Rails.root.join('spec', 'fixtures', 'openapi', 'api-docs', 'openapi'))
+$doc = OpenapiContracts::Doc.parse(Rails.root.join('spec/fixtures/openapi/api-docs/openapi'))
 ```
 
 Ideally you do this once in a RSpec `before(:suite)` hook.

@@ -1,0 +1,32 @@
+#!/bin/bash -le
+
+name="openapi_contracts"
+
+git fetch origin
+current=`bin/version`
+sha=`git rev-parse HEAD`
+
+read -p "Which version? (${current}) " version
+version=${version:=$current}
+
+VERSION=$version gem build ${name}.gemspec
+
+echo "Creating GitHub release"
+link=`gh release create v${version} --target $sha --generate-notes`
+echo $link
+git fetch --tags origin
+
+file="${name}-${version}.gem"
+read -p "Push to rubygems? (y/n) " yn
+case $yn in
+	y ) echo Pushing to rubygems ...;;
+	n ) echo Aborting.;
+		exit;;
+	* ) echo invalid response;
+		exit 1;;
+esac
+
+gem push $file
+rm $file
+
+open $link

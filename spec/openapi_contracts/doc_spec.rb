@@ -17,7 +17,7 @@ RSpec.describe OpenapiContracts::Doc do
       hash = subject.to_h
       expect(hash).to be_a(Hash)
       expect(hash['type']).to eq 'object'
-      expect(hash.dig('properties', 'attributes', 'required')).to eq %w(email)
+      expect(hash.dig('properties', 'attributes', 'required')).to eq %w(name email)
     end
   end
 
