@@ -19,7 +19,7 @@ RSpec.describe OpenapiContracts::Matchers::MatchOpenapiDoc do
         id:         'some-id',
         type:       'user',
         attributes: {
-          name: 'Hugo',
+          name:  'Hugo',
           email: 'name@me.example'
         }
       }

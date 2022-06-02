@@ -36,14 +36,15 @@ module OpenapiContracts
     end
 
     def nullable_to_type!(object)
-      if object.is_a?(Hash)
+      case object
+      when Hash
         if object['type'] && object['nullable']
           object['type'] = [object['type'], 'null']
           object.delete 'nullable'
         else
           object.each_value { |o| nullable_to_type! o }
         end
-      elsif object.is_a?(Array)
+      when Array
         object.each { |o| nullable_to_type! o }
       end
     end

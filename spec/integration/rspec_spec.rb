@@ -18,7 +18,7 @@ RSpec.describe 'RSpec integration' do # rubocop:disable RSpec/DescribeClass
         id:         'some-id',
         type:       'user',
         attributes: {
-          name: nil,
+          name:  nil,
           email: 'name@me.example'
         }
       }
