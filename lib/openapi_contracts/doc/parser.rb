@@ -20,7 +20,7 @@ module OpenapiContracts
 
     def parse_file(path, translate: true)
       schema = YAML.safe_load(File.read(path))
-      translate ? translate_paths(schema, Pathname(path).parent) : schema
+      translate ? translate_paths!(schema, Pathname(path).parent) : schema
     end
 
     def join_partials(cwd, data)
@@ -67,14 +67,17 @@ module OpenapiContracts
       data
     end
 
-    def translate_paths(data, cwd)
-      data.each_with_object({}) do |(key, val), m|
-        if val.is_a?(Hash)
-          m[key] = translate_paths(val, cwd)
-        elsif key == '$ref' && val !~ %r{^#/}
-          m[key] = json_pointer(cwd.join(val), '#/')
-        else
-          m[key] = val
+    def translate_paths!(data, cwd)
+      case data
+      when Array
+        data.each { |v| translate_paths!(v, cwd) }
+      when Hash
+        data.each_pair do |k, v|
+          if k == '$ref' && v !~ %r{^#/}
+            v.replace json_pointer(cwd.join(v), '#/')
+          else
+            translate_paths!(v, cwd)
+          end
         end
       end
     end

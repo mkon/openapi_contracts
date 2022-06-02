@@ -62,4 +62,16 @@ RSpec.describe 'RSpec integration' do # rubocop:disable RSpec/DescribeClass
 
     it { is_expected.to_not match_openapi_doc(doc) }
   end
+
+  context 'when an attribute does match type oneOf' do
+    before { response_body[:data][:attributes][:addresses] = {street: 'Somestreet'} }
+
+    it { is_expected.to_not match_openapi_doc(doc) }
+  end
+
+  context 'when an attribute does not match type oneOf' do
+    before { response_body[:data][:attributes][:addresses] = {foo: 'bar'} }
+
+    it { is_expected.to_not match_openapi_doc(doc) }
+  end
 end

@@ -11,6 +11,10 @@ properties:
       name:
         type: string
         nullable: true
+      addresses:
+        type: array
+        oneOf:
+          - $ref: './Address.yaml'
       email:
         $ref: './Email.yaml'
     additionalProperties: false
