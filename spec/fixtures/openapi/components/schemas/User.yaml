@@ -8,10 +8,14 @@ properties:
   attributes:
     type: object
     properties:
+      name:
+        type: string
+        nullable: true
       email:
         $ref: './Email.yaml'
     additionalProperties: false
     required:
+      - name
       - email
 additionalProperties: false
 required:

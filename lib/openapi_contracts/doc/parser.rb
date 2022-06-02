@@ -12,7 +12,8 @@ module OpenapiContracts
       abs_path = @dir.join(path)
       data = parse_file(abs_path, translate: false)
       data.deep_merge! merge_components
-      join_partials(abs_path.dirname, data)
+      data = join_partials(abs_path.dirname, data)
+      nullable_to_type!(data)
     end
 
     private
@@ -34,10 +35,22 @@ module OpenapiContracts
       end
     end
 
+    def nullable_to_type!(object)
+      if object.is_a?(Hash)
+        if object['type'] && object['nullable']
+          object['type'] = [object['type'], 'null']
+          object.delete 'nullable'
+        else
+          object.each_value { |o| nullable_to_type! o }
+        end
+      elsif object.is_a?(Array)
+        object.each { |o| nullable_to_type! o }
+      end
+    end
+
     def merge_components
       data = {}
       Dir[File.expand_path('components/**/*.yaml', @dir)].each do |file|
-        # pn = Pathname(file).relative_path_from(@dir)
         pointer = json_pointer(Pathname(file)).split('/')
         i = 0
         pointer.reduce(data) do |h, p|

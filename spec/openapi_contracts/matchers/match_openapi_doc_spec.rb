@@ -19,6 +19,7 @@ RSpec.describe OpenapiContracts::Matchers::MatchOpenapiDoc do
         id:         'some-id',
         type:       'user',
         attributes: {
+          name: 'Hugo',
           email: 'name@me.example'
         }
       }
@@ -83,6 +84,14 @@ RSpec.describe OpenapiContracts::Matchers::MatchOpenapiDoc do
       expect(matcher.matches?(response)).to be false
       expect(matcher.failure_message).to start_with \
         '* 1 at /data/id does not match the schema'
+    end
+  end
+
+  context 'when a nullable attribute is null' do
+    before { response_body[:data][:attributes][:name] = nil }
+
+    it 'behaves correctly' do
+      expect(matcher.matches?(response)).to be true
     end
   end
 
