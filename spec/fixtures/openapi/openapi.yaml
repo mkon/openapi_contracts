@@ -29,7 +29,7 @@ paths:
         '200':
           description: OK
         '400':
-          description: Bad Request
+          $ref: components/responses/BadRequest.yaml
         '500':
           description: Server Error
   /user:
