@@ -7,6 +7,14 @@ module OpenapiContracts
       @path = path.freeze
     end
 
+    def follow_refs
+      if (ref = dig('$ref'))
+        at_path(ref.split('/')[1..])
+      else
+        self
+      end
+    end
+
     def fragment
       path.map { |p| p.gsub('/', '~1') }.join('/').then { |s| "#/#{s}" }
     end

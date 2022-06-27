@@ -1,7 +1,7 @@
 module OpenapiContracts
   class Doc::Response
     def initialize(schema)
-      @schema = schema
+      @schema = schema.follow_refs
     end
 
     def headers

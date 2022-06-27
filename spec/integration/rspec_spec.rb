@@ -3,7 +3,8 @@ require 'delegate'
 RSpec.describe 'RSpec integration' do # rubocop:disable RSpec/DescribeClass
   subject { TestResponse.new(last_response, last_request) }
 
-  let(:last_response) { Rack::MockResponse.new(200, response_headers, JSON.dump(response_body)) }
+  let(:last_response) { Rack::MockResponse.new(response_status, response_headers, JSON.dump(response_body)) }
+  let(:response_status) { 200 }
   let(:last_request) { Rack::Request.new(request_env) }
 
   let(:request_env) do
@@ -38,6 +39,17 @@ RSpec.describe 'RSpec integration' do # rubocop:disable RSpec/DescribeClass
   it { is_expected.to match_openapi_doc(doc).with_http_status(:ok) }
 
   it { is_expected.to_not match_openapi_doc(doc).with_http_status(:created) }
+
+  context 'when using component responses' do
+    let(:response_status) { 400 }
+    let(:response_body) do
+      {
+        errors: [{}]
+      }
+    end
+
+    it { is_expected.to match_openapi_doc(doc).with_http_status(:bad_request) }
+  end
 
   context 'when a required header is missing' do
     before { response_headers.delete('X-Request-Id') }
