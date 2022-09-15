@@ -51,6 +51,29 @@ RSpec.describe 'RSpec integration' do # rubocop:disable RSpec/DescribeClass
     it { is_expected.to match_openapi_doc(doc).with_http_status(:bad_request) }
   end
 
+  context 'when using dynamic paths' do
+    let(:request_env) do
+      {
+        'PATH_INFO'      => '/messages/ef278',
+        'REQUEST_METHOD' => 'GET'
+      }
+    end
+    let(:response_status) { 200 }
+    let(:response_body) do
+      {
+        data: {
+          id:         '1ef',
+          type:       'messages',
+          attributes: {
+            body: 'foo'
+          }
+        }
+      }
+    end
+
+    it { is_expected.to match_openapi_doc(doc, path: '/messages/{id}').with_http_status(:ok) }
+  end
+
   context 'when a required header is missing' do
     before { response_headers.delete('X-Request-Id') }
 

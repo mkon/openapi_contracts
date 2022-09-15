@@ -1,5 +1,5 @@
 RSpec.describe OpenapiContracts::Matchers::MatchOpenapiDoc do
-  subject(:matcher) { described_class.new(doc) }
+  subject(:matcher) { described_class.new(doc, {}) }
 
   let(:doc) { OpenapiContracts::Doc.parse(FIXTURES_PATH.join('openapi')) }
 

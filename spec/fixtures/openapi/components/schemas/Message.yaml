@@ -1,0 +1,20 @@
+type: object
+properties:
+  id:
+    type: string
+    example: acd3751
+  type:
+    type: string
+  attributes:
+    type: object
+    properties:
+      body:
+        type: string
+    additionalProperties: false
+    required:
+      - body
+additionalProperties: false
+required:
+  - id
+  - type
+  - attributes

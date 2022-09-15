@@ -43,6 +43,19 @@ it 'responds with 200 and matches the doc' do
 }
 ```
 
+### Options
+
+The `match_openapi_doc($doc)` method allows passing options as a 2nd argument.
+This allows overriding the default request.path lookup in case this does not find
+the correct response definition in your schema. This is especially important with
+dynamic paths.
+
+Example:
+
+```ruby
+it { is_expected.to match_openapi_doc($api_doc, path: '/messages/{id}').with_http_status(:ok) }
+```
+
 ### How it works
 
 It uses the `request.path`, `request.method`, `status` and `headers` on the test subject (which must be the response) to find the response schema in the OpenAPI document. Then it does the following checks:
