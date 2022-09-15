@@ -1,8 +1,9 @@
 module OpenapiContracts
   module Matchers
     class MatchOpenapiDoc
-      def initialize(doc)
+      def initialize(doc, options)
         @doc = doc
+        @options = options
         @errors = []
       end
 
@@ -43,7 +44,7 @@ module OpenapiContracts
 
       def response_spec
         @response_spec ||= @doc.response_for(
-          @response.request.path,
+          @options.fetch(:path, @response.request.path),
           @response.request.request_method.downcase,
           @response.status.to_s
         )

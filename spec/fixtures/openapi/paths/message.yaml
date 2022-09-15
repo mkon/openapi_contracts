@@ -1,0 +1,33 @@
+get:
+  tags:
+    - Message
+  summary: Get Message
+  description: Get Message
+  operationId: get_message
+  parameters:
+  - name: id
+    in: path
+    description: Id of the message.
+    required: true
+    schema:
+      type: string
+  responses:
+    '200':
+      description: OK
+      headers:
+        x-request-id:
+          schema:
+            type: string
+          required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                $ref: ../components/schemas/Message.yaml
+            required:
+              - data
+            additionalProperties: false
+    '400':
+      $ref: ../components/responses/BadRequest.yaml
