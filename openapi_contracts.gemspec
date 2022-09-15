@@ -16,7 +16,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'activesupport', '>= 6.1', '< 8'
   s.add_dependency 'json_schemer', '~> 0.2.20'
 
-  s.add_development_dependency 'rack', '~> 2.2.3'
+  s.add_development_dependency 'rack', '~> 3.0.0'
   s.add_development_dependency 'rspec', '~> 3.11.0'
   s.add_development_dependency 'rubocop', '1.36.0'
   s.add_development_dependency 'rubocop-rspec', '2.12.1'
