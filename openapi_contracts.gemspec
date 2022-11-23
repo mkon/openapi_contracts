@@ -18,7 +18,7 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency 'rack', '~> 3.0.0'
   s.add_development_dependency 'rspec', '~> 3.12.0'
-  s.add_development_dependency 'rubocop', '1.37.1'
+  s.add_development_dependency 'rubocop', '1.39.0'
   s.add_development_dependency 'rubocop-rspec', '2.15.0'
   s.add_development_dependency 'simplecov', '~> 0.21.2'
   s.metadata['rubygems_mfa_required'] = 'true'
