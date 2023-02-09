@@ -1,10 +1,18 @@
 RSpec.describe OpenapiContracts::Doc do
   subject(:doc) { described_class.parse(openapi_dir) }
-
+  
   let(:openapi_dir) { FIXTURES_PATH.join('openapi') }
-
+  
   describe '.parse' do
-    it { is_expected.to be_a(described_class) }
+    subject(:defined_doc) { described_class.parse(openapi_dir, 'auth.openapi.yaml') }
+
+    it 'parses default document when not defined' do
+      expect(doc).to be_a(described_class)
+    end
+
+    it 'parses correct document when defined' do
+      expect(defined_doc).to be_a(described_class)
+    end
   end
 
   describe '#at_path' do

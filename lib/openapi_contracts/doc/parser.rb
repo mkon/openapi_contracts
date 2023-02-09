@@ -1,14 +1,14 @@
 module OpenapiContracts
   class Doc::Parser
-    def self.call(dir)
-      new(dir).parse('openapi.yaml')
+    def self.call(dir, filename)
+      new(dir).parse(filename)
     end
 
     def initialize(dir)
       @dir = dir
     end
 
-    def parse(path = 'openapi.yaml')
+    def parse(path)
       abs_path = @dir.join(path)
       data = parse_file(abs_path, translate: false)
       data.deep_merge! merge_components

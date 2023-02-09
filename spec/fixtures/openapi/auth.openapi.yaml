@@ -1,0 +1,38 @@
+openapi: 3.0.2
+info:
+  version: 1.0.0
+  title: Example.com
+  termsOfService: 'https://example.com/terms/'
+  contact:
+    email: contact@example.com
+    url: 'http://example.com/contact'
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+  x-logo:
+    url: 'https://redocly.github.io/openapi-template/logo.png'
+  description: >
+    This is an **example** API to demonstrate features of OpenAPI specification
+tags:
+  - name: Auth
+    description: Authentication
+  - name: User
+    description: Operations about user
+servers:
+  - url: '//api.host.example'
+paths:
+  /health:
+    get:
+      operationId: health_check
+      summary: Health check
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: components/responses/BadRequest.yaml
+        '500':
+          description: Server Error
+  /messages/{id}:
+    $ref: 'paths/message.yaml'
+  /user:
+    $ref: 'paths/user.yaml'
