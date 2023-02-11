@@ -1,8 +1,8 @@
 RSpec.describe OpenapiContracts::Doc do
   subject(:doc) { described_class.parse(openapi_dir) }
-  
+
   let(:openapi_dir) { FIXTURES_PATH.join('openapi') }
-  
+
   describe '.parse' do
     subject(:defined_doc) { described_class.parse(openapi_dir, 'auth.openapi.yaml') }
 
