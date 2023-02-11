@@ -5,8 +5,8 @@ module OpenapiContracts
     autoload :Response, 'openapi_contracts/doc/response'
     autoload :Schema,   'openapi_contracts/doc/schema'
 
-    def self.parse(dir)
-      new Parser.call(dir)
+    def self.parse(dir, filename = 'openapi.yaml')
+      new Parser.call(dir, filename)
     end
 
     def initialize(schema)
