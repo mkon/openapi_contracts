@@ -3,10 +3,9 @@ module OpenapiContracts::Matchers
     class_attribute :final, instance_writer: false
     self.final = false
 
-    def initialize(stack, spec, response)
+    def initialize(stack, env)
       @stack = stack # next matcher
-      @spec = spec
-      @response = response
+      @env = env
       @errors = []
     end
 
@@ -14,10 +13,14 @@ module OpenapiContracts::Matchers
       validate
       errors.push(*@errors)
       # Do not call the next matcher when there is errors on a final matcher
-      @stack.call(errors) if @errors.empty? || !final?
+      return errors if @errors.any? && final?
+
+      @stack.call(errors)
     end
 
     private
+
+    delegate :expected_status, :response, :spec, to: :@env
 
     def validate
       raise NotImplementedError

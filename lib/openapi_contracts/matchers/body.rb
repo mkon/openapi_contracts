@@ -3,16 +3,20 @@ module OpenapiContracts::Matchers
     private
 
     def validate
-      if @spec.no_content?
-        @errors << 'Expected empty response body' if @response.body.present?
-      elsif !@spec.supports_content_type?(response_content_type)
+      if spec.no_content?
+        @errors << 'Expected empty response body' if response.body.present?
+      elsif !spec.supports_content_type?(response_content_type)
         @errors << "Undocumented response with content-type #{response_content_type.inspect}"
       else
-        schema = @spec.schema_for(response_content_type)
-        schemer = JSONSchemer.schema(schema.schema.merge('$ref' => schema.fragment))
-        schemer.validate(JSON(@response.body)).each do |err|
-          @errors << error_to_message(err)
-        end
+        validate_schema
+      end
+    end
+
+    def validate_schema
+      schema = spec.schema_for(response_content_type)
+      schemer = JSONSchemer.schema(schema.schema.merge('$ref' => schema.fragment))
+      schemer.validate(JSON(response.body)).each do |err|
+        @errors << error_to_message(err)
       end
     end
 
@@ -27,7 +31,7 @@ module OpenapiContracts::Matchers
     end
 
     def response_content_type
-      @response.headers['Content-Type'].split(';').first
+      response.headers['Content-Type'].split(';').first
     end
   end
 end

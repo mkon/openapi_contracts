@@ -3,8 +3,8 @@ module OpenapiContracts::Matchers
     private
 
     def validate
-      @spec.headers.each do |header|
-        value = @response.headers[header.name]
+      spec.headers.each do |header|
+        value = response.headers[header.name]
         if value.blank?
           @errors << "Missing header #{header.name}" if header.required?
         elsif !JSONSchemer.schema(header.schema).valid?(value)

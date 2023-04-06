@@ -10,6 +10,15 @@ require 'yaml'
 module OpenapiContracts
   autoload :Doc,      'openapi_contracts/doc'
   autoload :Matchers, 'openapi_contracts/matchers'
+
+  # Defines order of matching
+  MATCHERS = [
+    OpenapiContracts::Matchers::HttpStatus,
+    OpenapiContracts::Matchers::Body,
+    OpenapiContracts::Matchers::Headers
+  ].freeze
+
+  Env = Struct.new(:spec, :response, :expected_status)
 end
 
 if defined?(RSpec)
@@ -22,12 +31,11 @@ if defined?(RSpec)
         @response.request.request_method.downcase,
         @response.status.to_s
       )
-      matchers = [
-        OpenapiContracts::Matchers::Body,
-        OpenapiContracts::Matchers::Headers
-      ]
-      stack = matchers.reverse.reduce(->(err) { err }) { |s, m| m.new(s, @response_spec, response) }
-      @errors = stack.call(@errors) if response_documented? && http_status_matches?
+      env = OpenapiContracts::Env.new(@response_spec, response, @status)
+      stack = OpenapiContracts::MATCHERS
+              .reverse
+              .reduce(->(err) { err }) { |s, m| m.new(s, env) }
+      @errors = stack.call(@errors) if response_documented?
       @errors.empty?
     end
 
@@ -54,20 +62,6 @@ if defined?(RSpec)
 
     def response_desc
       "#{@response.request.request_method} #{@response.request.path}"
-    end
-
-    def http_status_desc(status = nil)
-      status ||= @response.status
-      "http status #{Rack::Utils::HTTP_STATUS_CODES[status]} (#{status})"
-    end
-
-    def http_status_matches?
-      if @status.present? && @status != @response.status
-        @errors << "Response has #{http_status_desc}"
-        false
-      else
-        true
-      end
     end
 
     def response_documented?
