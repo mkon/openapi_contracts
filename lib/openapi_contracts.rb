@@ -1,5 +1,6 @@
 require 'active_support'
 require 'active_support/core_ext/array'
+require 'active_support/core_ext/class'
 require 'active_support/core_ext/module'
 require 'active_support/core_ext/string'
 
@@ -7,7 +8,8 @@ require 'json_schemer'
 require 'yaml'
 
 module OpenapiContracts
-  autoload :Doc, 'openapi_contracts/doc'
+  autoload :Doc,      'openapi_contracts/doc'
+  autoload :Matchers, 'openapi_contracts/matchers'
 end
 
 if defined?(RSpec)
@@ -20,7 +22,12 @@ if defined?(RSpec)
         @response.request.request_method.downcase,
         @response.status.to_s
       )
-      response_documented? && http_status_matches? && [headers_match?, body_matches?].all?
+      matchers = [
+        OpenapiContracts::Matchers::Body,
+        OpenapiContracts::Matchers::Headers
+      ]
+      stack = matchers.reverse.reduce(->(err) { err }) { |s, m| m.new(s, @response_spec, response) }
+      @errors = stack.call(@errors) if response_documented? && http_status_matches?
       @errors.empty?
     end
 
@@ -49,22 +56,6 @@ if defined?(RSpec)
       "#{@response.request.request_method} #{@response.request.path}"
     end
 
-    def response_content_type
-      @response.headers['Content-Type'].split(';').first
-    end
-
-    def headers_match?
-      @response_spec.headers.each do |header|
-        value = @response.headers[header.name]
-        if value.blank?
-          @errors << "Missing header #{header.name}" if header.required?
-        elsif !JSONSchemer.schema(header.schema).valid?(value)
-          @errors << "Header #{header.name} does not match"
-        end
-      end
-      @errors.empty?
-    end
-
     def http_status_desc(status = nil)
       status ||= @response.status
       "http status #{Rack::Utils::HTTP_STATUS_CODES[status]} (#{status})"
@@ -76,31 +67,6 @@ if defined?(RSpec)
         false
       else
         true
-      end
-    end
-
-    def body_matches?
-      if @response_spec.no_content?
-        @errors << 'Expected empty response body' if @response.body.present?
-      elsif !@response_spec.supports_content_type?(response_content_type)
-        @errors << "Undocumented response with content-type #{response_content_type.inspect}"
-      else
-        @schema = @response_spec.schema_for(response_content_type)
-        schemer = JSONSchemer.schema(@schema.schema.merge('$ref' => @schema.fragment))
-        schemer.validate(JSON(@response.body)).each do |err|
-          @errors << error_to_message(err)
-        end
-      end
-      @errors.empty?
-    end
-
-    def error_to_message(error)
-      if error.key?('details')
-        error['details'].to_a.map do |(key, val)|
-          "#{key.humanize}: #{val} at #{error['data_pointer']}"
-        end.to_sentence
-      else
-        "#{error['data'].inspect} at #{error['data_pointer']} does not match the schema"
       end
     end
 
