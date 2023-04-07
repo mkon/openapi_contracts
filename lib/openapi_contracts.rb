@@ -8,14 +8,16 @@ require 'json_schemer'
 require 'yaml'
 
 module OpenapiContracts
+  autoload :Helper,   'openapi_contracts/helper'
   autoload :Doc,      'openapi_contracts/doc'
   autoload :Matchers, 'openapi_contracts/matchers'
 
   # Defines order of matching
   MATCHERS = [
-    OpenapiContracts::Matchers::HttpStatus,
-    OpenapiContracts::Matchers::Body,
-    OpenapiContracts::Matchers::Headers
+    Matchers::Documented,
+    Matchers::HttpStatus,
+    Matchers::Body,
+    Matchers::Headers
   ].freeze
 
   Env = Struct.new(:spec, :response, :expected_status)
@@ -23,19 +25,15 @@ end
 
 if defined?(RSpec)
   RSpec::Matchers.define :match_openapi_doc do |doc, options = {}| # rubocop:disable Metrics/BlockLength
+    include OpenapiContracts::Helper
+
     match do |response|
-      @errors = []
-      @response = response
-      @response_spec ||= doc.response_for(
-        options.fetch(:path, @response.request.path),
-        @response.request.request_method.downcase,
-        @response.status.to_s
-      )
-      env = OpenapiContracts::Env.new(@response_spec, response, @status)
+      spec = lookup_api_spec(doc, options, response)
+      env = OpenapiContracts::Env.new(spec, response, @status)
       stack = OpenapiContracts::MATCHERS
               .reverse
               .reduce(->(err) { err }) { |s, m| m.new(s, env) }
-      @errors = stack.call(@errors) if response_documented?
+      @errors = stack.call
       @errors.empty?
     end
 
@@ -60,15 +58,12 @@ if defined?(RSpec)
 
     private
 
-    def response_desc
-      "#{@response.request.request_method} #{@response.request.path}"
-    end
-
-    def response_documented?
-      return true if @response_spec
-
-      @errors << "Undocumented request/response for #{response_desc.inspect} with #{http_status_desc}"
-      false
+    def lookup_api_spec(doc, options, response)
+      doc.response_for(
+        options.fetch(:path, response.request.path),
+        response.request.request_method.downcase,
+        response.status.to_s
+      )
     end
   end
 end
