@@ -1,18 +1,14 @@
 require 'delegate'
 
 RSpec.describe 'RSpec integration' do # rubocop:disable RSpec/DescribeClass
-  subject { TestResponse.new(last_response, last_request) }
+  include TestHelper
 
-  let(:last_response) { Rack::MockResponse.new(response_status, response_headers, JSON.dump(response_body)) }
-  let(:response_status) { 200 }
-  let(:last_request) { Rack::Request.new(request_env) }
-
-  let(:request_env) do
-    {
-      'PATH_INFO'      => '/user',
-      'REQUEST_METHOD' => 'GET'
-    }
+  subject do
+    response_builder.for_request(:get, '/user')
   end
+
+  let(:response_builder) { json_response(response_status, response_body) }
+  let(:response_status) { 200 }
   let(:response_body) do
     {
       data: {
@@ -25,13 +21,6 @@ RSpec.describe 'RSpec integration' do # rubocop:disable RSpec/DescribeClass
       }
     }
   end
-  let(:response_headers) do
-    {
-      'Content-Type' => 'application/json',
-      'X-Request-Id' => 'random-request-id'
-    }
-  end
-
   let(:doc) { OpenapiContracts::Doc.parse(FIXTURES_PATH.join('openapi')) }
 
   it { is_expected.to match_openapi_doc(doc) }
@@ -75,7 +64,7 @@ RSpec.describe 'RSpec integration' do # rubocop:disable RSpec/DescribeClass
   end
 
   context 'when a required header is missing' do
-    before { response_headers.delete('X-Request-Id') }
+    before { response_builder.headers.delete('X-Request-Id') }
 
     it { is_expected.to_not match_openapi_doc(doc) }
   end
