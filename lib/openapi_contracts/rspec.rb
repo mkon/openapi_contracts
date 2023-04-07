@@ -31,14 +31,4 @@ RSpec::Matchers.define :match_openapi_doc do |doc, options = {}| # rubocop:disab
     end
     self
   end
-
-  private
-
-  def lookup_api_spec(doc, options, response)
-    doc.response_for(
-      options.fetch(:path, response.request.path),
-      response.request.request_method.downcase,
-      response.status.to_s
-    )
-  end
 end
