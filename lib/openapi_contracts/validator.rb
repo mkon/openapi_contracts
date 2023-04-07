@@ -11,13 +11,24 @@ module OpenapiContracts
     def valid?
       return @errors.empty? if instance_variable_defined?(:@errors)
 
-      spec = lookup_api_spec(doc, options, response)
-      env = Env.new(spec, response, options[:status])
-      stack = MATCHERS
-              .reverse
-              .reduce(->(err) { err }) { |s, m| m.new(s, env) }
-      @errors = stack.call
+      @errors = matchers.call
       @errors.empty?
+    end
+
+    private
+
+    def lookup_api_spec
+      @doc.response_for(
+        @options.fetch(:path, @response.request.path),
+        @response.request.request_method.downcase,
+        @response.status.to_s
+      )
+    end
+
+    def matchers
+      env = Env.new(lookup_api_spec, @response, @options[:status])
+      MATCHERS.reverse
+              .reduce(->(err) { err }) { |s, m| m.new(s, env) }
     end
   end
 end
