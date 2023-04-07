@@ -10,6 +10,7 @@ RSpec::Matchers.define :match_openapi_doc do |doc, options = {}| # rubocop:disab
     return true if validator.valid?
 
     @errors = validator.errors
+    false
   end
 
   description do
