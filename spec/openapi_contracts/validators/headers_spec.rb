@@ -24,4 +24,16 @@ RSpec.describe OpenapiContracts::Validators::Headers do
       ]
     end
   end
+
+  context 'when the schema does not match' do
+    before do
+      response_headers['X-Request-Id'] = 1
+    end
+
+    it 'returns the error' do
+      expect(subject.call).to eq [
+        'Header x-request-id does not match'
+      ]
+    end
+  end
 end

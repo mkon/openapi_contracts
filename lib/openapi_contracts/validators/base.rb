@@ -24,8 +24,10 @@ module OpenapiContracts::Validators
 
     delegate :expected_status, :response, :spec, to: :@env
 
+    # :nocov:
     def validate
       raise NotImplementedError
     end
+    # :nocov:
   end
 end

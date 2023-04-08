@@ -72,4 +72,10 @@ RSpec.describe 'RSpec integration' do # rubocop:disable RSpec/DescribeClass
 
     it { is_expected.to_not match_openapi_doc(doc) }
   end
+
+  context 'when the response is not documented' do
+    let(:method) { 'POST' }
+
+    it { is_expected.to_not match_openapi_doc(doc) }
+  end
 end

@@ -45,4 +45,25 @@ RSpec.describe OpenapiContracts::Validators::Body do
       ]
     end
   end
+
+  context 'when the response body has a different content type' do
+    before do
+      response_headers['Content-Type'] = 'application/xml'
+    end
+
+    let(:response_body) { '<xml\>' }
+
+    it 'returns an error' do
+      expect(subject.call).to eq ['Undocumented response with content-type "application/xml"']
+    end
+  end
+
+  context 'when the response should have no content but has' do
+    let(:path) { '/health' }
+    let(:response_body) { 'OK' }
+
+    it 'returns an error' do
+      expect(subject.call).to eq ['Expected empty response body']
+    end
+  end
 end
