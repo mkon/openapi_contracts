@@ -1,4 +1,4 @@
-module OpenapiContracts::Matchers
+module OpenapiContracts::Validators
   class Body < Base
     private
 

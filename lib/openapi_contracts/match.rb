@@ -27,8 +27,8 @@ module OpenapiContracts
 
     def matchers
       env = Env.new(lookup_api_spec, @response, @options[:status])
-      MATCHERS.reverse
-              .reduce(->(err) { err }) { |s, m| m.new(s, env) }
+      Validators::ALL.reverse
+                     .reduce(->(err) { err }) { |s, m| m.new(s, env) }
     end
   end
 end

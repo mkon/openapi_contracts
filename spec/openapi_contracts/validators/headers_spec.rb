@@ -1,4 +1,4 @@
-RSpec.describe OpenapiContracts::Matchers::Headers do
+RSpec.describe OpenapiContracts::Validators::Headers do
   subject { described_class.new(stack, env) }
 
   let(:env) { OpenapiContracts::Env.new(spec, response, 200) }
