@@ -1,13 +1,13 @@
 RSpec.describe OpenapiContracts::Matchers::Body do
-  include TestHelper
-
   subject { described_class.new(stack, env) }
 
-  let(:stack) { ->(errors) { errors } }
   let(:env) { OpenapiContracts::Env.new(spec, response, 200) }
-  let(:doc) { OpenapiContracts::Doc.parse(FIXTURES_PATH.join('openapi')) }
-  let(:spec) { doc.response_for('/user', 'get', '200') }
-  let(:response) { json_response(200, {data: user}).for_request(:get, '/user') }
+  let(:spec) { doc.response_for(path, method.downcase, response_status.to_s) }
+  let(:stack) { ->(errors) { errors } }
+
+  include_context 'when using GET /user' do
+    let(:response_json) { {data: user} }
+  end
 
   context 'when the body matches the schema' do
     let(:user) do

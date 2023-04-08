@@ -1,13 +1,11 @@
 RSpec.describe OpenapiContracts::Matchers::Headers do
-  include TestHelper
-
   subject { described_class.new(stack, env) }
 
-  let(:stack) { ->(errors) { errors } }
   let(:env) { OpenapiContracts::Env.new(spec, response, 200) }
-  let(:doc) { OpenapiContracts::Doc.parse(FIXTURES_PATH.join('openapi')) }
   let(:spec) { doc.response_for('/user', 'get', '200') }
-  let(:response) { json_response(200, {}).for_request(:get, '/user') }
+  let(:stack) { ->(errors) { errors } }
+
+  include_context 'when using GET /user'
 
   context 'when the headers match the schema' do
     it 'has no errors' do
@@ -16,10 +14,8 @@ RSpec.describe OpenapiContracts::Matchers::Headers do
   end
 
   context 'when missing a header' do
-    let(:response) do
-      json_response(200, {})
-        .tap { |b| b.headers.delete('X-Request-Id') }
-        .for_request(:get, '/user')
+    before do
+      response_headers.delete('X-Request-Id')
     end
 
     it 'returns the error' do
