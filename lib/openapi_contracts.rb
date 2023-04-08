@@ -8,8 +8,8 @@ require 'json_schemer'
 require 'yaml'
 
 module OpenapiContracts
-  autoload :Helper,    'openapi_contracts/helper'
   autoload :Doc,       'openapi_contracts/doc'
+  autoload :Helper,    'openapi_contracts/helper'
   autoload :Matchers,  'openapi_contracts/matchers'
   autoload :Validator, 'openapi_contracts/validator'
 
