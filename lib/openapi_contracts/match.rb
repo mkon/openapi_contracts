@@ -1,5 +1,5 @@
 module OpenapiContracts
-  class Validator
+  class Match
     attr_reader :errors
 
     def initialize(doc, response, options = {})

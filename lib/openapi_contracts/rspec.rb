@@ -2,14 +2,14 @@ RSpec::Matchers.define :match_openapi_doc do |doc, options = {}| # rubocop:disab
   include OpenapiContracts::Helper
 
   match do |response|
-    validator = OpenapiContracts::Validator.new(
+    match = OpenapiContracts::Match.new(
       doc,
       response,
       options.merge({status: @status}.compact)
     )
-    return true if validator.valid?
+    return true if match.valid?
 
-    @errors = validator.errors
+    @errors = match.errors
     false
   end
 

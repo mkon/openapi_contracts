@@ -8,10 +8,10 @@ require 'json_schemer'
 require 'yaml'
 
 module OpenapiContracts
-  autoload :Doc,       'openapi_contracts/doc'
-  autoload :Helper,    'openapi_contracts/helper'
-  autoload :Matchers,  'openapi_contracts/matchers'
-  autoload :Validator, 'openapi_contracts/validator'
+  autoload :Doc,      'openapi_contracts/doc'
+  autoload :Helper,   'openapi_contracts/helper'
+  autoload :Match,    'openapi_contracts/match'
+  autoload :Matchers, 'openapi_contracts/matchers'
 
   # Defines order of matching
   MATCHERS = [
@@ -22,6 +22,12 @@ module OpenapiContracts
   ].freeze
 
   Env = Struct.new(:spec, :response, :expected_status)
+
+  module_function
+
+  def match(doc, response, options = {})
+    Match.new(doc, response, options)
+  end
 end
 
 require 'openapi_contracts/rspec' if defined?(RSpec)

@@ -61,8 +61,8 @@ it { is_expected.to match_openapi_doc($api_doc, path: '/messages/{id}').with_htt
 You can also use the Validator directly:
 ```ruby
 # Let's raise an error if the response does not match
-validator = OpenapiContracts::Validator.new($doc, response, options = {})
-raise validator.errors.merge("/n") unless validator.valid?
+result = OpenapiContracts.match($doc, response, options = {})
+raise result.errors.merge("/n") unless result.valid?
 ```
 
 ### How it works

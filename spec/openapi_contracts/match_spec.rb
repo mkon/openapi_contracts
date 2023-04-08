@@ -1,4 +1,4 @@
-RSpec.describe OpenapiContracts::Validator do
+RSpec.describe OpenapiContracts::Match do
   subject do
     described_class.new(doc, response)
   end
