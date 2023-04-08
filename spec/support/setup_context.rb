@@ -12,7 +12,7 @@ RSpec.shared_context 'when using GET /user' do
   let(:response_headers) do
     {
       'Content-Type' => 'application/json',
-      'X-Request-Id' => 'some-requets-id'
+      'X-Request-Id' => 'some-request-id'
     }
   end
   let(:response_json) do
