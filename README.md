@@ -56,6 +56,15 @@ Example:
 it { is_expected.to match_openapi_doc($api_doc, path: '/messages/{id}').with_http_status(:ok) }
 ```
 
+### Without RSpec
+
+You can also use the Validator directly:
+```ruby
+# Let's raise an error if the response does not match
+result = OpenapiContracts.match($doc, response, options = {})
+raise result.errors.merge("/n") unless result.valid?
+```
+
 ### How it works
 
 It uses the `request.path`, `request.method`, `status` and `headers` on the test subject (which must be the response) to find the response schema in the OpenAPI document. Then it does the following checks:

@@ -1,38 +1,7 @@
-require 'delegate'
-
 RSpec.describe 'RSpec integration' do # rubocop:disable RSpec/DescribeClass
-  subject { TestResponse.new(last_response, last_request) }
+  subject { response }
 
-  let(:last_response) { Rack::MockResponse.new(response_status, response_headers, JSON.dump(response_body)) }
-  let(:response_status) { 200 }
-  let(:last_request) { Rack::Request.new(request_env) }
-
-  let(:request_env) do
-    {
-      'PATH_INFO'      => '/user',
-      'REQUEST_METHOD' => 'GET'
-    }
-  end
-  let(:response_body) do
-    {
-      data: {
-        id:         'some-id',
-        type:       'user',
-        attributes: {
-          name:  nil,
-          email: 'name@me.example'
-        }
-      }
-    }
-  end
-  let(:response_headers) do
-    {
-      'Content-Type' => 'application/json',
-      'X-Request-Id' => 'random-request-id'
-    }
-  end
-
-  let(:doc) { OpenapiContracts::Doc.parse(FIXTURES_PATH.join('openapi')) }
+  include_context 'when using GET /user'
 
   it { is_expected.to match_openapi_doc(doc) }
 
@@ -42,7 +11,7 @@ RSpec.describe 'RSpec integration' do # rubocop:disable RSpec/DescribeClass
 
   context 'when using component responses' do
     let(:response_status) { 400 }
-    let(:response_body) do
+    let(:response_json) do
       {
         errors: [{}]
       }
@@ -52,14 +21,8 @@ RSpec.describe 'RSpec integration' do # rubocop:disable RSpec/DescribeClass
   end
 
   context 'when using dynamic paths' do
-    let(:request_env) do
-      {
-        'PATH_INFO'      => '/messages/ef278',
-        'REQUEST_METHOD' => 'GET'
-      }
-    end
-    let(:response_status) { 200 }
-    let(:response_body) do
+    let(:path) { '/messages/ef278' }
+    let(:response_json) do
       {
         data: {
           id:         '1ef',
@@ -81,31 +44,37 @@ RSpec.describe 'RSpec integration' do # rubocop:disable RSpec/DescribeClass
   end
 
   context 'when a required attribute is missing' do
-    before { response_body[:data][:attributes].delete(:email) }
+    before { response_json[:data][:attributes].delete(:email) }
 
     it { is_expected.to_not match_openapi_doc(doc) }
   end
 
   context 'when an additinal attribute is included' do
-    before { response_body[:data][:attributes].merge!(other: 'foo') }
+    before { response_json[:data][:attributes].merge!(other: 'foo') }
 
     it { is_expected.to_not match_openapi_doc(doc) }
   end
 
   context 'when a attribute does not match type' do
-    before { response_body[:data][:id] = 1 }
+    before { response_json[:data][:id] = 1 }
 
     it { is_expected.to_not match_openapi_doc(doc) }
   end
 
   context 'when an attribute does match type oneOf' do
-    before { response_body[:data][:attributes][:addresses] = {street: 'Somestreet'} }
+    before { response_json[:data][:attributes][:addresses] = {street: 'Somestreet'} }
 
     it { is_expected.to_not match_openapi_doc(doc) }
   end
 
   context 'when an attribute does not match type oneOf' do
-    before { response_body[:data][:attributes][:addresses] = {foo: 'bar'} }
+    before { response_json[:data][:attributes][:addresses] = {foo: 'bar'} }
+
+    it { is_expected.to_not match_openapi_doc(doc) }
+  end
+
+  context 'when the response is not documented' do
+    let(:method) { 'POST' }
 
     it { is_expected.to_not match_openapi_doc(doc) }
   end
