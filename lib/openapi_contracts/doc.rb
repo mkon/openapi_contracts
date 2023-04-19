@@ -1,7 +1,9 @@
 module OpenapiContracts
   class Doc
     autoload :Header,   'openapi_contracts/doc/header'
+    autoload :Method,   'openapi_contracts/doc/method'
     autoload :Parser,   'openapi_contracts/doc/parser'
+    autoload :Path,     'openapi_contracts/doc/path'
     autoload :Response, 'openapi_contracts/doc/response'
     autoload :Schema,   'openapi_contracts/doc/schema'
 
@@ -11,15 +13,33 @@ module OpenapiContracts
 
     def initialize(schema)
       @schema = Schema.new(schema)
+      @paths = dig('paths').to_h { |path, _| [path, Path.new(at_path(['paths', path]))] }
     end
 
     delegate :dig, :fetch, :[], :at_path, to: :@schema
 
-    def response_for(path, method, status)
-      path = ['paths', path, method, 'responses', status]
-      return unless dig(*path).present?
+    # Returns an Enumerator over all paths
+    def paths
+      @paths.each_value
+    end
 
-      Response.new(@schema.at_path(path))
+    def response_for(path, method, status)
+      with_path(path)&.with_method(method)&.with_status(status)
+    end
+
+    # Returns an Enumerator over all Responses
+    def responses(&block)
+      return enum_for(:responses) unless block_given?
+
+      paths.each do |path|
+        path.methods.each do |method|
+          method.responses.each(&block)
+        end
+      end
+    end
+
+    def with_path(path)
+      @paths[path]
     end
   end
 end

@@ -38,4 +38,12 @@ RSpec.describe OpenapiContracts::Doc do
 
     it { is_expected.to be_a(OpenapiContracts::Doc::Response) }
   end
+
+  describe '#responses' do
+    subject { doc.responses }
+
+    it { is_expected.to all be_a(OpenapiContracts::Doc::Response) }
+
+    it { is_expected.to have_attributes(count: 7) }
+  end
 end

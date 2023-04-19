@@ -14,7 +14,7 @@ module OpenapiContracts
     # Resolves Schema ref pointers links like "$ref: #/some/path" and returns new sub-schema
     # at the target if the current schema is only a ref link.
     def follow_refs
-      if (ref = dig('$ref'))
+      if (ref = as_h['$ref'])
         at_path(ref.split('/')[1..])
       else
         self
@@ -26,13 +26,13 @@ module OpenapiContracts
       path.map { |p| p.gsub('/', '~1') }.join('/').then { |s| "#/#{s}" }
     end
 
-    delegate :dig, :fetch, :key?, :[], to: :to_h
+    delegate :dig, :fetch, :key?, :[], :to_h, to: :as_h
 
     def at_path(path)
       self.class.new(schema, path)
     end
 
-    def to_h
+    def as_h
       return @schema if path.nil? || path.empty?
 
       @schema.dig(*path)
