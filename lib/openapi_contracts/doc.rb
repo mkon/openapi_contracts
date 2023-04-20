@@ -11,12 +11,14 @@ module OpenapiContracts
       new Parser.call(dir, filename)
     end
 
+    attr_reader :schema
+
     def initialize(schema)
       @schema = Schema.new(schema)
-      @paths = dig('paths').to_h { |path, _| [path, Path.new(at_path(['paths', path]))] }
+      @paths = @schema['paths'].to_h do |path, _|
+        [path, Path.new(@schema.at_pointer(['paths', path]))]
+      end
     end
-
-    delegate :dig, :fetch, :[], :at_path, to: :@schema
 
     # Returns an Enumerator over all paths
     def paths

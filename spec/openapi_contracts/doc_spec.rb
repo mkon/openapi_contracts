@@ -15,20 +15,6 @@ RSpec.describe OpenapiContracts::Doc do
     end
   end
 
-  describe '#at_path' do
-    subject { doc.at_path(pointer) }
-
-    let(:pointer) { %w(components schemas User) }
-
-    it 'is a correctly initialized schema' do
-      expect(subject).to be_a(OpenapiContracts::Doc::Schema)
-      hash = subject.to_h
-      expect(hash).to be_a(Hash)
-      expect(hash['type']).to eq 'object'
-      expect(hash.dig('properties', 'attributes', 'required')).to eq %w(name email)
-    end
-  end
-
   describe '#response_for' do
     subject { doc.response_for(path, method, status) }
 

@@ -4,18 +4,18 @@ module OpenapiContracts
   # their position in the overall schema. This allows even small sub-schemas to resolve
   # links to any other part of the schema
   class Doc::Schema
-    attr_reader :path, :schema
+    attr_reader :pointer, :schema
 
-    def initialize(schema, path = nil)
+    def initialize(schema, pointer = nil)
       @schema = schema
-      @path = path.freeze
+      @pointer = pointer.freeze
     end
 
     # Resolves Schema ref pointers links like "$ref: #/some/path" and returns new sub-schema
     # at the target if the current schema is only a ref link.
     def follow_refs
       if (ref = as_h['$ref'])
-        at_path(ref.split('/')[1..])
+        at_pointer(ref.split('/')[1..])
       else
         self
       end
@@ -23,23 +23,23 @@ module OpenapiContracts
 
     # Generates a fragment pointer for the current schema path
     def fragment
-      path.map { |p| p.gsub('/', '~1') }.join('/').then { |s| "#/#{s}" }
+      pointer.map { |p| p.gsub('/', '~1') }.join('/').then { |s| "#/#{s}" }
     end
 
     delegate :dig, :fetch, :key?, :[], :to_h, to: :as_h
 
-    def at_path(path)
-      self.class.new(schema, path)
+    def at_pointer(pointer)
+      self.class.new(schema, pointer)
     end
 
     def as_h
-      return @schema if path.nil? || path.empty?
+      return @schema if pointer.nil? || pointer.empty?
 
-      @schema.dig(*path)
+      @schema.dig(*pointer)
     end
 
-    def navigate(*sub_path)
-      self.class.new(schema, (path + Array.wrap(sub_path)))
+    def navigate(*sub_pointer)
+      self.class.new(schema, (pointer + Array.wrap(sub_pointer)))
     end
   end
 end
