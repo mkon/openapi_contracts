@@ -4,10 +4,10 @@ module OpenapiContracts
   # their position in the overall schema. This allows even small sub-schemas to resolve
   # links to any other part of the schema
   class Doc::Schema
-    attr_reader :pointer, :schema
+    attr_reader :pointer, :raw
 
-    def initialize(schema, pointer = nil)
-      @schema = schema
+    def initialize(raw, pointer = nil)
+      @raw = raw
       @pointer = pointer.freeze
     end
 
@@ -29,17 +29,17 @@ module OpenapiContracts
     delegate :dig, :fetch, :key?, :[], :to_h, to: :as_h
 
     def at_pointer(pointer)
-      self.class.new(schema, pointer)
+      self.class.new(raw, pointer)
     end
 
     def as_h
-      return @schema if pointer.nil? || pointer.empty?
+      return @raw if pointer.nil? || pointer.empty?
 
-      @schema.dig(*pointer)
+      @raw.dig(*pointer)
     end
 
-    def navigate(*sub_pointer)
-      self.class.new(schema, (pointer + Array.wrap(sub_pointer)))
+    def navigate(*spointer)
+      self.class.new(@raw, (pointer + Array.wrap(spointer)))
     end
   end
 end
