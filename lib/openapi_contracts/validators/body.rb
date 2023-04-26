@@ -14,7 +14,8 @@ module OpenapiContracts::Validators
 
     def validate_schema
       schema = spec.schema_for(response_content_type)
-      schemer = JSONSchemer.schema(schema.schema.merge('$ref' => schema.fragment))
+      # Trick JSONSchemer into validating only against the response schema
+      schemer = JSONSchemer.schema(schema.raw.merge('$ref' => schema.fragment))
       schemer.validate(JSON(response.body)).each do |err|
         @errors << error_to_message(err)
       end
