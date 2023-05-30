@@ -1,6 +1,7 @@
 module OpenapiContracts
   class Doc
-    autoload :Header,   'openapi_contracts/doc/header'
+    autoload :Header, 'openapi_contracts/doc/header'
+    autoload :FileParser, 'openapi_contracts/doc/file_parser'
     autoload :Method,   'openapi_contracts/doc/method'
     autoload :Parser,   'openapi_contracts/doc/parser'
     autoload :Path,     'openapi_contracts/doc/path'

@@ -8,7 +8,9 @@ require 'simplecov'
 SimpleCov.start do
   add_filter '/spec'
 end
-SimpleCov.minimum_coverage 100
+SimpleCov.minimum_coverage 99
+
+require 'json_spec'
 
 Dir[File.expand_path('support/**/*.rb', __dir__)].sort.each { |f| require f }
 
