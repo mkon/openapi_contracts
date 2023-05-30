@@ -32,6 +32,17 @@ paths:
           $ref: components/responses/BadRequest.yaml
         '500':
           description: Server Error
+  /numbers/one:
+    get:
+      operationId: number_one
+      summary: Number One
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: components/schemas/Multi.yaml#/One
   /messages/{id}:
     $ref: 'paths/message.yaml'
   /user:
