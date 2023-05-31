@@ -1,0 +1,23 @@
+One:
+  type: object
+  properties:
+    one:
+      type: string
+
+Two:
+  type: object
+  properties:
+    two:
+      type: string
+
+Three:
+  type: object
+  properties:
+    three:
+      type: string
+
+All:
+  allOf:
+    - $ref: '#/One'
+    - $ref: '#/Two'
+    - $ref: '#/Three'
