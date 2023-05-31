@@ -10,6 +10,10 @@ module OpenapiContracts
       end
     end
 
+    def self.parse(root, pathname)
+      new(root, pathname).call
+    end
+
     def initialize(root, pathname)
       @root = root
       @pathname = pathname.relative? ? root.join(pathname) : pathname
@@ -56,8 +60,8 @@ module OpenapiContracts
         {key => "#/#{@pathname.relative_path_from(@root).sub_ext('').join(pointer)}"}
       elsif %r{^(?<relpath>[^#]+)(?:#/(?<pointer>.*))?} =~ target
         if relpath.start_with?('paths') # path description file pointer
-          result = self.class.new(@root, Pathname(relpath)).call
-          result.data
+          # Inline the file contents
+          self.class.parse(@root, Pathname(relpath)).data
         else # A file pointer with potential JSON sub-pointer
           tgt = @pathname.parent.relative_path_from(@root).join(relpath).sub_ext('')
           tgt = tgt.join(pointer) if pointer

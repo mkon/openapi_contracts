@@ -10,7 +10,7 @@ module OpenapiContracts
 
     def parse(path)
       abs_path = @dir.join(path)
-      file = Doc::FileParser.new(@dir, abs_path).call
+      file = Doc::FileParser.parse(@dir, abs_path)
       data = file.data
       data.deep_merge! merge_components
       nullable_to_type!(data)
@@ -21,7 +21,7 @@ module OpenapiContracts
     def merge_components
       data = {}
       Dir[File.expand_path('components/**/*.yaml', @dir)].each do |file|
-        result = Doc::FileParser.new(@dir, Pathname(file)).call
+        result = Doc::FileParser.parse(@dir, Pathname(file))
         data.deep_merge!(result.to_mergable_hash)
       end
       data
