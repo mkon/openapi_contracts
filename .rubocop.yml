@@ -4,6 +4,9 @@ AllCops:
   TargetRubyVersion: 2.7
   NewCops: enable
 
+Gemspec/DevelopmentDependencies:
+  Enabled: false
+
 Layout/HashAlignment:
   EnforcedColonStyle: table
   EnforcedHashRocketStyle: table
