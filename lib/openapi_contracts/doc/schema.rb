@@ -26,7 +26,7 @@ module OpenapiContracts
       pointer.map { |p| p.gsub('/', '~1') }.join('/').then { |s| "#/#{s}" }
     end
 
-    delegate :dig, :fetch, :key?, :[], :to_h, to: :as_h
+    delegate :dig, :fetch, :keys, :key?, :[], :to_h, to: :as_h
 
     def at_pointer(pointer)
       self.class.new(raw, pointer)

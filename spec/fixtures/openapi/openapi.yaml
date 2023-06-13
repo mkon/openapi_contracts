@@ -16,6 +16,10 @@ info:
 tags:
   - name: Auth
     description: Authentication
+  - name: Comments
+    description: Comments
+  - name: Messages
+    description: Messages
   - name: User
     description: Operations about user
 servers:
@@ -45,5 +49,7 @@ paths:
                 $ref: components/schemas/Numbers.yaml#/All
   /messages/{id}:
     $ref: 'paths/message.yaml'
+  /comments/{id}:
+    $ref: 'paths/comment.yaml'
   /user:
     $ref: 'paths/user.yaml'

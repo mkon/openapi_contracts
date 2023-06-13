@@ -1,0 +1,25 @@
+parameters:
+- name: id
+  in: path
+  description: Id of the comment.
+  required: true
+  schema:
+    type: string
+get:
+  tags:
+    - Comment
+  summary: Get Comment
+  description: Get Comment
+  operationId: get_comment
+  responses:
+    '200':
+      description: OK
+patch:
+  tags:
+    - Comment
+  summary: Update Comment
+  description: Patch Comment
+  operationId: patch_comment
+  responses:
+    '204':
+      description: OK
