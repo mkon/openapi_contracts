@@ -24,6 +24,19 @@ tags:
     description: Operations about user
 servers:
   - url: '//api.host.example'
+components:
+  responses:
+    GenericError:
+      description: Error response
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errors:
+                type: array
+                items:
+                  type: object
 paths:
   /health:
     get:
@@ -34,6 +47,9 @@ paths:
           description: OK
         '400':
           $ref: components/responses/BadRequest.yaml
+        '409':
+           description: Conflict
+           $ref: '#/components/responses/GenericError'
         '500':
           description: Server Error
   /numbers:
