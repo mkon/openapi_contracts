@@ -1,5 +1,5 @@
 RSpec.describe OpenapiContracts::Doc::FileParser do
-  subject(:parser) { described_class.new(openapi_dir, pathname) }
+  subject(:parser) { described_class.new(openapi_dir.join('openapi.yaml'), pathname) }
 
   let(:openapi_dir) { FIXTURES_PATH.join('openapi') }
 
