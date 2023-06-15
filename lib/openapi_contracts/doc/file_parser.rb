@@ -10,13 +10,14 @@ module OpenapiContracts
       end
     end
 
-    def self.parse(root, pathname)
-      new(root, pathname).call
+    def self.parse(rootfile, pathname)
+      new(rootfile, pathname).call
     end
 
-    def initialize(root, pathname)
-      @root = root
-      @pathname = pathname.relative? ? root.join(pathname) : pathname
+    def initialize(rootfile, pathname)
+      @root = rootfile.parent
+      @rootfile = rootfile
+      @pathname = pathname.relative? ? @root.join(pathname) : pathname
     end
 
     def call
@@ -57,11 +58,11 @@ module OpenapiContracts
     def transform_pointer(key, target)
       if %r{^#/(?<pointer>.*)} =~ target
         # A JSON Pointer
-        {key => "#/#{@pathname.relative_path_from(@root).sub_ext('').join(pointer)}"}
+        {key => generate_absolute_pointer(pointer)}
       elsif %r{^(?<relpath>[^#]+)(?:#/(?<pointer>.*))?} =~ target
         if relpath.start_with?('paths') # path description file pointer
           # Inline the file contents
-          self.class.parse(@root, Pathname(relpath)).data
+          self.class.parse(@rootfile, Pathname(relpath)).data
         else # A file pointer with potential JSON sub-pointer
           tgt = @pathname.parent.relative_path_from(@root).join(relpath).sub_ext('')
           tgt = tgt.join(pointer) if pointer
@@ -69,6 +70,15 @@ module OpenapiContracts
         end
       else
         {key => target}
+      end
+    end
+
+    # A JSON pointer to the currently parsed file as seen from the root openapi file
+    def generate_absolute_pointer(json_pointer)
+      if @rootfile == @pathname
+        "#/#{json_pointer}"
+      else
+        "#/#{@pathname.relative_path_from(@root).sub_ext('').join(json_pointer)}"
       end
     end
   end

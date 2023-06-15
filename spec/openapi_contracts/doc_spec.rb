@@ -4,7 +4,7 @@ RSpec.describe OpenapiContracts::Doc do
   let(:openapi_dir) { FIXTURES_PATH.join('openapi') }
 
   describe '.parse' do
-    subject(:defined_doc) { described_class.parse(openapi_dir, 'auth.openapi.yaml') }
+    subject(:defined_doc) { described_class.parse(openapi_dir, 'other.openapi.yaml') }
 
     it 'parses default document when not defined' do
       expect(doc).to be_a(described_class)
@@ -30,6 +30,6 @@ RSpec.describe OpenapiContracts::Doc do
 
     it { is_expected.to all be_a(OpenapiContracts::Doc::Response) }
 
-    it { is_expected.to have_attributes(count: 10) }
+    it { is_expected.to have_attributes(count: 11) }
   end
 end
