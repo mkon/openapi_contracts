@@ -17,8 +17,9 @@ module OpenapiContracts
     def initialize(schema)
       @schema = Schema.new(schema)
       @paths = @schema['paths'].to_h do |path, _|
-        [path, Path.new(@schema.at_pointer(['paths', path]))]
+        [path, Path.new(path, @schema.at_pointer(['paths', path]))]
       end
+      @dynamic_paths = paths.select(&:dynamic?)
     end
 
     # Returns an Enumerator over all paths
@@ -42,7 +43,11 @@ module OpenapiContracts
     end
 
     def with_path(path)
-      @paths[path]
+      if @paths.key?(path)
+        @paths[path]
+      else
+        @dynamic_paths.find { |p| p.matches?(path) }
+      end
     end
   end
 end
