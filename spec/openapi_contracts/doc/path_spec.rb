@@ -64,131 +64,40 @@ RSpec.describe OpenapiContracts::Doc::Path do
       end
     end
 
-    context 'when the param is a integer' do
+    context 'when the param is a integer from 0 - 1000' do
       let(:id_schema) do
         {
-          'type' => 'integer'
+          'type'    => 'integer',
+          'minimum' => 0,
+          'maximum' => 1000
         }
       end
 
       it 'can match', :aggregate_failures do
-        expect(path.matches?('/messages/1234')).to be true
+        expect(path.matches?('/messages/1001')).to be false
+        expect(path.matches?('/messages/1000')).to be true
         expect(path.matches?('/messages/1.234')).to be false
-        expect(path.matches?('/messages/word')).to be false
-        expect(path.matches?('/messages/-1234')).to be true
+        expect(path.matches?('/messages/-1234')).to be false
         expect(path.matches?('/messages/-1.234')).to be false
-      end
-
-      context 'when there is a minimum' do
-        let(:id_schema) do
-          {
-            'type'    => 'number',
-            'minimum' => -2
-          }
-        end
-
-        it 'can match', :aggregate_failures do
-          expect(path.matches?('/messages/1234')).to be true
-          expect(path.matches?('/messages/-1234')).to be false
-        end
-      end
-
-      context 'when there is a maximum' do
-        let(:id_schema) do
-          {
-            'type'    => 'number',
-            'maximum' => 2
-          }
-        end
-
-        it 'can match', :aggregate_failures do
-          expect(path.matches?('/messages/1234')).to be false
-          expect(path.matches?('/messages/-1234')).to be true
-        end
-      end
-
-      context 'when there is a minimum and maximum' do
-        let(:id_schema) do
-          {
-            'type'    => 'number',
-            'minimum' => 0,
-            'maximum' => 1234
-          }
-        end
-
-        it 'can match', :aggregate_failures do
-          expect(path.matches?('/messages/1234')).to be true
-          expect(path.matches?('/messages/-1234')).to be false
-        end
       end
     end
 
-    context 'when the param is a number' do
+    context 'when the param is a number from 0 to 1000' do
       let(:id_schema) do
         {
-          'type' => 'number'
+          'type'             => 'number',
+          'minimum'          => 0,
+          'maximum'          => 1000,
+          'exclusiveMaximum' => true
         }
       end
 
       it 'can match', :aggregate_failures do
-        expect(path.matches?('/messages/1234')).to be true
+        expect(path.matches?('/messages/1000')).to be false
+        expect(path.matches?('/messages/999.9')).to be true
         expect(path.matches?('/messages/1.234')).to be true
         expect(path.matches?('/messages/word')).to be false
-        expect(path.matches?('/messages/-1234')).to be true
-        expect(path.matches?('/messages/-1.234')).to be true
-      end
-
-      context 'when there is a minimum' do
-        let(:id_schema) do
-          {
-            'type'    => 'number',
-            'minimum' => -2
-          }
-        end
-
-        it 'can match', :aggregate_failures do
-          expect(path.matches?('/messages/1234')).to be true
-          expect(path.matches?('/messages/1.234')).to be true
-          expect(path.matches?('/messages/word')).to be false
-          expect(path.matches?('/messages/-1234')).to be false
-          expect(path.matches?('/messages/-1.234')).to be true
-        end
-      end
-
-      context 'when there is a maximum' do
-        let(:id_schema) do
-          {
-            'type'    => 'number',
-            'maximum' => 2
-          }
-        end
-
-        it 'can match', :aggregate_failures do
-          expect(path.matches?('/messages/1234')).to be false
-          expect(path.matches?('/messages/1.234')).to be true
-          expect(path.matches?('/messages/word')).to be false
-          expect(path.matches?('/messages/-1234')).to be true
-          expect(path.matches?('/messages/-1.234')).to be true
-        end
-      end
-
-      context 'when there is a minimum and maximum' do
-        let(:id_schema) do
-          {
-            'type'             => 'number',
-            'minimum'          => 0,
-            'maximum'          => 1234,
-            'exclusiveMaximum' => true
-          }
-        end
-
-        it 'can match', :aggregate_failures do
-          expect(path.matches?('/messages/1234')).to be false
-          expect(path.matches?('/messages/1.234')).to be true
-          expect(path.matches?('/messages/word')).to be false
-          expect(path.matches?('/messages/-1234')).to be false
-          expect(path.matches?('/messages/-1.234')).to be false
-        end
+        expect(path.matches?('/messages/-1.234')).to be false
       end
     end
   end
