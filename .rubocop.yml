@@ -18,6 +18,10 @@ Layout/SpaceInsideHashLiteralBraces:
 Lint/AssignmentInCondition:
   Enabled: false
 
+Style/BlockDelimiters:
+  EnforcedStyle: braces_for_chaining
+Style/MultilineBlockChain:
+  Enabled: false
 Style/ClassAndModuleChildren:
   Enabled: false
 Style/ConditionalAssignment:
