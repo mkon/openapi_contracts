@@ -1,6 +1,7 @@
 module OpenapiContracts
   class Doc::Path
-    def initialize(schema)
+    def initialize(path, schema)
+      @path = path
       @schema = schema
 
       @methods = (known_http_methods & @schema.keys).to_h do |method|
@@ -8,8 +9,25 @@ module OpenapiContracts
       end
     end
 
+    def dynamic?
+      @path.include?('{')
+    end
+
+    def matches?(path)
+      @path == path || regexp_path.match(path) do |m|
+        m.named_captures.each do |k, v|
+          return false unless parameter_matches?(k, v)
+        end
+        true
+      end
+    end
+
     def methods
       @methods.each_value
+    end
+
+    def static?
+      !dynamic?
     end
 
     def with_method(method)
@@ -17,6 +35,23 @@ module OpenapiContracts
     end
 
     private
+
+    def parameter_matches?(name, value)
+      parameter = @schema['parameters']
+        &.find { |p| p['name'] == name && p['in'] == 'path' }
+        &.then { |s| Doc::Parameter.new(s.with_indifferent_access) }
+
+      return false unless parameter
+
+      parameter.matches?(value)
+    end
+
+    def regexp_path
+      re = /\{(\S+)\}/
+      @path.gsub(re) { |placeholder|
+        placeholder.match(re) { |m| "(?<#{m[1]}>[^/]*)" }
+      }.then { |str| Regexp.new(str) }
+    end
 
     def known_http_methods
       # https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods

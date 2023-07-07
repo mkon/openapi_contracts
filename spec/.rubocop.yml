@@ -7,6 +7,9 @@ require: rubocop-rspec
 Metrics/BlockLength:
   Enabled: false
 
+RSpec/DescribeClass:
+  Exclude:
+  - integration/**/*
 RSpec/MultipleExpectations:
   Enabled: false
 RSpec/MultipleMemoizedHelpers:

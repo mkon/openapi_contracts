@@ -1,4 +1,4 @@
-RSpec.describe 'RSpec integration' do # rubocop:disable RSpec/DescribeClass
+RSpec.describe 'RSpec integration' do
   subject { response }
 
   include_context 'when using GET /user'
@@ -21,6 +21,23 @@ RSpec.describe 'RSpec integration' do # rubocop:disable RSpec/DescribeClass
   end
 
   context 'when using dynamic paths' do
+    let(:path) { '/messages/ef278ab2' }
+    let(:response_json) do
+      {
+        data: {
+          id:         '1ef',
+          type:       'messages',
+          attributes: {
+            body: 'foo'
+          }
+        }
+      }
+    end
+
+    it { is_expected.to match_openapi_doc(doc).with_http_status(:ok) }
+  end
+
+  context 'when using dynamic paths with path option' do
     let(:path) { '/messages/ef278' }
     let(:response_json) do
       {
