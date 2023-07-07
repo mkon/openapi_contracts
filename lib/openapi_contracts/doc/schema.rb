@@ -23,7 +23,7 @@ module OpenapiContracts
 
     # Generates a fragment pointer for the current schema path
     def fragment
-      pointer.map { |p| p.gsub('/', '~1') }.join('/').then { |s| "#/#{s}" }
+      pointer.map { |p| URI.encode_www_form_component(p.gsub('/', '~1')) }.join('/').then { |s| "#/#{s}" }
     end
 
     delegate :dig, :fetch, :keys, :key?, :[], :to_h, to: :as_h
