@@ -47,8 +47,9 @@ it 'responds with 200 and matches the doc' do
 
 The `match_openapi_doc($doc)` method allows passing options as a 2nd argument.
 This allows overriding the default request.path lookup in case this does not find
-the correct response definition in your schema. This is especially important with
-dynamic paths.
+the correct response definition in your schema. This can be usefull when there is
+dynamic parameters in the path and the matcher fails to resolve the request path to
+an endpoint in the openapi specification.
 
 Example:
 
@@ -67,7 +68,9 @@ raise result.errors.merge("/n") unless result.valid?
 
 ### How it works
 
-It uses the `request.path`, `request.method`, `status` and `headers` on the test subject (which must be the response) to find the response schema in the OpenAPI document. Then it does the following checks:
+It uses the `request.path`, `request.method`, `status` and `headers` on the test subject
+(which must be the response) to find the response schema in the OpenAPI document.
+Then it does the following checks:
 
 * The response is documented
 * Required headers are present
