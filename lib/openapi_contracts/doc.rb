@@ -4,6 +4,7 @@ module OpenapiContracts
     autoload :FileParser, 'openapi_contracts/doc/file_parser'
     autoload :Method,     'openapi_contracts/doc/method'
     autoload :Parser,     'openapi_contracts/doc/parser'
+    autoload :Parameter,  'openapi_contracts/doc/parameter'
     autoload :Path,       'openapi_contracts/doc/path'
     autoload :Response,   'openapi_contracts/doc/response'
     autoload :Schema,     'openapi_contracts/doc/schema'
