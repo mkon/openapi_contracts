@@ -37,7 +37,7 @@ module OpenapiContracts
     private
 
     def parameter_matches?(name, value)
-      parameter = @schema['parameters'].find { |p| p['name'] == name && p['in'] == 'path' }
+      parameter = @schema['parameters']&.find { |p| p['name'] == name && p['in'] == 'path' }
 
       return false unless parameter
 
