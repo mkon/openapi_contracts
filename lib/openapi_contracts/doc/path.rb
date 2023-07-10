@@ -41,7 +41,7 @@ module OpenapiContracts
                        .map.with_index { |_spec, index| @schema.navigate('parameters', index.to_s).follow_refs }
                        .find { |s| s['name'] == name && s['in'] == 'path' }
                       &.then { |s| Doc::Parameter.new(s) }
-      return unless parameter
+      return false unless parameter
 
       parameter.matches?(value)
     end
