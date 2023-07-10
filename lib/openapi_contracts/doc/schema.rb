@@ -6,7 +6,7 @@ module OpenapiContracts
   class Doc::Schema
     attr_reader :pointer, :raw
 
-    def initialize(raw, pointer = nil)
+    def initialize(raw, pointer = [])
       @raw = raw
       @pointer = pointer.freeze
     end
@@ -26,16 +26,30 @@ module OpenapiContracts
       pointer.map { |p| URI.encode_www_form_component(p.gsub('/', '~1')) }.join('/').then { |s| "#/#{s}" }
     end
 
-    delegate :dig, :fetch, :keys, :key?, :[], :to_h, to: :as_h
+    delegate :dig, :fetch, :keys, :key?, :[], :to_h, to: :resolve
 
     def at_pointer(pointer)
       self.class.new(raw, pointer)
     end
 
     def as_h
+      resolve
+    end
+
+    def resolve
       return @raw if pointer.nil? || pointer.empty?
 
-      @raw.dig(*pointer)
+      pointer.inject(@raw) do |obj, key|
+        return nil unless obj
+
+        if obj.is_a?(Array)
+          raise ArgumentError unless /^\d+$/ =~ key
+
+          key = key.to_i
+        end
+
+        obj[key]
+      end
     end
 
     def navigate(*spointer)

@@ -1,11 +1,11 @@
 RSpec.describe OpenapiContracts::Doc::Parameter do
-  subject(:parameter) { described_class.new(options) }
+  subject(:parameter) { described_class.new(spec) }
 
-  let(:options) do
-    {
-      name:   'something',
-      schema: schema
-    }
+  let(:spec) do
+    OpenapiContracts::Doc::Schema.new(
+      'name'   => 'something',
+      'schema' => schema
+    )
   end
 
   shared_examples 'a path parameter' do |expectations|

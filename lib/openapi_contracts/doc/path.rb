@@ -37,11 +37,11 @@ module OpenapiContracts
     private
 
     def parameter_matches?(name, value)
-      parameter = @schema['parameters']
-        &.find { |p| p['name'] == name && p['in'] == 'path' }
-        &.then { |s| Doc::Parameter.new(s.with_indifferent_access) }
-
-      return false unless parameter
+      parameter = Array.wrap(@schema['parameters'])
+                       .map.with_index { |_spec, index| @schema.navigate('parameters', index.to_s).follow_refs }
+                       .find { |s| s['name'] == name && s['in'] == 'path' }
+                      &.then { |s| Doc::Parameter.new(s) }
+      return unless parameter
 
       parameter.matches?(value)
     end
