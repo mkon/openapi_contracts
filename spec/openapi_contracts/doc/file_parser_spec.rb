@@ -70,7 +70,7 @@ RSpec.describe OpenapiContracts::Doc::FileParser do
       subject { result.to_mergable_hash.to_json }
 
       it { is_expected.to be_json_eql(<<~JSON) }
-        {
+         {
           "paths": {
             "user": {
               "get": {
@@ -109,6 +109,91 @@ RSpec.describe OpenapiContracts::Doc::FileParser do
                   }
                 },
                 "summary": "Get User",
+                "tags": [
+                  "User"
+                ]
+              },
+              "post": {
+                "description": "Create User",
+                "operationId": "create_user",
+                "requestBody": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "data": {
+                            "additionalProperties": false,
+                            "properties": {
+                              "attributes": {
+                                "additionalProperties": false,
+                                "properties": {
+                                  "email": {
+                                    "$ref": "#/components/schemas/Email"
+                                  },
+                                  "name": {
+                                    "nullable": true,
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "name",
+                                  "email"
+                                ],
+                                "type": "object"
+                              },
+                              "type": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "type",
+                              "attributes"
+                            ],
+                            "type": "object"
+                          }
+                        },
+                        "required": [
+                          "data"
+                        ],
+                        "type": "object"
+                      }
+                    }
+                  }
+                },
+                "responses": {
+                  "201": {
+                    "content": {
+                      "application/json": {
+                        "schema": {
+                          "additionalProperties": false,
+                          "properties": {
+                            "data": {
+                              "$ref": "#/components/schemas/User"
+                            }
+                          },
+                          "required": [
+                            "data"
+                          ],
+                          "type": "object"
+                        }
+                      }
+                    },
+                    "description": "Created",
+                    "headers": {
+                      "x-request-id": {
+                        "required": true,
+                        "schema": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  },
+                  "400": {
+                    "$ref": "#/components/responses/BadRequest"
+                  }
+                },
+                "summary": "Create User",
                 "tags": [
                   "User"
                 ]

@@ -14,7 +14,7 @@ module OpenapiContracts
   autoload :Match,      'openapi_contracts/match'
   autoload :Validators, 'openapi_contracts/validators'
 
-  Env = Struct.new(:spec, :response, :expected_status)
+  Env = Struct.new(:spec, :response, :expected_status, :request_body_required?, :request_body)
 
   module_function
 

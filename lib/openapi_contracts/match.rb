@@ -17,18 +17,34 @@ module OpenapiContracts
 
     private
 
-    def lookup_api_spec
-      @doc.response_for(
-        @options.fetch(:path, @response.request.path),
-        @response.request.request_method.downcase,
-        @response.status.to_s
-      )
+    def response_spec
+      @doc.response_for(path, method, status)
+    end
+
+    def request_spec
+      @doc.request_for(path, method)
     end
 
     def matchers
-      env = Env.new(lookup_api_spec, @response, @options[:status])
+      env = Env.new(response_spec, @response, @options[:status], request_body_required?, request_spec)
       Validators::ALL.reverse
                      .reduce(->(err) { err }) { |s, m| m.new(s, env) }
+    end
+
+    def request_body_required?
+      @options.fetch(:request_body, false)
+    end
+
+    def path
+      @options.fetch(:path, @response.request.path)
+    end
+
+    def method
+      @response.request.request_method.downcase
+    end
+
+    def status
+      @response.status.to_s
     end
   end
 end

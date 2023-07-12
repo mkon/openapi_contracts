@@ -22,7 +22,7 @@ module OpenapiContracts::Validators
 
     private
 
-    delegate :expected_status, :response, :spec, to: :@env
+    delegate :request_body, :request_body_required?, :expected_status, :response, :spec, to: :@env
 
     # :nocov:
     def validate

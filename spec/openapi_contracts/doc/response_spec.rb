@@ -31,13 +31,13 @@ RSpec.describe OpenapiContracts::Doc::Response do
     describe '#supports_content_type?' do
       subject { response.supports_content_type?(content_type) }
 
-      context 'when content_type is supprted' do
+      context 'when content_type is supported' do
         let(:content_type) { 'application/json' }
 
         it { is_expected.to be true }
       end
 
-      context 'when content_type is not supprted' do
+      context 'when content_type is not supported' do
         let(:content_type) { 'application/text' }
 
         it { is_expected.to be false }
@@ -47,7 +47,7 @@ RSpec.describe OpenapiContracts::Doc::Response do
     describe '#schema_for' do
       subject { response.schema_for(content_type) }
 
-      context 'when content_type is supprted' do
+      context 'when content_type is supported' do
         let(:content_type) { 'application/json' }
 
         it { is_expected.to be_a(OpenapiContracts::Doc::Schema) }

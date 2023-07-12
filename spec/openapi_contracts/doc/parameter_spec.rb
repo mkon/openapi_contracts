@@ -51,7 +51,7 @@ RSpec.describe OpenapiContracts::Doc::Parameter do
       }
     end
 
-    context 'when the param is a integer' do
+    context 'when the param is an integer' do
       let(:schema) do
         {
           'type' => 'integer'
@@ -67,7 +67,7 @@ RSpec.describe OpenapiContracts::Doc::Parameter do
       }
     end
 
-    context 'when the param is a integer with minimum -2' do
+    context 'when the param is an integer with minimum -2' do
       let(:schema) do
         {
           'type'    => 'integer',
@@ -82,7 +82,7 @@ RSpec.describe OpenapiContracts::Doc::Parameter do
       }
     end
 
-    context 'when the param is a integer with exclusive minimum -2' do
+    context 'when the param is an integer with exclusive minimum -2' do
       let(:schema) do
         {
           'type'             => 'integer',
@@ -97,7 +97,7 @@ RSpec.describe OpenapiContracts::Doc::Parameter do
       }
     end
 
-    context 'when the param is a integer with maximum 2' do
+    context 'when the param is an integer with maximum 2' do
       let(:schema) do
         {
           'type'    => 'integer',
@@ -113,7 +113,7 @@ RSpec.describe OpenapiContracts::Doc::Parameter do
       }
     end
 
-    context 'when the param is a integer with exclusive maximum 2' do
+    context 'when the param is an integer with exclusive maximum 2' do
       let(:schema) do
         {
           'type'             => 'integer',
@@ -128,7 +128,7 @@ RSpec.describe OpenapiContracts::Doc::Parameter do
       }
     end
 
-    context 'when the param is a integer with minimum 0 and maximum 1234' do
+    context 'when the param is an integer with minimum 0 and maximum 1234' do
       let(:schema) do
         {
           'type'    => 'integer',
@@ -214,7 +214,7 @@ RSpec.describe OpenapiContracts::Doc::Parameter do
       }
     end
 
-    context 'when the param is a array' do
+    context 'when the param is an array' do
       let(:schema) do
         {
           'type' => 'array'
