@@ -14,7 +14,7 @@ module OpenapiContracts::Validators
       else
         schema = request_body.schema_for(request_content_type)
         # Trick JSONSchemer into validating only against the request body schema
-        schemer = JSONSchemer.schema(schema.raw.merge('$ref' => schema.fragment))
+        schemer = JSONSchemer.schema(schema.raw.merge('$ref' => schema.fragment, '$schema' => 'http://json-schema.org/draft-04/schema#'))
         schemer.validate(JSON(request_payload)).each do |err|
           @errors << error_to_message(err)
         end
