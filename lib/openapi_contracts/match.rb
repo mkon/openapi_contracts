@@ -26,12 +26,12 @@ module OpenapiContracts
     end
 
     def matchers
-      env = Env.new(response_spec, @response, @options[:status], request_body_required?, request_spec)
+      env = Env.new(response_spec, @response, @options[:status], match_request_body?, request_spec)
       Validators::ALL.reverse
                      .reduce(->(err) { err }) { |s, m| m.new(s, env) }
     end
 
-    def request_body_required?
+    def match_request_body?
       @options.fetch(:request_body, false)
     end
 

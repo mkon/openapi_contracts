@@ -70,7 +70,7 @@ RSpec.describe OpenapiContracts::Doc::FileParser do
       subject { result.to_mergable_hash.to_json }
 
       it { is_expected.to be_json_eql(<<~JSON) }
-         {
+        {
           "paths": {
             "user": {
               "get": {

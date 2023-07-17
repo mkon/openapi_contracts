@@ -3,7 +3,7 @@ module OpenapiContracts::Validators
     private
 
     def validate
-      validate_schema if request_body_required?
+      validate_schema if match_request_body?
     end
 
     def validate_schema

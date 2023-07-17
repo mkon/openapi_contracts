@@ -5,8 +5,8 @@ module OpenapiContracts::Validators
     private
 
     def validate
-      request_missing if request_body_required? && !request_body
-      spec ? return : response_missing
+      response_missing unless spec
+      request_missing if match_request_body? && !request_body
     end
 
     def response_missing

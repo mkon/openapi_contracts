@@ -16,7 +16,7 @@ First, parse your API documentation:
 
 ```ruby
 # This must point to the folder where the OAS file is stored
-$doc = OpenapiContracts::Doc.parse(Rails.root.join('spec', 'fixtures', 'openapi', 'api-docs'), '<filename>')
+$doc = OpenapiContracts::Doc.parse(Rails.root.join('spec/fixtures/openapi/api-docs'), '<filename>')
 ```
 
 In case the `filename` argument is not set, parser will by default search for the file named `openapi.yaml`.
