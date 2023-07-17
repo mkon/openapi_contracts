@@ -1,12 +1,11 @@
 module OpenapiContracts
+  HTTP_METHODS = %w(get head post put delete connect options trace patch).freeze
+
   class Doc::Path
     def initialize(path, schema)
       @path = path
       @schema = schema
-
-      @methods = (known_http_methods & @schema.keys).to_h do |method|
-        [method, Doc::Method.new(@schema.navigate(method))]
-      end
+      @supported_methods = HTTP_METHODS & @schema.keys
     end
 
     def dynamic?
@@ -22,23 +21,29 @@ module OpenapiContracts
       end
     end
 
-    def methods
-      @methods.each_value
+    def operations
+      @supported_methods.each.lazy.map { |m| Doc::Operation.new(@schema.navigate(m)) }
     end
 
     def parameters
       enum = @schema.navigate('parameters').each
       return [].each unless enum
 
-      enum.map { |s| Doc::Parameter.new(s) }
+      enum.lazy.map { |s| Doc::Parameter.new(s) }
     end
 
     def static?
       !dynamic?
     end
 
+    def supports_method?(method)
+      @supported_methods.include?(method)
+    end
+
     def with_method(method)
-      @methods[method]
+      return unless supports_method?(method)
+
+      Doc::Operation.new(@schema.navigate(method))
     end
 
     private
@@ -55,11 +60,6 @@ module OpenapiContracts
       @path.gsub(re) { |placeholder|
         placeholder.match(re) { |m| "(?<#{m[1]}>[^/]*)" }
       }.then { |str| Regexp.new(str) }
-    end
-
-    def known_http_methods
-      # https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods
-      %w(get head post put delete connect options trace patch).freeze
     end
   end
 end

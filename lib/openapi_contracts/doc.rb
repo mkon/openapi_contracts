@@ -2,7 +2,7 @@ module OpenapiContracts
   class Doc
     autoload :Header,     'openapi_contracts/doc/header'
     autoload :FileParser, 'openapi_contracts/doc/file_parser'
-    autoload :Method,     'openapi_contracts/doc/method'
+    autoload :Operation,  'openapi_contracts/doc/operation'
     autoload :Parser,     'openapi_contracts/doc/parser'
     autoload :Parameter,  'openapi_contracts/doc/parameter'
     autoload :Path,       'openapi_contracts/doc/path'
@@ -43,8 +43,8 @@ module OpenapiContracts
       return enum_for(:responses) unless block_given?
 
       paths.each do |path|
-        path.methods.each do |method|
-          method.responses.each(&block)
+        path.operations.each do |operation|
+          operation.responses.each(&block)
         end
       end
     end

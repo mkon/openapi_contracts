@@ -33,6 +33,10 @@ module OpenapiContracts
       end
     end
 
+    def inspect
+      "<#{self.class.name} @pointer=#{@pointer.join('/')}>"
+    end
+
     # Resolves Schema ref pointers links like "$ref: #/some/path" and returns new sub-schema
     # at the target if the current schema is only a ref link.
     def follow_refs

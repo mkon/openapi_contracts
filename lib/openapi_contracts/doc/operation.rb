@@ -1,5 +1,5 @@
 module OpenapiContracts
-  class Doc::Method
+  class Doc::Operation
     def initialize(schema)
       @schema = schema
       @responses = schema['responses'].to_h do |status, _|
@@ -9,7 +9,10 @@ module OpenapiContracts
 
     # Enumerator over response-specific parameters
     def parameters
-      @schema.navigate('parameters').each.map { |s| Doc::Parameter.new(s) }
+      enum = @schema.navigate('parameters').each
+      return [].each unless enum
+
+      enum.lazy.map { |s| Doc::Parameter.new(s) }
     end
 
     def responses
