@@ -1,13 +1,17 @@
 module OpenapiContracts
   class Doc::Parameter
-    attr_reader :schema
+    attr_reader :name, :in, :schema
 
     def initialize(spec)
       @spec = spec
       options = spec.to_h
-      @name = options[:name]
-      @in = options[:in]
-      @required = options[:required]
+      @name = options['name']
+      @in = options['in']
+      @required = options['required']
+    end
+
+    def in_path?
+      @in == 'path'
     end
 
     def matches?(value)

@@ -11,10 +11,33 @@ module OpenapiContracts
       @pointer = pointer.freeze
     end
 
+    def each
+      data = resolve
+      case data
+      when Array
+        enum = data.each_with_index
+        Enumerator.new(enum.size) do |yielder|
+          loop do
+            _item, index = enum.next
+            yielder << navigate(index.to_s)
+          end
+        end
+      when Hash
+        enum = data.each_key
+        Enumerator.new(enum.size) do |yielder|
+          loop do
+            key = enum.next
+            yielder << [key, navigate(key)]
+          end
+        end
+      end
+    end
+
     # Resolves Schema ref pointers links like "$ref: #/some/path" and returns new sub-schema
     # at the target if the current schema is only a ref link.
     def follow_refs
-      if (ref = as_h['$ref'])
+      data = resolve
+      if data.is_a?(Hash) && (ref = data['$ref'])
         at_pointer(ref.split('/')[1..])
       else
         self
@@ -36,6 +59,7 @@ module OpenapiContracts
       resolve
     end
 
+    # Returns the actual sub-specification contents at the pointer of this Specification
     def resolve
       return @raw if pointer.nil? || pointer.empty?
 
@@ -53,7 +77,7 @@ module OpenapiContracts
     end
 
     def navigate(*spointer)
-      self.class.new(@raw, (pointer + Array.wrap(spointer)))
+      self.class.new(@raw, (pointer + Array.wrap(spointer))).follow_refs
     end
   end
 end

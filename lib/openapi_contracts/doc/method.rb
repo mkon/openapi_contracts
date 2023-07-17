@@ -7,6 +7,11 @@ module OpenapiContracts
       end
     end
 
+    # Enumerator over response-specific parameters
+    def parameters
+      @schema.navigate('parameters').each.map { |s| Doc::Parameter.new(s) }
+    end
+
     def responses
       @responses.each_value
     end

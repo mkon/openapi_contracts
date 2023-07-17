@@ -13,10 +13,10 @@ module OpenapiContracts
       @path.include?('{')
     end
 
-    def matches?(path)
+    def matches?(path, method)
       @path == path || regexp_path.match(path) do |m|
         m.named_captures.each do |k, v|
-          return false unless parameter_matches?(k, v)
+          return false unless parameter_matches?(method, k, v)
         end
         true
       end
@@ -24,6 +24,13 @@ module OpenapiContracts
 
     def methods
       @methods.each_value
+    end
+
+    def parameters
+      enum = @schema.navigate('parameters').each
+      return [].each unless enum
+
+      enum.map { |s| Doc::Parameter.new(s) }
     end
 
     def static?
@@ -36,14 +43,11 @@ module OpenapiContracts
 
     private
 
-    def parameter_matches?(name, value)
-      parameter = Array.wrap(@schema['parameters'])
-                       .map.with_index { |_spec, index| @schema.navigate('parameters', index.to_s).follow_refs }
-                       .find { |s| s['name'] == name && s['in'] == 'path' }
-                      &.then { |s| Doc::Parameter.new(s) }
-      return false unless parameter
+    def parameter_matches?(method, name, value)
+      # Check path-wide parameters first
+      return true if parameters.select(&:in_path?).find { |s| s.name == name }&.matches?(value)
 
-      parameter.matches?(value)
+      with_method(method)&.parameters&.find { |s| s.name == name }&.matches?(value)
     end
 
     def regexp_path

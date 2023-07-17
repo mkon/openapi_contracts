@@ -29,7 +29,13 @@ module OpenapiContracts
     end
 
     def response_for(path, method, status)
-      with_path(path)&.with_method(method)&.with_status(status)
+      path = if @paths.key?(path)
+               @paths[path]
+             else
+               @dynamic_paths.find { |p| p.matches?(path, method) }
+             end
+
+      path&.with_method(method)&.with_status(status)
     end
 
     # Returns an Enumerator over all Responses
@@ -44,11 +50,7 @@ module OpenapiContracts
     end
 
     def with_path(path)
-      if @paths.key?(path)
-        @paths[path]
-      else
-        @dynamic_paths.find { |p| p.matches?(path) }
-      end
+      @paths[path]
     end
   end
 end
