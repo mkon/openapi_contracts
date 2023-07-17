@@ -1,18 +1,13 @@
 module OpenapiContracts
   class Doc::Operation
-    def initialize(schema)
+    include Doc::WithParameters
+
+    def initialize(path, schema)
+      @path = path
       @schema = schema
-      @responses = schema['responses'].to_h do |status, _|
-        [status, Doc::Response.new(schema.navigate('responses', status))]
+      @responses = schema.navigate('responses').each.to_h do |status, subspec| # rubocop:disable Style/HashTransformValues
+        [status, Doc::Response.new(subspec)]
       end
-    end
-
-    # Enumerator over response-specific parameters
-    def parameters
-      enum = @schema.navigate('parameters').each
-      return [].each unless enum
-
-      enum.lazy.map { |s| Doc::Parameter.new(s) }
     end
 
     def responses

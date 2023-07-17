@@ -11,7 +11,7 @@ module OpenapiContracts
       @pointer = pointer.freeze
     end
 
-    def each
+    def each # rubocop:disable Metrics/MethodLength
       data = resolve
       case data
       when Array
@@ -33,9 +33,11 @@ module OpenapiContracts
       end
     end
 
+    # :nocov:
     def inspect
-      "<#{self.class.name} @pointer=#{@pointer.join('/')}>"
+      "<#{self.class.name} @pointer=#{@pointer.inspect}>"
     end
+    # :nocov:
 
     # Resolves Schema ref pointers links like "$ref: #/some/path" and returns new sub-schema
     # at the target if the current schema is only a ref link.
@@ -57,10 +59,6 @@ module OpenapiContracts
 
     def at_pointer(pointer)
       self.class.new(raw, pointer)
-    end
-
-    def as_h
-      resolve
     end
 
     # Returns the actual sub-specification contents at the pointer of this Specification

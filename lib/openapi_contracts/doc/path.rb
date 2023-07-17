@@ -1,7 +1,9 @@
 module OpenapiContracts
-  HTTP_METHODS = %w(get head post put delete connect options trace patch).freeze
-
   class Doc::Path
+    include Doc::WithParameters
+
+    HTTP_METHODS = %w(get head post put delete connect options trace patch).freeze
+
     def initialize(path, schema)
       @path = path
       @schema = schema
@@ -12,24 +14,17 @@ module OpenapiContracts
       @path.include?('{')
     end
 
-    def matches?(path, method)
-      @path == path || regexp_path.match(path) do |m|
-        m.named_captures.each do |k, v|
-          return false unless parameter_matches?(method, k, v)
-        end
-        true
-      end
-    end
-
     def operations
-      @supported_methods.each.lazy.map { |m| Doc::Operation.new(@schema.navigate(m)) }
+      @supported_methods.each.lazy.map { |m| Doc::Operation.new(self, @schema.navigate(m)) }
     end
 
-    def parameters
-      enum = @schema.navigate('parameters').each
-      return [].each unless enum
-
-      enum.lazy.map { |s| Doc::Parameter.new(s) }
+    def path_regexp
+      @path_regexp ||= begin
+        re = /\{(\S+)\}/
+        @path.gsub(re) { |placeholder|
+          placeholder.match(re) { |m| "(?<#{m[1]}>[^/]*)" }
+        }.then { |str| Regexp.new(str) }
+      end
     end
 
     def static?
@@ -43,23 +38,7 @@ module OpenapiContracts
     def with_method(method)
       return unless supports_method?(method)
 
-      Doc::Operation.new(@schema.navigate(method))
-    end
-
-    private
-
-    def parameter_matches?(method, name, value)
-      # Check path-wide parameters first
-      return true if parameters.select(&:in_path?).find { |s| s.name == name }&.matches?(value)
-
-      with_method(method)&.parameters&.find { |s| s.name == name }&.matches?(value)
-    end
-
-    def regexp_path
-      re = /\{(\S+)\}/
-      @path.gsub(re) { |placeholder|
-        placeholder.match(re) { |m| "(?<#{m[1]}>[^/]*)" }
-      }.then { |str| Regexp.new(str) }
+      Doc::Operation.new(self, @schema.navigate(method))
     end
   end
 end

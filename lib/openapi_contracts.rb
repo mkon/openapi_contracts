@@ -12,6 +12,7 @@ module OpenapiContracts
   autoload :Doc,        'openapi_contracts/doc'
   autoload :Helper,     'openapi_contracts/helper'
   autoload :Match,      'openapi_contracts/match'
+  autoload :OperationRouter, 'openapi_contracts/operation_router'
   autoload :Validators, 'openapi_contracts/validators'
 
   Env = Struct.new(:spec, :response, :expected_status)
