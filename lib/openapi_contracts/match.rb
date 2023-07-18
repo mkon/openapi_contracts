@@ -1,5 +1,8 @@
 module OpenapiContracts
   class Match
+    MIN_REQUEST_ANCESTORS = %w(Rack::Request::Env Rack::Request::Helpers).freeze
+    MIN_RESPONSE_ANCESTORS = %w(Rack::Response::Helpers).freeze
+
     attr_reader :errors
 
     def initialize(doc, response, options = {})
@@ -7,6 +10,8 @@ module OpenapiContracts
       @response = response
       @request = options.delete(:request) { response.request }
       @options = options
+      raise ArgumentError, "#{@response} must be compatible with Rack::Response::Helpers" unless response_compatible?
+      raise ArgumentError, "#{@request} must be compatible with Rack::Request::{Env,Helpers}" unless request_compatible?
     end
 
     def valid?
@@ -17,6 +22,16 @@ module OpenapiContracts
     end
 
     private
+
+    def request_compatible?
+      ancestors = @request.class.ancestors.map(&:to_s)
+      MIN_REQUEST_ANCESTORS.all? { |s| ancestors.include?(s) }
+    end
+
+    def response_compatible?
+      ancestors = @response.class.ancestors.map(&:to_s)
+      MIN_RESPONSE_ANCESTORS.all? { |s| ancestors.include?(s) }
+    end
 
     def lookup_api_spec
       @doc.response_for(
