@@ -1,7 +1,10 @@
 RSpec.describe OpenapiContracts::Validators::Request do
   subject { described_class.new(stack, env) }
 
-  let(:env) { OpenapiContracts::Env.new(spec, response, 201, true, req) }
+  let(:env) {
+    OpenapiContracts::Env.new(spec: spec, response: response, request: response.request, expected_status: 201, match_request_body?: true,
+                              request_body: req)
+  }
   let(:spec) { doc.response_for(path, method.downcase, response_status.to_s) }
   let(:req) { doc.request_for(path, method.downcase) }
   let(:stack) { ->(errors) { errors } }
@@ -37,11 +40,7 @@ RSpec.describe OpenapiContracts::Validators::Request do
   end
 
   context 'when the request body has a different content type' do
-    before do
-      response_headers['Content-Type'] = 'application/xml'
-    end
-
-    let(:response_body) { '<xml\>' }
+    let(:content_type) { 'application/xml' }
 
     it 'returns an error' do
       expect(subject.call).to eq ['Undocumented request with content-type "application/xml"']

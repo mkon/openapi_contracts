@@ -1,7 +1,10 @@
 RSpec.describe OpenapiContracts::Validators::Documented do
   subject { described_class.new(stack, env) }
 
-  let(:env) { OpenapiContracts::Env.new(spec, response, 204, match_request_body?, request_body) }
+  let(:env) {
+    OpenapiContracts::Env.new(spec: spec, response: response, expected_status: 204,
+                              match_request_body?: match_request_body?, request_body: request_body)
+  }
   let(:spec) { doc.response_for(path, method.downcase, response_status.to_s) }
   let(:request_body) { doc.request_for(path, method.downcase) }
   let(:stack) { ->(errors) { errors } }

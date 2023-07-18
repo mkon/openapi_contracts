@@ -22,7 +22,8 @@ module OpenapiContracts::Validators
     end
 
     def request_payload
-      response.request.env['PARAMS'] || response.request.body.read
+      request.body.rewind
+      request.body.read
     end
 
     def error_to_message(error)
@@ -36,7 +37,7 @@ module OpenapiContracts::Validators
     end
 
     def request_content_type
-      response.headers['Content-Type'].split(';').first
+      request.content_type&.split(';')&.first
     end
   end
 end
