@@ -12,7 +12,7 @@ module OpenapiContracts::Validators
     end
 
     def response_desc
-      "#{response.request.request_method} #{response.request.path}"
+      "#{request.request_method} #{request.path}"
     end
   end
 end

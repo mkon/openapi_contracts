@@ -1,10 +1,9 @@
 RSpec.shared_context 'when using GET /user' do
-  let(:response) {
-    TestResponse.new(
-      Rack::MockResponse.new(response_status, response_headers, response_body),
-      Rack::Request.new({'PATH_INFO' => path, 'REQUEST_METHOD' => method.to_s.upcase})
-    )
-  }
+  let(:response) do
+    TestResponse[response_status, response_headers, response_body].tap do |resp|
+      resp.request = TestRequest.build(path, method: method)
+    end
+  end
   let(:doc) { OpenapiContracts::Doc.parse(FIXTURES_PATH.join('openapi')) }
   let(:method) { 'GET' }
   let(:path) { '/user' }

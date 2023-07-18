@@ -5,6 +5,7 @@ module OpenapiContracts
     def initialize(doc, response, options = {})
       @doc = doc
       @response = response
+      @request = options.delete(:request) { response.request }
       @options = options
     end
 
@@ -19,14 +20,19 @@ module OpenapiContracts
 
     def lookup_api_spec
       @doc.response_for(
-        @options.fetch(:path, @response.request.path),
-        @response.request.request_method.downcase,
+        @options.fetch(:path, @request.path),
+        @request.request_method.downcase,
         @response.status.to_s
       )
     end
 
     def matchers
-      env = Env.new(lookup_api_spec, @response, @options[:status])
+      env = Env.new(
+        spec:            lookup_api_spec,
+        response:        @response,
+        request:         @request,
+        expected_status: @options[:status]
+      )
       Validators::ALL.reverse
                      .reduce(->(err) { err }) { |s, m| m.new(s, env) }
     end
