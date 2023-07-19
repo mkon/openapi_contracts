@@ -41,7 +41,7 @@ RSpec.describe OpenapiContracts::Validators::RequestBody do
     let(:content_type) { 'application/xml' }
 
     it 'returns an error' do
-      expect(subject.call).to eq ['Undocumented request with content-type "application/xml"']
+      expect(subject.call).to eq ['Undocumented request with media-type "application/xml"']
     end
   end
 end

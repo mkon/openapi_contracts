@@ -12,18 +12,18 @@ module OpenapiContracts
       end
     end
 
-    def schema_for(content_type)
-      return unless supports_content_type?(content_type)
+    def schema_for(media_type)
+      return unless supports_media_type?(media_type)
 
-      @schema.navigate('content', content_type, 'schema')
+      @schema.navigate('content', media_type, 'schema')
     end
 
     def no_content?
       !@schema.key? 'content'
     end
 
-    def supports_content_type?(content_type)
-      @schema.dig('content', content_type).present?
+    def supports_media_type?(media_type)
+      @schema.dig('content', media_type).present?
     end
   end
 end
