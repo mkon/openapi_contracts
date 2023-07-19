@@ -33,23 +33,41 @@ module OpenapiContracts
       MIN_RESPONSE_ANCESTORS.all? { |s| ancestors.include?(s) }
     end
 
-    def lookup_api_spec
-      @doc.response_for(
-        @options.fetch(:path, @request.path),
-        @request.request_method.downcase,
-        @response.status.to_s
-      )
+    def response_spec
+      @doc.response_for(path, method, status)
+    end
+
+    def request_spec
+      @doc.request_for(path, method)
     end
 
     def matchers
       env = Env.new(
-        spec:            lookup_api_spec,
-        response:        @response,
-        request:         @request,
-        expected_status: @options[:status]
+        spec:                response_spec,
+        response:            @response,
+        request:             @request,
+        expected_status:     @options[:status],
+        match_request_body?: match_request_body?,
+        request_body:        request_spec
       )
       Validators::ALL.reverse
                      .reduce(->(err) { err }) { |s, m| m.new(s, env) }
+    end
+
+    def match_request_body?
+      @options.fetch(:request_body, false)
+    end
+
+    def path
+      @options.fetch(:path, @request.path)
+    end
+
+    def method
+      @request.request_method.downcase
+    end
+
+    def status
+      @response.status.to_s
     end
   end
 end

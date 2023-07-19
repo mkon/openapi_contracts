@@ -6,6 +6,7 @@ module OpenapiContracts
     autoload :Parser,     'openapi_contracts/doc/parser'
     autoload :Parameter,  'openapi_contracts/doc/parameter'
     autoload :Path,       'openapi_contracts/doc/path'
+    autoload :Request,    'openapi_contracts/doc/request'
     autoload :Response,   'openapi_contracts/doc/response'
     autoload :Schema,     'openapi_contracts/doc/schema'
 
@@ -30,6 +31,10 @@ module OpenapiContracts
 
     def response_for(path, method, status)
       with_path(path)&.with_method(method)&.with_status(status)
+    end
+
+    def request_for(path, method)
+      with_path(path)&.with_method(method)&.request_body
     end
 
     # Returns an Enumerator over all Responses

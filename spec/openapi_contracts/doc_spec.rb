@@ -30,6 +30,6 @@ RSpec.describe OpenapiContracts::Doc do
 
     it { is_expected.to all be_a(OpenapiContracts::Doc::Response) }
 
-    it { is_expected.to have_attributes(count: 11) }
+    it { is_expected.to have_attributes(count: 13) }
   end
 end

@@ -64,7 +64,7 @@ RSpec.describe OpenapiContracts::Doc::Path do
       end
     end
 
-    context 'when the param is a integer from 0 - 1000' do
+    context 'when the param is an integer from 0 - 1000' do
       let(:id_schema) do
         {
           'type'    => 'integer',

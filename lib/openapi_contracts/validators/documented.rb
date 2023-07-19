@@ -5,10 +5,17 @@ module OpenapiContracts::Validators
     private
 
     def validate
-      return if spec
+      response_missing unless spec
+      request_missing if match_request_body? && !request_body
+    end
 
+    def response_missing
       status_desc = http_status_desc(response.status)
-      @errors << "Undocumented request/response for #{response_desc.inspect} with #{status_desc}"
+      @errors << "Undocumented response for #{response_desc.inspect} with #{status_desc}"
+    end
+
+    def request_missing
+      @errors << "Undocumented request body for #{response_desc.inspect}"
     end
 
     def response_desc
