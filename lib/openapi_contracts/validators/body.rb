@@ -2,6 +2,10 @@ module OpenapiContracts::Validators
   class Body < Base
     private
 
+    def spec
+      @spec ||= operation.response_for_status(response.status)
+    end
+
     def validate
       if spec.no_content?
         @errors << 'Expected empty response body' if response.body.present?
@@ -16,7 +20,8 @@ module OpenapiContracts::Validators
       schema = spec.schema_for(response_content_type)
       # Trick JSONSchemer into validating only against the response schema
       schemer = JSONSchemer.schema(schema.raw.merge('$ref' => schema.fragment, '$schema' => 'http://json-schema.org/draft-04/schema#'))
-      schemer.validate(JSON(response.body)).each do |err|
+      # ActionDispatch::Response body is a plain string, while Rack::Response returns an array
+      schemer.validate(JSON(Array.wrap(response.body).join)).each do |err|
         @errors << error_to_message(err)
       end
     end
@@ -32,7 +37,7 @@ module OpenapiContracts::Validators
     end
 
     def response_content_type
-      response.headers['Content-Type'].split(';').first
+      response.content_type&.split(';')&.first
     end
   end
 end

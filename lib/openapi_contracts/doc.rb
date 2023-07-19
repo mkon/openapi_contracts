@@ -6,6 +6,7 @@ module OpenapiContracts
     autoload :Parser,         'openapi_contracts/doc/parser'
     autoload :Parameter,      'openapi_contracts/doc/parameter'
     autoload :Path,           'openapi_contracts/doc/path'
+    autoload :Request,        'openapi_contracts/doc/request'
     autoload :Response,       'openapi_contracts/doc/response'
     autoload :Schema,         'openapi_contracts/doc/schema'
     autoload :WithParameters, 'openapi_contracts/doc/with_parameters'
@@ -29,11 +30,8 @@ module OpenapiContracts
       @paths.each_value
     end
 
-    def response_for(path, method, status)
-      operation = OperationRouter.new(self).route(path, method)
-      return unless operation
-
-      operation&.with_status(status)
+    def operation_for(path, method)
+      OperationRouter.new(self).route(path, method.downcase)
     end
 
     # Returns an Enumerator over all Responses

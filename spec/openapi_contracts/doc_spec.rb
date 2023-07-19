@@ -15,14 +15,13 @@ RSpec.describe OpenapiContracts::Doc do
     end
   end
 
-  describe '#response_for' do
-    subject { doc.response_for(path, method, status) }
+  describe '#operation_for' do
+    subject { doc.operation_for(path, method) }
 
     let(:path) { '/user' }
     let(:method) { 'get' }
-    let(:status) { '200' }
 
-    it { is_expected.to be_a(OpenapiContracts::Doc::Response) }
+    it { is_expected.to be_a(OpenapiContracts::Doc::Operation) }
   end
 
   describe '#responses' do
@@ -30,6 +29,6 @@ RSpec.describe OpenapiContracts::Doc do
 
     it { is_expected.to all be_a(OpenapiContracts::Doc::Response) }
 
-    it { is_expected.to have_attributes(count: 11) }
+    it { is_expected.to have_attributes(count: 13) }
   end
 end

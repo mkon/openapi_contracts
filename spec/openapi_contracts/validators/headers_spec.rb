@@ -1,8 +1,8 @@
 RSpec.describe OpenapiContracts::Validators::Headers do
   subject { described_class.new(stack, env) }
 
-  let(:env) { OpenapiContracts::Env.new(spec, response, 200) }
-  let(:spec) { doc.response_for('/user', 'get', '200') }
+  let(:env) { OpenapiContracts::Env.new(operation: operation, response: response) }
+  let(:operation) { doc.operation_for(path, method) }
   let(:stack) { ->(errors) { errors } }
 
   include_context 'when using GET /user'

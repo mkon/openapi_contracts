@@ -1,11 +1,18 @@
 module OpenapiContracts
   class Match
+    DEFAULT_OPTIONS = {request_body: false}.freeze
+    MIN_REQUEST_ANCESTORS = %w(Rack::Request::Env Rack::Request::Helpers).freeze
+    MIN_RESPONSE_ANCESTORS = %w(Rack::Response::Helpers).freeze
+
     attr_reader :errors
 
     def initialize(doc, response, options = {})
       @doc = doc
       @response = response
-      @options = options
+      @request = options.delete(:request) { response.request }
+      @options = DEFAULT_OPTIONS.merge(options)
+      raise ArgumentError, "#{@response} must be compatible with Rack::Response::Helpers" unless response_compatible?
+      raise ArgumentError, "#{@request} must be compatible with Rack::Request::{Env,Helpers}" unless request_compatible?
     end
 
     def valid?
@@ -17,18 +24,35 @@ module OpenapiContracts
 
     private
 
-    def lookup_api_spec
-      @doc.response_for(
-        @options.fetch(:path, @response.request.path),
-        @response.request.request_method.downcase,
-        @response.status.to_s
+    def matchers
+      env = Env.new(
+        options:   @options,
+        operation: operation,
+        request:   @request,
+        response:  @response
+      )
+      validators = Validators::ALL.dup
+      validators.delete(Validators::HttpStatus) unless @options[:status]
+      validators.delete(Validators::Request) unless @options[:request_body]
+      validators.reverse
+                .reduce(->(err) { err }) { |s, m| m.new(s, env) }
+    end
+
+    def operation
+      @doc.operation_for(
+        @options.fetch(:path, @request.path),
+        @request.request_method.downcase
       )
     end
 
-    def matchers
-      env = Env.new(lookup_api_spec, @response, @options[:status])
-      Validators::ALL.reverse
-                     .reduce(->(err) { err }) { |s, m| m.new(s, env) }
+    def request_compatible?
+      ancestors = @request.class.ancestors.map(&:to_s)
+      MIN_REQUEST_ANCESTORS.all? { |s| ancestors.include?(s) }
+    end
+
+    def response_compatible?
+      ancestors = @response.class.ancestors.map(&:to_s)
+      MIN_RESPONSE_ANCESTORS.all? { |s| ancestors.include?(s) }
     end
   end
 end

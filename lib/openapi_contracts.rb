@@ -15,7 +15,7 @@ module OpenapiContracts
   autoload :OperationRouter, 'openapi_contracts/operation_router'
   autoload :Validators, 'openapi_contracts/validators'
 
-  Env = Struct.new(:spec, :response, :expected_status)
+  Env = Struct.new(:operation, :options, :request, :response, keyword_init: true)
 
   module_function
 

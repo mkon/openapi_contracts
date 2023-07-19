@@ -14,12 +14,12 @@ RSpec::Matchers.define :match_openapi_doc do |doc, options = {}| # rubocop:disab
   end
 
   description do
-    desc = 'to match the openapi schema'
+    desc = 'match the openapi schema'
     desc << " with #{http_status_desc(@status)}" if @status
     desc
   end
 
-  failure_message do |_reponse|
+  failure_message do |_response|
     @errors.map { |e| "* #{e}" }.join("\n")
   end
 

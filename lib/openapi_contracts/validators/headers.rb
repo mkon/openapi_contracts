@@ -2,6 +2,10 @@ module OpenapiContracts::Validators
   class Headers < Base
     private
 
+    def spec
+      @spec ||= operation.response_for_status(response.status)
+    end
+
     def validate
       spec.headers.each do |header|
         value = response.headers[header.name]

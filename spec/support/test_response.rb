@@ -1,12 +1,11 @@
-require 'delegate'
+class TestResponse < Rack::Response
+  # Rack::Response can not access request
+  # Make our response behave more like ActionDispatch::Response
+  attr_accessor :request
+end
 
-# TODO: Find a better way to work wiht both ActionDispatch and Rack::Test
-# Rack::Test can not access request from response
-class TestResponse < SimpleDelegator
-  attr_reader :request
-
-  def initialize(response, request)
-    @request = request
-    super response
+class TestRequest < Rack::Request
+  def self.build(path, opts = {})
+    new Rack::MockRequest.env_for(path, opts)
   end
 end

@@ -24,3 +24,59 @@ get:
             additionalProperties: false
     '400':
       $ref: ../components/responses/BadRequest.yaml
+post:
+  tags:
+    - User
+  summary: Create User
+  description: Create User
+  operationId: create_user
+  requestBody:
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            data:
+              type: object
+              properties:
+                type:
+                  type: string
+                attributes:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                      nullable: true
+                    email:
+                      $ref: ../components/schemas/Email.yaml
+                  additionalProperties: false
+                  required:
+                    - name
+                    - email
+              additionalProperties: false
+              required:
+                - type
+                - attributes
+          required:
+            - data
+          additionalProperties: false
+  responses:
+    '201':
+      description: Created
+      headers:
+        x-request-id:
+          schema:
+            type: string
+          required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                $ref: ../components/schemas/User.yaml
+            required:
+              - data
+            additionalProperties: false
+    '400':
+      $ref: ../components/responses/BadRequest.yaml

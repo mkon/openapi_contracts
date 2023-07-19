@@ -4,10 +4,10 @@ module OpenapiContracts
 
     HTTP_METHODS = %w(get head post put delete connect options trace patch).freeze
 
-    def initialize(path, schema)
+    def initialize(path, spec)
       @path = path
-      @schema = schema
-      @supported_methods = HTTP_METHODS & @schema.keys
+      @spec = spec
+      @supported_methods = HTTP_METHODS & @spec.keys
     end
 
     def dynamic?
@@ -15,7 +15,7 @@ module OpenapiContracts
     end
 
     def operations
-      @supported_methods.each.lazy.map { |m| Doc::Operation.new(self, @schema.navigate(m)) }
+      @supported_methods.each.lazy.map { |m| Doc::Operation.new(self, @spec.navigate(m)) }
     end
 
     def path_regexp
@@ -38,7 +38,7 @@ module OpenapiContracts
     def with_method(method)
       return unless supports_method?(method)
 
-      Doc::Operation.new(self, @schema.navigate(method))
+      Doc::Operation.new(self, @spec.navigate(method))
     end
   end
 end

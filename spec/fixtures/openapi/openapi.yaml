@@ -5,10 +5,10 @@ info:
   termsOfService: 'https://example.com/terms/'
   contact:
     email: contact@example.com
-    url: 'http://example.com/contact'
+    url: 'https://example.com/contact'
   license:
     name: Apache 2.0
-    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+    url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   x-logo:
     url: 'https://redocly.github.io/openapi-template/logo.png'
   description: >
@@ -48,8 +48,7 @@ paths:
         '400':
           $ref: components/responses/BadRequest.yaml
         '409':
-           description: Conflict
-           $ref: '#/components/responses/GenericError'
+          $ref: '#/components/responses/GenericError'
         '500':
           description: Server Error
   /numbers:
@@ -62,7 +61,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: components/schemas/Numbers.yaml#/All
+                $ref: 'components/schemas/Numbers.yaml#/All'
   /messages/{id}:
     $ref: 'paths/message.yaml'
   /comments/{id}:

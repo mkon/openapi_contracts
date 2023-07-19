@@ -66,7 +66,7 @@ RSpec.describe 'RSpec integration' do
     it { is_expected.to_not match_openapi_doc(doc) }
   end
 
-  context 'when an additinal attribute is included' do
+  context 'when an additional attribute is included' do
     before { response_json[:data][:attributes].merge!(other: 'foo') }
 
     it { is_expected.to_not match_openapi_doc(doc) }
@@ -94,5 +94,13 @@ RSpec.describe 'RSpec integration' do
     let(:method) { 'POST' }
 
     it { is_expected.to_not match_openapi_doc(doc) }
+  end
+
+  context 'when request body is validated' do
+    include_context 'when using POST /user'
+
+    it { is_expected.to match_openapi_doc(doc, path: '/user', request_body: true).with_http_status(:created) }
+
+    it { is_expected.to_not match_openapi_doc(doc, path: '/user', request_body: true).with_http_status(:ok) }
   end
 end
