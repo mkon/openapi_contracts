@@ -1,4 +1,4 @@
-RSpec.describe OpenapiContracts::Validators::Body do
+RSpec.describe OpenapiContracts::Validators::ResponseBody do
   subject { described_class.new(stack, env) }
 
   let(:env) { OpenapiContracts::Env.new(operation: operation, response: response) }

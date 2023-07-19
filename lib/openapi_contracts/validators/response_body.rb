@@ -1,5 +1,5 @@
 module OpenapiContracts::Validators
-  class Body < Base
+  class ResponseBody < Base
     include SchemaValidation
 
     private

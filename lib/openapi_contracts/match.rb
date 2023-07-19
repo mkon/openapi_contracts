@@ -33,7 +33,7 @@ module OpenapiContracts
       )
       validators = Validators::ALL.dup
       validators.delete(Validators::HttpStatus) unless @options[:status]
-      validators.delete(Validators::Request) unless @options[:request_body]
+      validators.delete(Validators::RequestBody) unless @options[:request_body]
       validators.reverse
                 .reduce(->(err) { err }) { |s, m| m.new(s, env) }
     end
