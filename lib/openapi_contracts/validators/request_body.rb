@@ -8,11 +8,9 @@ module OpenapiContracts::Validators
     delegate :request_body, to: :operation
 
     def data_for_validation
-      # Support "*/json" or "*/*+json"
-      raise ArgumentError, "#{media_type.inspect} is not supported yet" unless %r{/|\+json$} =~ media_type
-
       request.body.rewind
-      JSON(request.body.read)
+      raw = request.body.read
+      OpenapiContracts::PayloadParser.parse(media_type, raw)
     end
 
     def schema_for_validation

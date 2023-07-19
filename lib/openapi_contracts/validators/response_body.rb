@@ -7,11 +7,8 @@ module OpenapiContracts::Validators
     delegate :media_type, to: :response
 
     def data_for_validation
-      # Support "*/json" or "*/*+json"
-      raise ArgumentError, "#{media_type.inspect} is not supported yet" unless %r{/|\+json$} =~ media_type
-
       # ActionDispatch::Response body is a plain string, while Rack::Response returns an array
-      JSON(Array.wrap(response.body).join)
+      OpenapiContracts::PayloadParser.parse(media_type, Array.wrap(response.body).join)
     end
 
     def schema_for_validation
