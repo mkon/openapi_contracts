@@ -10,12 +10,13 @@ module OpenapiContracts::Validators
     end
 
     def error_to_message(error)
+      pointer = " at #{error['data_pointer']}" if error['data_pointer'].present?
       if error.key?('details')
         error['details'].to_a.map { |(key, val)|
-          "#{key.humanize}: #{val} at #{error['data_pointer']}"
+          "#{key.humanize}: #{val}#{pointer}"
         }.to_sentence
       else
-        "#{error['data'].inspect} at #{error['data_pointer']} does not match the schema"
+        "#{error['data'].inspect}#{pointer} does not match the schema"
       end
     end
   end
