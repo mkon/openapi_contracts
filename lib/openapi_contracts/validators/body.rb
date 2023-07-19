@@ -1,6 +1,18 @@
 module OpenapiContracts::Validators
   class Body < Base
+    include SchemaValidation
+
     private
+
+    def json_for_validation
+      # ActionDispatch::Response body is a plain string, while Rack::Response returns an array
+      JSON(Array.wrap(response.body).join)
+    end
+
+    def schema_for_validation
+      schema = spec.schema_for(response_content_type)
+      schema.raw.merge('$ref' => schema.fragment)
+    end
 
     def spec
       @spec ||= operation.response_for_status(response.status)
@@ -12,27 +24,7 @@ module OpenapiContracts::Validators
       elsif !spec.supports_content_type?(response_content_type)
         @errors << "Undocumented response with content-type #{response_content_type.inspect}"
       else
-        validate_schema
-      end
-    end
-
-    def validate_schema
-      schema = spec.schema_for(response_content_type)
-      # Trick JSONSchemer into validating only against the response schema
-      schemer = JSONSchemer.schema(schema.raw.merge('$ref' => schema.fragment, '$schema' => 'http://json-schema.org/draft-04/schema#'))
-      # ActionDispatch::Response body is a plain string, while Rack::Response returns an array
-      schemer.validate(JSON(Array.wrap(response.body).join)).each do |err|
-        @errors << error_to_message(err)
-      end
-    end
-
-    def error_to_message(error)
-      if error.key?('details')
-        error['details'].to_a.map { |(key, val)|
-          "#{key.humanize}: #{val} at #{error['data_pointer']}"
-        }.to_sentence
-      else
-        "#{error['data'].inspect} at #{error['data_pointer']} does not match the schema"
+        @errors += validate_schema(schema_for_validation, json_for_validation)
       end
     end
 

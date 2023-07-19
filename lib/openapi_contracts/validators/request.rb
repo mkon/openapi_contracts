@@ -1,8 +1,20 @@
 module OpenapiContracts::Validators
   class Request < Base
+    include SchemaValidation
+
     private
 
     delegate :request_body, to: :operation
+
+    def json_for_validation
+      request.body.rewind
+      JSON(request.body.read)
+    end
+
+    def schema_for_validation
+      schema = request_body.schema_for(request_content_type)
+      schema.raw.merge('$ref' => schema.fragment)
+    end
 
     def validate
       if !request_body
@@ -10,31 +22,7 @@ module OpenapiContracts::Validators
       elsif !request_body.supports_content_type?(request_content_type)
         @errors << "Undocumented request with content-type #{request_content_type.inspect}"
       else
-        validate_schema
-      end
-    end
-
-    def validate_schema
-      schema = request_body.schema_for(request_content_type)
-      # Trick JSONSchemer into validating only against the request body schema
-      schemer = JSONSchemer.schema(schema.raw.merge('$ref' => schema.fragment, '$schema' => 'http://json-schema.org/draft-04/schema#'))
-      schemer.validate(JSON(request_payload)).each do |err|
-        @errors << error_to_message(err)
-      end
-    end
-
-    def request_payload
-      request.body.rewind
-      request.body.read
-    end
-
-    def error_to_message(error)
-      if error.key?('details')
-        error['details'].to_a.map { |(key, val)|
-          "#{key.humanize}: #{val} at #{error['data_pointer']}"
-        }.to_sentence
-      else
-        "#{error['data'].inspect} at #{error['data_pointer']} does not match the request schema"
+        @errors += validate_schema(schema_for_validation, json_for_validation)
       end
     end
 

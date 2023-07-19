@@ -30,8 +30,8 @@ RSpec.describe OpenapiContracts::Validators::Request do
 
     it 'returns all errors' do
       expect(subject.call).to eq [
-        '"a2kfn2" at /data/id does not match the request schema',
-        'nil at /data/type does not match the request schema',
+        '"a2kfn2" at /data/id does not match the schema',
+        'nil at /data/type does not match the schema',
         'Missing keys: ["email"] at /data/attributes'
       ]
     end
