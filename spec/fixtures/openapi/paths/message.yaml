@@ -1,6 +1,6 @@
-parameters:
-- $ref: ../components/parameters/messageId.yaml
 get:
+  parameters:
+  - $ref: ../components/parameters/messageId.yaml
   tags:
     - Message
   summary: Get Message

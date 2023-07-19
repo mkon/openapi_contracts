@@ -1,14 +1,15 @@
 module OpenapiContracts
   class Doc
-    autoload :Header,     'openapi_contracts/doc/header'
-    autoload :FileParser, 'openapi_contracts/doc/file_parser'
-    autoload :Method,     'openapi_contracts/doc/method'
-    autoload :Parser,     'openapi_contracts/doc/parser'
-    autoload :Parameter,  'openapi_contracts/doc/parameter'
-    autoload :Path,       'openapi_contracts/doc/path'
-    autoload :Request,    'openapi_contracts/doc/request'
-    autoload :Response,   'openapi_contracts/doc/response'
-    autoload :Schema,     'openapi_contracts/doc/schema'
+    autoload :Header,         'openapi_contracts/doc/header'
+    autoload :FileParser,     'openapi_contracts/doc/file_parser'
+    autoload :Operation,      'openapi_contracts/doc/operation'
+    autoload :Parser,         'openapi_contracts/doc/parser'
+    autoload :Parameter,      'openapi_contracts/doc/parameter'
+    autoload :Path,           'openapi_contracts/doc/path'
+    autoload :Request,        'openapi_contracts/doc/request'
+    autoload :Response,       'openapi_contracts/doc/response'
+    autoload :Schema,         'openapi_contracts/doc/schema'
+    autoload :WithParameters, 'openapi_contracts/doc/with_parameters'
 
     def self.parse(dir, filename = 'openapi.yaml')
       new Parser.call(dir, filename)
@@ -29,12 +30,8 @@ module OpenapiContracts
       @paths.each_value
     end
 
-    def response_for(path, method, status)
-      with_path(path)&.with_method(method)&.with_status(status)
-    end
-
-    def request_for(path, method)
-      with_path(path)&.with_method(method)&.request_body
+    def operation_for(path, method)
+      OperationRouter.new(self).route(path, method.downcase)
     end
 
     # Returns an Enumerator over all Responses
@@ -42,18 +39,14 @@ module OpenapiContracts
       return enum_for(:responses) unless block_given?
 
       paths.each do |path|
-        path.methods.each do |method|
-          method.responses.each(&block)
+        path.operations.each do |operation|
+          operation.responses.each(&block)
         end
       end
     end
 
     def with_path(path)
-      if @paths.key?(path)
-        @paths[path]
-      else
-        @dynamic_paths.find { |p| p.matches?(path) }
-      end
+      @paths[path]
     end
   end
 end

@@ -10,7 +10,7 @@ RSpec.shared_context 'when using GET /user' do
   let(:response_body) { JSON.dump(response_json) }
   let(:response_headers) do
     {
-      'Content-Type' => 'application/json',
+      'Content-Type' => 'application/json;charset=utf-8',
       'X-Request-Id' => 'some-request-id'
     }
   end
@@ -44,7 +44,7 @@ RSpec.shared_context 'when using POST /user' do
   let(:request_body) { JSON.dump(request_json) }
   let(:response_headers) do
     {
-      'Content-Type' => 'application/json',
+      'Content-Type' => 'application/json;charset=utf-8',
       'X-Request-Id' => 'some-request-id'
     }
   end

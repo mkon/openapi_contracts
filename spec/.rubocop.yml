@@ -10,6 +10,8 @@ Metrics/BlockLength:
 RSpec/DescribeClass:
   Exclude:
   - integration/**/*
+RSpec/ExampleLength:
+  Max: 10
 RSpec/MultipleExpectations:
   Enabled: false
 RSpec/MultipleMemoizedHelpers:
