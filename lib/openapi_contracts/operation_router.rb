@@ -10,11 +10,12 @@ module OpenapiContracts
 
       @dynamic_paths.each do |path|
         next unless path.supports_method?(method)
+        next unless m = path.path_regexp.match(actual_path)
 
         operation = path.with_method(method)
         parameters = (path.parameters + operation.parameters).select(&:in_path?)
 
-        return operation if parameter_match?(path.path_regexp, actual_path, parameters)
+        return operation if parameter_match?(m.named_captures, parameters)
       end
 
       nil
@@ -22,14 +23,11 @@ module OpenapiContracts
 
     private
 
-    def parameter_match?(path_regexp, actual_path, parameters)
-      path_regexp.match(actual_path) do |m|
-        m.named_captures.each do |k, v|
-          return false unless parameters&.find { |s| s.name == k }&.matches?(v)
-        end
-        return true
+    def parameter_match?(actual_params, parameters)
+      actual_params.each do |k, v|
+        return false unless parameters&.find { |s| s.name == k }&.matches?(v)
       end
-      false
+      true
     end
   end
 end
