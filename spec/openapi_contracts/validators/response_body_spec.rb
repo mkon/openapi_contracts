@@ -58,6 +58,15 @@ RSpec.describe OpenapiContracts::Validators::ResponseBody do
     end
   end
 
+  context 'when the response should have no content' do
+    let(:path) { '/health' }
+    let(:response_body) { '' }
+
+    it 'returns no error' do
+      expect(subject.call).to eq []
+    end
+  end
+
   context 'when the response should have no content but has' do
     let(:path) { '/health' }
     let(:response_body) { 'OK' }

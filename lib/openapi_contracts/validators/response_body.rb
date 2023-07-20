@@ -22,7 +22,7 @@ module OpenapiContracts::Validators
 
     def validate
       if spec.no_content?
-        @errors << 'Expected empty response body' if response.body.present?
+        @errors << 'Expected empty response body' if Array.wrap(response.body).any?(&:present?)
       elsif !spec.supports_media_type?(media_type)
         @errors << "Undocumented response with content-type #{media_type.inspect}"
       else
