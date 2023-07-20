@@ -62,6 +62,8 @@ paths:
             application/json:
               schema:
                 $ref: 'components/schemas/Numbers.yaml#/All'
+  /messages/last:
+    $ref: 'paths/messages_last.yaml'
   /messages/{id}:
     $ref: 'paths/message.yaml'
   /comments/{id}:

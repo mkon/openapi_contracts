@@ -60,6 +60,7 @@ module OpenapiContracts
         # A JSON Pointer
         {key => generate_absolute_pointer(pointer)}
       elsif %r{^(?<relpath>[^#]+)(?:#/(?<pointer>.*))?} =~ target
+        # debugger
         if relpath.start_with?('paths') # path description file pointer
           # Inline the file contents
           self.class.parse(@rootfile, Pathname(relpath)).data

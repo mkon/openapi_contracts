@@ -66,6 +66,7 @@ module OpenapiContracts
       return @raw if pointer.nil? || pointer.empty?
 
       pointer.inject(@raw) do |obj, key|
+        # debugger if pointer.last == 'responses'
         return nil unless obj
 
         if obj.is_a?(Array)
@@ -74,7 +75,9 @@ module OpenapiContracts
           key = key.to_i
         end
 
-        obj[key]
+        data = obj[key]
+
+        data
       end
     end
 

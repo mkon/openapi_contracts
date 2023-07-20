@@ -1,0 +1,8 @@
+get:
+  tags:
+    - Message
+  summary: Last Message
+  description: Get Last Message
+  operationId: get_last_message
+  responses:
+    $ref: ./message.yaml#/get/responses

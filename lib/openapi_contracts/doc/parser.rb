@@ -1,5 +1,18 @@
 module OpenapiContracts
   class Doc::Parser
+    # OpenApi 3 is a not fully comptible with JSON schema Draft 4
+    # This is one of the diffs - draft 4 does not understand nullable
+    class NullableTranformer
+      def self.call(object)
+        return unless object['type'] && object['nullable']
+
+        object['type'] = [object['type'], 'null']
+        object.delete 'nullable'
+      end
+    end
+
+    TRANSFORMERS = [NullableTranformer].freeze
+
     def self.call(dir, filename)
       new(dir.join(filename)).parse
     end
@@ -12,7 +25,7 @@ module OpenapiContracts
       file = Doc::FileParser.parse(@rootfile, @rootfile)
       data = file.data
       data.deep_merge! merge_components
-      nullable_to_type!(data)
+      transform_objects!(data)
       # debugger
     end
 
@@ -27,17 +40,13 @@ module OpenapiContracts
       data
     end
 
-    def nullable_to_type!(object)
+    def transform_objects!(object)
       case object
       when Hash
-        if object['type'] && object['nullable']
-          object['type'] = [object['type'], 'null']
-          object.delete 'nullable'
-        else
-          object.each_value { |o| nullable_to_type! o }
-        end
+        TRANSFORMERS.each { |t| t.call(object) }
+        object.each_value { |o| transform_objects! o }
       when Array
-        object.each { |o| nullable_to_type! o }
+        object.each { |o| transform_objects! o }
       end
     end
   end
