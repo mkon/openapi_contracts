@@ -29,8 +29,6 @@ RSpec.describe 'RSpec integration' do
       }
     end
 
-    before { skip 'Problem in file parsing' }
-
     it { is_expected.to match_openapi_doc(doc).with_http_status(:bad_request) }
   end
 

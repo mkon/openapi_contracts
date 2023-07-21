@@ -4,6 +4,8 @@ module OpenapiContracts
 
     HTTP_METHODS = %w(get head post put delete connect options trace patch).freeze
 
+    attr_reader :path
+
     def initialize(path, spec)
       @path = path
       @spec = spec

@@ -5,8 +5,7 @@ RSpec.describe OpenapiContracts::Doc::Schema do
 
   describe '#each' do
     it 'can enumerate the contents' do
-      skip 'Problem in file parsing'
-      expect(schema.navigate('paths', '/messages/last', 'get', 'responses').each.size).to eq(3)
+      expect(schema.navigate('paths', '/messages/last', 'get', 'responses').each.size).to eq(2)
     end
   end
 end

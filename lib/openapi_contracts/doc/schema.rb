@@ -43,8 +43,8 @@ module OpenapiContracts
     # at the target if the current schema is only a ref link.
     def follow_refs
       data = resolve
-      if data.is_a?(Hash) && (ref = data['$ref'])
-        at_pointer(ref.split('/')[1..])
+      if data.is_a?(Hash) && data.key?('$ref')
+        at_pointer Doc::Pointer.from_json_pointer(data['$ref']).to_a
       else
         self
       end
@@ -75,9 +75,7 @@ module OpenapiContracts
           key = key.to_i
         end
 
-        data = obj[key]
-
-        data
+        obj[key]
       end
     end
 

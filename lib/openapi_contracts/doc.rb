@@ -6,6 +6,7 @@ module OpenapiContracts
     autoload :Parser,         'openapi_contracts/doc/parser'
     autoload :Parameter,      'openapi_contracts/doc/parameter'
     autoload :Path,           'openapi_contracts/doc/path'
+    autoload :Pointer,        'openapi_contracts/doc/pointer'
     autoload :Request,        'openapi_contracts/doc/request'
     autoload :Response,       'openapi_contracts/doc/response'
     autoload :Schema,         'openapi_contracts/doc/schema'
