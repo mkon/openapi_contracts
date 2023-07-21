@@ -18,7 +18,15 @@ module OpenapiContracts
       @segments = segments
     end
 
+    def inspect
+      "<#{self.class.name}#{to_a}>"
+    end
+
     delegate :empty?, to: :@segments
+
+    def navigate(*segments)
+      self.class[to_a + segments]
+    end
 
     def parent
       self.class[to_a[0..-2]]
@@ -29,9 +37,11 @@ module OpenapiContracts
     end
 
     def to_json_pointer
-      @segments.map { |s|
-        s.gsub(%r{/}, '~1')
-      }.join('/').then { |s| "#/#{s}" }
+      escaped_segments.join('/').then { |s| "#/#{s}" }
+    end
+
+    def to_json_schemer_pointer
+      www_escaped_segments.join('/').then { |s| "#/#{s}" }
     end
 
     def walk(object)
@@ -47,6 +57,24 @@ module OpenapiContracts
         end
 
         obj[key]
+      end
+    end
+
+    def ==(other)
+      to_a == other.to_a
+    end
+
+    private
+
+    def escaped_segments
+      @segments.map do |s|
+        s.gsub(%r{/}, '~1')
+      end
+    end
+
+    def www_escaped_segments
+      escaped_segments.map do |s|
+        URI.encode_www_form_component(s)
       end
     end
   end

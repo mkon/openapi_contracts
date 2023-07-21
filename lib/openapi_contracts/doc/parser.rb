@@ -18,19 +18,18 @@ module OpenapiContracts
     # This is one of the diffs - draft 4 does not understand nullable
     class NullableTranformer < Transformer
       def call(object)
-        return object unless object['type'].present? && object['nullable'] == true
+        return unless object['type'].present? && object['nullable'] == true
 
-        object.except('nullable').merge(
-          'type' => [object['type'], 'null']
-        )
+        object.delete('nullable')
+        object['type'] = [object['type'], 'null']
       end
     end
 
     class PointerTransformer < Transformer
       def call(object)
-        return object unless object['$ref'].present?
+        return unless object['$ref'].present?
 
-        object.merge('$ref' => transform_pointer(object['$ref']))
+        object['$ref'] = transform_pointer(object['$ref'])
       end
 
       private
@@ -40,9 +39,8 @@ module OpenapiContracts
           # A JSON Pointer
           generate_absolute_pointer(pointer)
         elsif %r{^(?<relpath>[^#]+)(?:#/(?<pointer>.*))?} =~ target
-          pathname = @cwd.join(relpath)
-          res = @parser.filenesting[pathname]
-          tgt = res.to_json_pointer
+          ptr = @parser.filenesting[@cwd.join(relpath)]
+          tgt = ptr.to_json_pointer
           tgt += "/#{pointer}" if pointer
           tgt
         else
@@ -101,18 +99,18 @@ module OpenapiContracts
     private
 
     def file_to_data(pathname, pointer)
-      transform_objects(YAML.safe_load(File.read(@cwd.join(pathname))), pathname.parent, pointer)
+      YAML.safe_load_file(@cwd.join(pathname)).tap do |data|
+        transform_objects!(data, pathname.parent, pointer)
+      end
     end
 
-    def transform_objects(object, cwd, nesting)
+    def transform_objects!(object, cwd, pointer)
       case object
       when Hash
-        obj = object.transform_values { |v| transform_objects(v, cwd, nesting) }
-        TRANSFORMERS.map { |t| t.new(self, cwd, nesting) }.reduce(obj) { |o, t| t.call(o) }
+        object.each_value { |v| transform_objects!(v, cwd, pointer) }
+        TRANSFORMERS.map { |t| t.new(self, cwd, pointer) }.each { |t| t.call(object) }
       when Array
-        object.map { |o| transform_objects(o, cwd, nesting) }
-      else
-        object
+        object.each { |o| transform_objects!(o, cwd, pointer) }
       end
     end
   end

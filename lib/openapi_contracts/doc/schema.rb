@@ -6,7 +6,9 @@ module OpenapiContracts
   class Doc::Schema
     attr_reader :pointer, :raw
 
-    def initialize(raw, pointer = [])
+    def initialize(raw, pointer = Doc::Pointer[])
+      raise ArgumentError unless pointer.is_a?(Doc::Pointer)
+
       @raw = raw
       @pointer = pointer.freeze
     end
@@ -44,7 +46,7 @@ module OpenapiContracts
     def follow_refs
       data = resolve
       if data.is_a?(Hash) && data.key?('$ref')
-        at_pointer Doc::Pointer.from_json_pointer(data['$ref']).to_a
+        at_pointer Doc::Pointer.from_json_pointer(data['$ref'])
       else
         self
       end
@@ -52,7 +54,7 @@ module OpenapiContracts
 
     # Generates a fragment pointer for the current schema path
     def fragment
-      pointer.map { |p| URI.encode_www_form_component(p.gsub('/', '~1')) }.join('/').then { |s| "#/#{s}" }
+      pointer.to_json_schemer_pointer
     end
 
     delegate :dig, :fetch, :keys, :key?, :[], :to_h, to: :resolve
@@ -63,24 +65,11 @@ module OpenapiContracts
 
     # Returns the actual sub-specification contents at the pointer of this Specification
     def resolve
-      return @raw if pointer.nil? || pointer.empty?
-
-      pointer.inject(@raw) do |obj, key|
-        # debugger if pointer.last == 'responses'
-        return nil unless obj
-
-        if obj.is_a?(Array)
-          raise ArgumentError unless /^\d+$/ =~ key
-
-          key = key.to_i
-        end
-
-        obj[key]
-      end
+      @pointer.walk(@raw)
     end
 
-    def navigate(*spointer)
-      self.class.new(@raw, (pointer + Array.wrap(spointer))).follow_refs
+    def navigate(*segments)
+      self.class.new(@raw, pointer.navigate(segments)).follow_refs
     end
   end
 end

@@ -1,7 +1,6 @@
 module OpenapiContracts
   class Doc
     autoload :Header,         'openapi_contracts/doc/header'
-    autoload :FileParser,     'openapi_contracts/doc/file_parser'
     autoload :Operation,      'openapi_contracts/doc/operation'
     autoload :Parser,         'openapi_contracts/doc/parser'
     autoload :Parameter,      'openapi_contracts/doc/parameter'
@@ -21,7 +20,7 @@ module OpenapiContracts
     def initialize(schema)
       @schema = Schema.new(schema)
       @paths = @schema['paths'].to_h do |path, _|
-        [path, Path.new(path, @schema.at_pointer(['paths', path]))]
+        [path, Path.new(path, @schema.at_pointer(Doc::Pointer['paths', path]))]
       end
       @dynamic_paths = paths.select(&:dynamic?)
     end
