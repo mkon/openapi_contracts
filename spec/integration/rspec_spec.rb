@@ -20,6 +20,18 @@ RSpec.describe 'RSpec integration' do
     it { is_expected.to match_openapi_doc(doc).with_http_status(:bad_request) }
   end
 
+  context 'when using referenced responses' do
+    let(:path) { '/messages/last' }
+    let(:response_status) { 400 }
+    let(:response_json) do
+      {
+        errors: [{}]
+      }
+    end
+
+    it { is_expected.to match_openapi_doc(doc).with_http_status(:bad_request) }
+  end
+
   context 'when using dynamic paths' do
     let(:path) { '/messages/ef278ab2' }
     let(:response_json) do

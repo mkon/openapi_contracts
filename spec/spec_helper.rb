@@ -12,6 +12,6 @@ SimpleCov.minimum_coverage 99
 
 require 'json_spec'
 
-Dir[File.expand_path('support/**/*.rb', __dir__)].sort.each { |f| require f }
+Dir[File.expand_path('support/**/*.rb', __dir__)].each { |f| require f }
 
 FIXTURES_PATH = Pathname.new(__dir__).join('fixtures')
