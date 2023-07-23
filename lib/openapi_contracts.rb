@@ -14,6 +14,7 @@ module OpenapiContracts
   autoload :Helper,          'openapi_contracts/helper'
   autoload :Match,           'openapi_contracts/match'
   autoload :OperationRouter, 'openapi_contracts/operation_router'
+  autoload :Parser,          'openapi_contracts/parser'
   autoload :PayloadParser,   'openapi_contracts/payload_parser'
   autoload :Validators,      'openapi_contracts/validators'
 
