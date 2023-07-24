@@ -8,8 +8,14 @@ properties:
   attributes:
     type: object
     properties:
+      author:
+        type: object
+        nullable: true
       body:
         type: string
+      title:
+        type: string
+        nullable: true
     additionalProperties: false
     required:
       - body

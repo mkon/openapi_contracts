@@ -4,6 +4,7 @@ require 'active_support/core_ext/hash'
 require 'active_support/core_ext/class'
 require 'active_support/core_ext/module'
 require 'active_support/core_ext/string'
+require 'rubygems/version'
 
 require 'json_schemer'
 require 'rack'
@@ -14,6 +15,7 @@ module OpenapiContracts
   autoload :Helper,          'openapi_contracts/helper'
   autoload :Match,           'openapi_contracts/match'
   autoload :OperationRouter, 'openapi_contracts/operation_router'
+  autoload :Parser,          'openapi_contracts/parser'
   autoload :PayloadParser,   'openapi_contracts/payload_parser'
   autoload :Validators,      'openapi_contracts/validators'
 

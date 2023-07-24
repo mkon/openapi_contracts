@@ -2,7 +2,6 @@ module OpenapiContracts
   class Doc
     autoload :Header,         'openapi_contracts/doc/header'
     autoload :Operation,      'openapi_contracts/doc/operation'
-    autoload :Parser,         'openapi_contracts/doc/parser'
     autoload :Parameter,      'openapi_contracts/doc/parameter'
     autoload :Path,           'openapi_contracts/doc/path'
     autoload :Pointer,        'openapi_contracts/doc/pointer'
@@ -17,8 +16,8 @@ module OpenapiContracts
 
     attr_reader :schema
 
-    def initialize(schema)
-      @schema = Schema.new(schema)
+    def initialize(raw)
+      @schema = Schema.new(raw)
       @paths = @schema['paths'].to_h do |path, _|
         [path, Path.new(path, @schema.at_pointer(Doc::Pointer['paths', path]))]
       end

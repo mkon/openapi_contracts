@@ -1,11 +1,12 @@
 RSpec.describe OpenapiContracts::Doc::Parameter do
   subject(:parameter) { described_class.new(spec) }
 
-  let(:spec) do
-    OpenapiContracts::Doc::Schema.new(
+  let(:spec) { OpenapiContracts::Doc::Schema.new(raw) }
+  let(:raw) do
+    {
       'name'   => 'something',
       'schema' => schema
-    )
+    }
   end
 
   shared_examples 'a path parameter' do |expectations|
@@ -95,6 +96,24 @@ RSpec.describe OpenapiContracts::Doc::Parameter do
         '0'  => true,
         '-2' => false
       }
+
+      context 'when using openapi 3.1' do
+        let(:schema) do
+          {
+            'type'             => 'integer',
+            'exclusiveMinimum' => -2
+          }
+        end
+
+        before do
+          raw['openapi'] = '3.1'
+        end
+
+        include_examples 'a path parameter', {
+          '0'  => true,
+          '-2' => false
+        }
+      end
     end
 
     context 'when the param is an integer with maximum 2' do

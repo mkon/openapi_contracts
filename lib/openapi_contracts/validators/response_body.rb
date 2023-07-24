@@ -11,11 +11,6 @@ module OpenapiContracts::Validators
       OpenapiContracts::PayloadParser.parse(media_type, Array.wrap(response.body).join)
     end
 
-    def schema_for_validation
-      schema = spec.schema_for(media_type)
-      schema.raw.merge('$ref' => schema.fragment)
-    end
-
     def spec
       @spec ||= operation.response_for_status(response.status)
     end
@@ -26,7 +21,7 @@ module OpenapiContracts::Validators
       elsif !spec.supports_media_type?(media_type)
         @errors << "Undocumented response with content-type #{media_type.inspect}"
       else
-        @errors += validate_schema(schema_for_validation, data_for_validation)
+        @errors += validate_schema(spec.schema_for(media_type), data_for_validation)
       end
     end
   end
