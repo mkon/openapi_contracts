@@ -30,7 +30,7 @@ module OpenapiContracts
     def schemer
       @schemer ||= begin
         schema = @spec.navigate('schema')
-        JSONSchemer.schema(schema.raw.merge('$ref' => schema.fragment, '$schema' => 'http://json-schema.org/draft-04/schema#'))
+        JSONSchemer.schema(Validators::SchemaValidation.build_validation_schema(schema))
       end
     end
 

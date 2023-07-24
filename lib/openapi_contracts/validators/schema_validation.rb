@@ -21,7 +21,7 @@ module OpenapiContracts::Validators
     end
 
     def schema_draft_version(schema)
-      if schema.openapi_version < Gem::Version.new('3.1')
+      if schema.openapi_version.blank? || schema.openapi_version < Gem::Version.new('3.1')
         # Closest compatible version is actually draft 5 but not supported by json-schemer
         'http://json-schema.org/draft-04/schema#'
       else

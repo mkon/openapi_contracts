@@ -47,23 +47,20 @@ RSpec.describe 'RSpec integration' do
     end
 
     it { is_expected.to match_openapi_doc(doc).with_http_status(:ok) }
-  end
-
-  context 'when using dynamic paths with path option' do
-    let(:path) { '/messages/ef278' }
-    let(:response_json) do
-      {
-        data: {
-          id:         '1ef',
-          type:       'messages',
-          attributes: {
-            body: 'foo'
-          }
-        }
-      }
-    end
 
     it { is_expected.to match_openapi_doc(doc, path: '/messages/{id}').with_http_status(:ok) }
+
+    context 'when a string attribute is nullable' do
+      before { response_json[:data][:attributes][:title] = nil }
+
+      it { is_expected.to match_openapi_doc(doc) }
+    end
+
+    context 'when a object attribute is nullable' do
+      before { response_json[:data][:attributes][:author] = nil }
+
+      it { is_expected.to match_openapi_doc(doc) }
+    end
   end
 
   context 'when a required header is missing' do
