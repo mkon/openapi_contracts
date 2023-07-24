@@ -4,6 +4,7 @@ require 'active_support/core_ext/hash'
 require 'active_support/core_ext/class'
 require 'active_support/core_ext/module'
 require 'active_support/core_ext/string'
+require 'rubygems/version'
 
 require 'json_schemer'
 require 'rack'

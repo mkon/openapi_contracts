@@ -63,6 +63,10 @@ module OpenapiContracts
       self.class.new(raw, pointer)
     end
 
+    def openapi_version
+      @raw['openapi']&.then { |v| Gem::Version.new(v) }
+    end
+
     # Returns the actual sub-specification contents at the pointer of this Specification
     def resolve
       @pointer.walk(@raw)
