@@ -1,9 +1,15 @@
 RSpec.describe OpenapiContracts::Doc::Request do
-  subject { doc.operation_for(path, method).request_body }
+  subject(:request) { doc.operation_for(path, method).request_body }
 
   let(:doc) { OpenapiContracts::Doc.parse(FIXTURES_PATH.join('openapi')) }
+  let(:path) { '/user' }
+  let(:method) { 'post' }
 
-  let(:request) { doc.operation_for('/user', 'post').request_body }
+  context 'when there is no request_body defined on the operation' do
+    let(:method) { 'get' }
+
+    it { is_expected.to be_nil }
+  end
 
   describe '#supports_media_type?' do
     subject { request.supports_media_type?(media_type) }

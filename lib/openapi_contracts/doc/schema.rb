@@ -57,7 +57,8 @@ module OpenapiContracts
       pointer.to_json_schemer_pointer
     end
 
-    delegate :dig, :fetch, :keys, :key?, :[], :to_h, to: :resolve
+    delegate :dig, to: :resolve, allow_nil: true
+    delegate :fetch, :keys, :key?, :[], :to_h, to: :resolve
 
     def at_pointer(pointer)
       self.class.new(raw, pointer)
@@ -65,6 +66,10 @@ module OpenapiContracts
 
     def openapi_version
       @raw['openapi']&.then { |v| Gem::Version.new(v) }
+    end
+
+    def presence
+      resolve.present? ? self : nil
     end
 
     # Returns the actual sub-specification contents at the pointer of this Specification

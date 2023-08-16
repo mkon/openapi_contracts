@@ -13,7 +13,7 @@ module OpenapiContracts
     def request_body
       return @request_body if instance_variable_defined?(:@request_body)
 
-      @request_body = @spec.navigate('requestBody')&.then { |s| Doc::Request.new(s) }
+      @request_body = @spec.navigate('requestBody').presence&.then { |s| Doc::Request.new(s) }
     end
 
     def responses
