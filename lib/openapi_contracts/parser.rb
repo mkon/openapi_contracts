@@ -2,7 +2,7 @@ module OpenapiContracts
   class Parser
     autoload :Transformers, 'openapi_contracts/parser/transformers'
 
-    TRANSFORMERS = [Transformers::Nullable, Transformers::Pointer].freeze
+    TRANSFORMERS = [Transformers::Pointer].freeze
 
     def self.call(dir, filename)
       new(dir.join(filename)).parse
