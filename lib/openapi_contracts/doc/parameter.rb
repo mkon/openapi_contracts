@@ -28,10 +28,7 @@ module OpenapiContracts
     private
 
     def schemer
-      @schemer ||= begin
-        schema = @spec.navigate('schema')
-        JSONSchemer.schema(Validators::SchemaValidation.build_validation_schema(schema))
-      end
+      @schemer ||= Validators::SchemaValidation.validation_schemer(@spec.navigate('schema'))
     end
 
     def integer_parameter_matches?(value)

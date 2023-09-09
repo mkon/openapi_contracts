@@ -1,11 +1,18 @@
 RSpec.describe OpenapiContracts::Doc::Parameter do
   subject(:parameter) { described_class.new(spec) }
 
-  let(:spec) { OpenapiContracts::Doc::Schema.new(raw) }
+  let(:spec) { OpenapiContracts::Doc::Schema.new(raw).navigate('components', 'parameters', 'Example') }
   let(:raw) do
     {
-      'name'   => 'something',
-      'schema' => schema
+      'openapi'    => '3.0.0',
+      'components' => {
+        'parameters' => {
+          'Example' => {
+            'name'   => 'example',
+            'schema' => schema
+          }
+        }
+      }
     }
   end
 
