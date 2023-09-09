@@ -88,16 +88,7 @@ Then it does the following checks:
 
 ## Known Issues
 
-### OpenApi 3.0
-
-For openapi schemas < 3.1, data is  validated using JSON Schema Draft 04, even tho OpenApi 3.0 is a super+subset of Draft 05.
-This is due to the fact that we validate the data using json-schemer which does not support 05 and even then would not be fully compatible.
-However compatibility issues should be fairly rare and there might be workarounds by describing the data slightly different.
-
-### OpenAPi 3.1
-
-Here exists a similar problem. OpenApi 3.1 is finally fully compatible with JSON Draft 2020-12, but there is no support yet in json-schemer,
-so we use the closest draft which is 07. 
+None at the moment :)
 
 ## Future plans
 
