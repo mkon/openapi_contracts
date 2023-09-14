@@ -5,7 +5,7 @@ RSpec.describe OpenapiContracts::Doc::Path do
   let(:schema) do
     {
       'paths' => {
-        '/messages/{id}' => {
+        '/messages/{id}'             => {
           'parameters' => [id_param].compact
         },
         '/messages/{id}/{second_id}' => {
@@ -59,11 +59,11 @@ RSpec.describe OpenapiContracts::Doc::Path do
     end
   end
 
-  describe "#path_regexp" do
-    subject { doc.with_path("/messages/{id}/{second_id}").path_regexp.match("/messages/123/abc").captures }
+  describe '#path_regexp' do
+    subject { doc.with_path('/messages/{id}/{second_id}').path_regexp.match('/messages/123/abc').captures }
 
-    it "matches both parameters" do
-      expect(subject).to eq(["123", "abc"])
+    it 'matches both parameters' do
+      expect(subject).to eq %w(123 abc)
     end
   end
 end
