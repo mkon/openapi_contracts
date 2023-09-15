@@ -16,7 +16,27 @@ RSpec.describe OpenapiContracts::Validators::ResponseBody do
         type:       'user',
         attributes: {
           name:  'Joe',
-          email: 'joe@host.example'
+          email: 'joe@host.example',
+          rank:  1.0
+        }
+      }
+    end
+
+    it 'has no errors' do
+      expect(subject.call).to be_empty
+    end
+  end
+
+  context 'when having nilled fields' do
+    let(:user) do
+      {
+        id:         '123',
+        type:       'user',
+        attributes: {
+          name:      nil,
+          email:     'joe@host.example',
+          addresses: nil,
+          rank:      nil
         }
       }
     end
@@ -32,17 +52,20 @@ RSpec.describe OpenapiContracts::Validators::ResponseBody do
         id:         1,
         type:       nil,
         attributes: {
-          name: 'Joe'
+          name: 'Joe',
+          rank: 1
         }
       }
     end
 
     it 'returns all errors' do
-      expect(subject.call).to eq [
-        '1 at /data/id does not match the schema',
-        'nil at /data/type does not match the schema',
-        'Missing keys: ["email"] at /data/attributes'
-      ]
+      expect(subject.call).to contain_exactly(
+        '1 at `/data/attributes/rank` does not match format: float',
+        '1 at `/data/id` is not a string',
+        '1 at `/data/attributes/rank` is not null',
+        'null at `/data/type` is not a string',
+        'object at `/data/attributes` is missing required properties: email'
+      )
     end
   end
 

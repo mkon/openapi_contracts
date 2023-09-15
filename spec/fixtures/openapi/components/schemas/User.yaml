@@ -12,11 +12,18 @@ properties:
         type: string
         nullable: true
       addresses:
-        type: array
         oneOf:
-          - $ref: './Address.yaml'
+          - type: array
+            oneOf:
+              - $ref: './Address.yaml'
+          - type: "null"
       email:
         $ref: './Email.yaml'
+      rank:
+        oneOf:
+          - type: "null"
+          - type: number
+            format: float
     additionalProperties: false
     required:
       - name

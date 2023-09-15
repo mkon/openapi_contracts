@@ -3,14 +3,9 @@ module OpenapiContracts::Validators
     module_function
 
     def error_to_message(error)
-      pointer = " at #{error['data_pointer']}" if error['data_pointer'].present?
-      if error.key?('details')
-        error['details'].to_a.map { |(key, val)|
-          "#{key.humanize}: #{val}#{pointer}"
-        }.to_sentence
-      else
-        "#{error['data'].inspect}#{pointer} does not match the schema"
-      end
+      msg = error['error']
+      msg.sub!(/^value/, error['data'].to_json) if error['data'].to_json.length < 50
+      msg
     end
 
     def schema_draft_version(schema)
