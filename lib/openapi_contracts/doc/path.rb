@@ -25,7 +25,7 @@ module OpenapiContracts
         re = /\{([^\}]+)\}/
         @path.gsub(re) { |placeholder|
           placeholder.match(re) { |m| "(?<#{m[1]}>[^/]*)" }
-        }.then { |str| Regexp.new(str) }
+        }.then { |str| Regexp.new( "^#{str}$") }
       end
     end
 
