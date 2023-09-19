@@ -1,8 +1,11 @@
 RSpec.describe OpenapiContracts::Match do
   subject do
-    described_class.new(doc, response)
+    described_class.new(doc, response, options)
   end
 
+  let(:options) { {} }
+
+  before { allow(OpenapiContracts).to receive(:collect_coverage).and_return(true) }
   after { OpenapiContracts::Coverage.store.clear! }
 
   include_context 'when using GET /user'
@@ -20,5 +23,14 @@ RSpec.describe OpenapiContracts::Match do
         }
       }
     )
+  end
+
+  context 'when using nocov option' do
+    let(:options) { {nocov: true} }
+
+    it 'does not register coverage' do
+      subject.valid?
+      expect(OpenapiContracts::Coverage.store.data).to eq({})
+    end
   end
 end

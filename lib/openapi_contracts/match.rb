@@ -19,14 +19,18 @@ module OpenapiContracts
       return @errors.empty? if instance_variable_defined?(:@errors)
 
       @errors = matchers.call
-      Coverage.store.increment!(operation.path.to_s, method, status, media_type)
+      Coverage.store.increment!(operation.path.to_s, method, status, media_type) if collect_coverage?
       @errors.empty?
     end
 
     private
 
+    def collect_coverage?
+      OpenapiContracts.collect_coverage && @request.present? && @errors.empty? && !@options[:nocov]
+    end
+
     def media_type
-      @response.headers['Content-Type'].split(';').first
+      @response.headers['Content-Type']&.split(';')&.first || 'no_content'
     end
 
     def matchers
@@ -61,7 +65,7 @@ module OpenapiContracts
     end
 
     def method
-      @response.request.request_method.downcase
+      @request.request_method.downcase
     end
 
     def path
