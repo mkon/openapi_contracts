@@ -5,11 +5,8 @@ module OpenapiContracts::Coverage
       @data = data
     end
 
-    def generate
-      {
-        'meta'  => meta,
-        'paths' => @data
-      }
+    def generate(pathname)
+      File.write(pathname, JSON.pretty_generate(report))
     end
 
     private
@@ -24,6 +21,13 @@ module OpenapiContracts::Coverage
           'covered' => total_covered_responses,
           'total'   => @doc.responses.count
         }
+      }
+    end
+
+    def report
+      {
+        'meta'  => meta,
+        'paths' => @data
       }
     end
 

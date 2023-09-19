@@ -7,7 +7,7 @@ RSpec.describe OpenapiContracts::Coverage do
   before { described_class.store.clear! }
 
   describe '.report' do
-    subject { described_class.report(doc) }
+    let(:file) { Tempfile.new }
 
     before do
       described_class.store.increment!('/health', 'get', '200', 'text/plain')
@@ -17,13 +17,15 @@ RSpec.describe OpenapiContracts::Coverage do
       described_class.store.increment!('/user', 'post', '201', 'application/json')
       described_class.store.increment!('/user', 'post', '400', 'application/json')
       described_class.store.increment!('/user', 'post', '400', 'application/json')
+      described_class.report(doc, Pathname(file.path))
     end
 
     it 'can generate a report' do
-      expect(subject.dig('meta', 'operations', 'covered')).to eq(3)
-      expect(subject.dig('meta', 'operations', 'total')).to eq(8)
-      expect(subject.dig('meta', 'responses', 'covered')).to eq(4)
-      expect(subject.dig('meta', 'responses', 'total')).to eq(15)
+      data = JSON(File.read(file))
+      expect(data.dig('meta', 'operations', 'covered')).to eq(3)
+      expect(data.dig('meta', 'operations', 'total')).to eq(8)
+      expect(data.dig('meta', 'responses', 'covered')).to eq(4)
+      expect(data.dig('meta', 'responses', 'total')).to eq(15)
     end
   end
 end

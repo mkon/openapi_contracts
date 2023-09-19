@@ -4,11 +4,11 @@ module OpenapiContracts
     autoload :Store,  'openapi_contracts/coverage/store'
 
     def self.store
-      @store ||= Store.new
+      Thread.current[:openapi_contracts_coverage_store] ||= Store.new
     end
 
-    def self.report(doc)
-      Report.new(doc, store.data).generate
+    def self.report(doc, filepath)
+      Report.new(doc, store.data).generate(filepath)
     end
   end
 end
