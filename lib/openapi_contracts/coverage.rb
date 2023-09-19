@@ -10,5 +10,10 @@ module OpenapiContracts
     def self.report(doc, filepath)
       Report.new(doc, store.data).generate(filepath)
     end
+
+    def self.merge_reports(doc, filepath, *others)
+      reports = others.map { |fp| JSON(File.read(fp))['paths'] }
+      Report.merge(doc, *reports).generate(filepath)
+    end
   end
 end

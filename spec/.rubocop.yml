@@ -14,6 +14,8 @@ RSpec/ExampleLength:
   Max: 10
   CountAsOne:
     - hash
+RSpec/IndexedLet:
+  Enabled: false
 RSpec/MultipleExpectations:
   Enabled: false
 RSpec/MultipleMemoizedHelpers:

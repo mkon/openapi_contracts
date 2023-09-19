@@ -1,12 +1,24 @@
 module OpenapiContracts::Coverage
   class Report
-    def initialize(doc, data)
+    def self.merge(doc, *reports)
+      reports.each_with_object(Report.new(doc)) do |r, m|
+        m.merge!(r)
+      end
+    end
+
+    attr_reader :data
+
+    def initialize(doc, data = {})
       @doc = doc
       @data = data
     end
 
     def generate(pathname)
       File.write(pathname, JSON.pretty_generate(report))
+    end
+
+    def merge!(data)
+      @data.deep_merge!(data) { |_key, val1, val2| val1 + val2 }
     end
 
     private
