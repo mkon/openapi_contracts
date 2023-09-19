@@ -6,6 +6,7 @@ RSpec.describe 'RSpec integration' do
   it { is_expected.to match_openapi_doc(doc) }
 
   it { is_expected.to match_openapi_doc(doc).with_http_status(:ok) }
+  it { is_expected.to match_openapi_doc(doc).with_http_status(200) }
 
   it { is_expected.to_not match_openapi_doc(doc).with_http_status(:created) }
 

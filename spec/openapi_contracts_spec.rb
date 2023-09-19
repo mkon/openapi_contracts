@@ -1,6 +1,18 @@
 RSpec.describe OpenapiContracts do
   include_context 'when using GET /user'
 
+  describe '.hash_bury' do
+    subject { described_class.hash_bury({}, %i(foo bar), 'test') }
+
+    it { is_expected.to eq({foo: {bar: 'test'}}) }
+  end
+
+  describe '.hash_bury!' do
+    subject { {}.tap { |h| described_class.hash_bury!(h, %i(foo bar), 'test') } }
+
+    it { is_expected.to eq({foo: {bar: 'test'}}) }
+  end
+
   describe '.match' do
     subject { described_class.match(doc, response) }
 
