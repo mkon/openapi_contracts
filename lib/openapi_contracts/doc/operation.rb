@@ -2,12 +2,18 @@ module OpenapiContracts
   class Doc::Operation
     include Doc::WithParameters
 
+    attr_reader :path
+
     def initialize(path, spec)
       @path = path
       @spec = spec
-      @responses = spec.navigate('responses').each.to_h do |status, subspec| # rubocop:disable Style/HashTransformValues
-        [status, Doc::Response.new(subspec)]
+      @responses = spec.navigate('responses').each.to_h do |status, subspec|
+        [status, Doc::Response.new(status, subspec)]
       end
+    end
+
+    def verb
+      @spec.pointer[2]
     end
 
     def request_body

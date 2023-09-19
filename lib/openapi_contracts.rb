@@ -11,6 +11,7 @@ require 'rack'
 require 'yaml'
 
 module OpenapiContracts
+  autoload :Coverage,        'openapi_contracts/coverage'
   autoload :Doc,             'openapi_contracts/doc'
   autoload :Helper,          'openapi_contracts/helper'
   autoload :Match,           'openapi_contracts/match'
@@ -25,6 +26,17 @@ module OpenapiContracts
 
   def match(doc, response, options = {})
     Match.new(doc, response, options)
+  end
+
+  def hash_bury(hash, keys, value)
+    other = keys.reverse.reduce(value) { |m, k| {k => m} }
+    hash.deep_merge other
+  end
+
+  def hash_bury!(hash, keys, value)
+    other = keys.reverse.reduce(value) { |m, k| {k => m} }
+    hash.deep_merge! other
+    other
   end
 end
 

@@ -12,6 +12,8 @@ RSpec/DescribeClass:
   - integration/**/*
 RSpec/ExampleLength:
   Max: 10
+  CountAsOne:
+    - hash
 RSpec/MultipleExpectations:
   Enabled: false
 RSpec/MultipleMemoizedHelpers:

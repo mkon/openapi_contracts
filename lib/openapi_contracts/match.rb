@@ -19,10 +19,15 @@ module OpenapiContracts
       return @errors.empty? if instance_variable_defined?(:@errors)
 
       @errors = matchers.call
+      Coverage.store.increment!(operation.path.to_s, method, status, media_type)
       @errors.empty?
     end
 
     private
+
+    def media_type
+      @response.headers['Content-Type'].split(';').first
+    end
 
     def matchers
       env = Env.new(
@@ -39,7 +44,7 @@ module OpenapiContracts
     end
 
     def operation
-      @doc.operation_for(
+      @operation ||= @doc.operation_for(
         @options.fetch(:path, @request.path),
         @request.request_method.downcase
       )
@@ -53,6 +58,18 @@ module OpenapiContracts
     def response_compatible?
       ancestors = @response.class.ancestors.map(&:to_s)
       MIN_RESPONSE_ANCESTORS.all? { |s| ancestors.include?(s) }
+    end
+
+    def method
+      @response.request.request_method.downcase
+    end
+
+    def path
+      @options.fetch(:path, @response.request.path)
+    end
+
+    def status
+      @response.status.to_s
     end
   end
 end
