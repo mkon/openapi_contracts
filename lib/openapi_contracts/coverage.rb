@@ -7,13 +7,13 @@ module OpenapiContracts
       Thread.current[:openapi_contracts_coverage_store] ||= Store.new
     end
 
-    def self.report(doc, filepath)
-      Report.new(doc, store.data).generate(filepath)
+    def self.report(doc)
+      Report.new(doc, store.data)
     end
 
-    def self.merge_reports(doc, filepath, *others)
+    def self.merge_reports(doc, *others)
       reports = others.map { |fp| JSON(File.read(fp))['paths'] }
-      Report.merge(doc, *reports).generate(filepath)
+      Report.merge(doc, *reports)
     end
   end
 end

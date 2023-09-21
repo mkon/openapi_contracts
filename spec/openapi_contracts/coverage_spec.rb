@@ -8,29 +8,36 @@ RSpec.describe OpenapiContracts::Coverage do
   after { described_class.store.clear! }
 
   describe '.merge_reports' do
-    let(:file1) { Tempfile.new }
-    let(:file2) { Tempfile.new }
-    let(:file3) { Tempfile.new }
-    let(:merged_file) { Tempfile.new }
+    subject { described_class.merge_reports(doc, *[file1, file2, file3].map(&:path)) }
 
-    before do
-      described_class.store.increment!('/health', 'get', '200', 'text/plain')
-      described_class.store.increment!('/user', 'get', '200', 'application/json')
-      described_class.store.increment!('/user', 'get', '200', 'application/json')
-      described_class.report(doc, Pathname(file1.path))
-      described_class.store.clear!
-      described_class.store.increment!('/user', 'get', '401', 'application/json')
-      described_class.store.increment!('/user', 'post', '201', 'application/json')
-      described_class.report(doc, Pathname(file2.path))
-      described_class.store.clear!
-      described_class.store.increment!('/user', 'post', '400', 'application/json')
-      described_class.store.increment!('/user', 'post', '400', 'application/json')
-      described_class.report(doc, Pathname(file3.path))
-      described_class.merge_reports(doc, merged_file.path, *[file1, file2, file3].map(&:path))
+    let(:file1) do
+      Tempfile.new.tap do |f|
+        described_class.store.clear!
+        described_class.store.increment!('/health', 'get', '200', 'text/plain')
+        described_class.store.increment!('/user', 'get', '200', 'application/json')
+        described_class.store.increment!('/user', 'get', '200', 'application/json')
+        described_class.report(doc).generate(f.path)
+      end
+    end
+    let(:file2) do
+      Tempfile.new.tap do |f|
+        described_class.store.clear!
+        described_class.store.increment!('/user', 'get', '401', 'application/json')
+        described_class.store.increment!('/user', 'post', '201', 'application/json')
+        described_class.report(doc).generate(f.path)
+      end
+    end
+    let(:file3) do
+      Tempfile.new.tap do |f|
+        described_class.store.clear!
+        described_class.store.increment!('/user', 'post', '400', 'application/json')
+        described_class.store.increment!('/user', 'post', '400', 'application/json')
+        described_class.report(doc).generate(f.path)
+      end
     end
 
     it 'can generate a report' do
-      data = JSON(File.read(merged_file))
+      data = subject.as_json
       expect(data.dig('meta', 'operations', 'covered')).to eq(3)
       expect(data.dig('meta', 'operations', 'total')).to eq(8)
       expect(data.dig('meta', 'responses', 'covered')).to eq(4)
@@ -39,7 +46,7 @@ RSpec.describe OpenapiContracts::Coverage do
   end
 
   describe '.report' do
-    let(:file) { Tempfile.new }
+    subject { described_class.report(doc) }
 
     before do
       described_class.store.increment!('/health', 'get', '200', 'text/plain')
@@ -49,11 +56,10 @@ RSpec.describe OpenapiContracts::Coverage do
       described_class.store.increment!('/user', 'post', '201', 'application/json')
       described_class.store.increment!('/user', 'post', '400', 'application/json')
       described_class.store.increment!('/user', 'post', '400', 'application/json')
-      described_class.report(doc, Pathname(file.path))
     end
 
-    it 'can generate a report' do
-      data = JSON(File.read(file))
+    it 'can generate a report', :aggregate_failures do
+      data = subject.as_json
       expect(data.dig('meta', 'operations', 'covered')).to eq(3)
       expect(data.dig('meta', 'operations', 'total')).to eq(8)
       expect(data.dig('meta', 'responses', 'covered')).to eq(4)

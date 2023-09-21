@@ -8,6 +8,10 @@ module OpenapiContracts::Coverage
 
     attr_reader :data
 
+    def as_json(*)
+      report
+    end
+
     def initialize(doc, data = {})
       @doc = doc
       @data = data
@@ -21,8 +25,6 @@ module OpenapiContracts::Coverage
       @data.deep_merge!(data) { |_key, val1, val2| val1 + val2 }
     end
 
-    private
-
     def meta
       {
         'operations' => {
@@ -35,6 +37,8 @@ module OpenapiContracts::Coverage
         }
       }
     end
+
+    private
 
     def report
       {
