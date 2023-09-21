@@ -19,7 +19,7 @@ module OpenapiContracts
       return @errors.empty? if instance_variable_defined?(:@errors)
 
       @errors = matchers.call
-      Coverage.store.increment!(operation.path.to_s, method, status, media_type) if collect_coverage?
+      Coverage.store.increment!(operation.path.to_s, request_method, status, media_type) if collect_coverage?
       @errors.empty?
     end
 
@@ -48,10 +48,7 @@ module OpenapiContracts
     end
 
     def operation
-      @operation ||= @doc.operation_for(
-        @options.fetch(:path, @request.path),
-        @request.request_method.downcase
-      )
+      @operation ||= @doc.operation_for(path, request_method)
     end
 
     def request_compatible?
@@ -64,12 +61,12 @@ module OpenapiContracts
       MIN_RESPONSE_ANCESTORS.all? { |s| ancestors.include?(s) }
     end
 
-    def method
+    def request_method
       @request.request_method.downcase
     end
 
     def path
-      @options.fetch(:path, @response.request.path)
+      @options.fetch(:path, @request.path)
     end
 
     def status
