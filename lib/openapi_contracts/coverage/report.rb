@@ -35,7 +35,10 @@ module OpenapiContracts::Coverage
           'covered' => total_covered_responses,
           'total'   => @doc.responses.count
         }
-      }
+      }.tap do |d|
+        d['operations']['quota'] = d['operations']['covered'].to_f / d['operations']['total']
+        d['responses']['quota'] = d['responses']['covered'].to_f / d['responses']['total']
+      end
     end
 
     private
