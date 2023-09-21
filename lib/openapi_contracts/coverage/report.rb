@@ -27,7 +27,7 @@ module OpenapiContracts::Coverage
       {
         'operations' => {
           'covered' => total_covered_operations,
-          'total'   => @doc.paths.map { |p| p.operations.count }.reduce(&:+)
+          'total'   => @doc.operations.count
         },
         'responses'  => {
           'covered' => total_covered_responses,
@@ -44,19 +44,13 @@ module OpenapiContracts::Coverage
     end
 
     def total_covered_operations
-      @doc.paths.map { |p|
-        p.operations.select { |o| @data.dig(p.to_s, o.verb).present? }.count
-      }.reduce(&:+)
+      @doc.operations.select { |o| @data.dig(o.path.to_s, o.verb).present? }.count
     end
 
     def total_covered_responses
-      @doc.paths.map { |p|
-        p.operations.map do |o|
-          o.responses.select { |r|
-            @data.dig(p.to_s, o.verb, r.status).present?
-          }.count
-        end
-      }.flatten.reduce(&:+)
+      @doc.responses.select { |r|
+        @data.dig(r.operation.path.to_s, r.operation.verb, r.status).present?
+      }.count
     end
   end
 end
