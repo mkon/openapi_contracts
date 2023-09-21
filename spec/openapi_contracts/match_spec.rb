@@ -6,7 +6,6 @@ RSpec.describe OpenapiContracts::Match do
   let(:options) { {} }
 
   before { allow(OpenapiContracts).to receive(:collect_coverage).and_return(true) }
-  after { OpenapiContracts::Coverage.store.clear! }
 
   include_context 'when using GET /user'
 
@@ -14,7 +13,7 @@ RSpec.describe OpenapiContracts::Match do
 
   it 'registers the coverage' do
     subject.valid?
-    expect(OpenapiContracts::Coverage.store.data).to eq(
+    expect(doc.coverage.data).to eq(
       '/user' => {
         'get' => {
           '200' => {
@@ -32,7 +31,7 @@ RSpec.describe OpenapiContracts::Match do
 
     it 'registers the coverage' do
       subject.valid?
-      expect(OpenapiContracts::Coverage.store.data).to eq(
+      expect(doc.coverage.data).to eq(
         '/comments/{id}' => {
           'patch' => {
             '204' => {
@@ -49,7 +48,7 @@ RSpec.describe OpenapiContracts::Match do
 
     it 'does not register coverage' do
       subject.valid?
-      expect(OpenapiContracts::Coverage.store.data).to eq({})
+      expect(doc.coverage.data).to eq({})
     end
   end
 end

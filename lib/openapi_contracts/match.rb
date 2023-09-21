@@ -19,7 +19,7 @@ module OpenapiContracts
       return @errors.empty? if instance_variable_defined?(:@errors)
 
       @errors = matchers.call
-      Coverage.store.increment!(operation.path.to_s, request_method, status, media_type) if collect_coverage?
+      @doc.coverage.increment!(operation.path.to_s, request_method, status, media_type) if collect_coverage?
       @errors.empty?
     end
 

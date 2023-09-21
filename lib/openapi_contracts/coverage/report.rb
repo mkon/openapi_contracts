@@ -1,4 +1,4 @@
-module OpenapiContracts::Coverage
+class OpenapiContracts::Coverage
   class Report
     def self.merge(doc, *reports)
       reports.each_with_object(Report.new(doc)) do |r, m|

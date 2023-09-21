@@ -1,38 +1,35 @@
 RSpec.describe OpenapiContracts::Coverage do
-  subject { described_class }
+  subject(:coverage) { doc.coverage }
 
   let(:doc) { OpenapiContracts::Doc.parse(openapi_dir) }
   let(:openapi_dir) { FIXTURES_PATH.join('openapi') }
-
-  before { described_class.store.clear! }
-  after { described_class.store.clear! }
 
   describe '.merge_reports' do
     subject { described_class.merge_reports(doc, *[file1, file2, file3].map(&:path)) }
 
     let(:file1) do
       Tempfile.new.tap do |f|
-        described_class.store.clear!
-        described_class.store.increment!('/health', 'get', '200', 'text/plain')
-        described_class.store.increment!('/user', 'get', '200', 'application/json')
-        described_class.store.increment!('/user', 'get', '200', 'application/json')
-        described_class.report(doc).generate(f.path)
+        doc.coverage.clear!
+        doc.coverage.increment!('/health', 'get', '200', 'text/plain')
+        doc.coverage.increment!('/user', 'get', '200', 'application/json')
+        doc.coverage.increment!('/user', 'get', '200', 'application/json')
+        doc.coverage.report.generate(f.path)
       end
     end
     let(:file2) do
       Tempfile.new.tap do |f|
-        described_class.store.clear!
-        described_class.store.increment!('/user', 'get', '401', 'application/json')
-        described_class.store.increment!('/user', 'post', '201', 'application/json')
-        described_class.report(doc).generate(f.path)
+        doc.coverage.clear!
+        doc.coverage.increment!('/user', 'get', '401', 'application/json')
+        doc.coverage.increment!('/user', 'post', '201', 'application/json')
+        doc.coverage.report.generate(f.path)
       end
     end
     let(:file3) do
       Tempfile.new.tap do |f|
-        described_class.store.clear!
-        described_class.store.increment!('/user', 'post', '400', 'application/json')
-        described_class.store.increment!('/user', 'post', '400', 'application/json')
-        described_class.report(doc).generate(f.path)
+        doc.coverage.clear!
+        doc.coverage.store.increment!('/user', 'post', '400', 'application/json')
+        doc.coverage.store.increment!('/user', 'post', '400', 'application/json')
+        doc.coverage.report.generate(f.path)
       end
     end
 
@@ -46,16 +43,16 @@ RSpec.describe OpenapiContracts::Coverage do
   end
 
   describe '.report' do
-    subject { described_class.report(doc) }
+    subject { coverage.report }
 
     before do
-      described_class.store.increment!('/health', 'get', '200', 'text/plain')
-      described_class.store.increment!('/user', 'get', '200', 'application/json')
-      described_class.store.increment!('/user', 'get', '200', 'application/json')
-      described_class.store.increment!('/user', 'get', '401', 'application/json')
-      described_class.store.increment!('/user', 'post', '201', 'application/json')
-      described_class.store.increment!('/user', 'post', '400', 'application/json')
-      described_class.store.increment!('/user', 'post', '400', 'application/json')
+      doc.coverage.store.increment!('/health', 'get', '200', 'text/plain')
+      doc.coverage.store.increment!('/user', 'get', '200', 'application/json')
+      doc.coverage.store.increment!('/user', 'get', '200', 'application/json')
+      doc.coverage.store.increment!('/user', 'get', '401', 'application/json')
+      doc.coverage.store.increment!('/user', 'post', '201', 'application/json')
+      doc.coverage.store.increment!('/user', 'post', '400', 'application/json')
+      doc.coverage.store.increment!('/user', 'post', '400', 'application/json')
     end
 
     it 'can generate a report', :aggregate_failures do

@@ -1,4 +1,4 @@
-module OpenapiContracts::Coverage
+class OpenapiContracts::Coverage
   class Store
     attr_accessor :data
 

@@ -2,8 +2,6 @@ RSpec.describe OpenapiContracts::Coverage::Report do
   let(:doc) { OpenapiContracts::Doc.parse(openapi_dir) }
   let(:openapi_dir) { FIXTURES_PATH.join('openapi') }
 
-  before { OpenapiContracts::Coverage.store.clear! }
-
   describe '.merge' do
     subject { described_class.merge(doc, report1, report2, report3) }
 
