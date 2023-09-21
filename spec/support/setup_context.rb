@@ -73,3 +73,21 @@ RSpec.shared_context 'when using POST /user' do
   end
   let(:response_status) { 201 }
 end
+
+RSpec.shared_context 'when using PATCH /comments/{id}' do
+  let(:response) do
+    TestResponse[response_status, response_headers, response_body].tap do |resp|
+      resp.request = TestRequest.build(path, method: method)
+    end
+  end
+  let(:doc) { OpenapiContracts::Doc.parse(FIXTURES_PATH.join('openapi')) }
+  let(:method) { 'PATCH' }
+  let(:path) { '/comments/ef159a' }
+  let(:response_body) { '' }
+  let(:response_headers) do
+    {
+      'X-Request-Id' => 'some-request-id'
+    }
+  end
+  let(:response_status) { 204 }
+end

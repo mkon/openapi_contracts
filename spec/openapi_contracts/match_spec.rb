@@ -25,6 +25,25 @@ RSpec.describe OpenapiContracts::Match do
     )
   end
 
+  context 'when using a no-content endpoint' do
+    include_context 'when using PATCH /comments/{id}'
+
+    it { is_expected.to be_valid }
+
+    it 'registers the coverage' do
+      subject.valid?
+      expect(OpenapiContracts::Coverage.store.data).to eq(
+        '/comments/{id}' => {
+          'patch' => {
+            '204' => {
+              'no_content' => 1
+            }
+          }
+        }
+      )
+    end
+  end
+
   context 'when using nocov option' do
     let(:options) { {nocov: true} }
 
