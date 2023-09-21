@@ -8,7 +8,7 @@ module OpenapiContracts
       @path = path
       @spec = spec
       @responses = spec.navigate('responses').each.to_h do |status, subspec|
-        [status, Doc::Response.new(status, subspec)]
+        [status, Doc::Response.new(self, status, subspec)]
       end
     end
 

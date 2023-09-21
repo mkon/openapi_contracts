@@ -1,10 +1,11 @@
 module OpenapiContracts
   class Doc::Response
-    attr_reader :coverage, :schema, :status
+    attr_reader :coverage, :schema, :status, :operation
 
     delegate :pointer, to: :schema
 
-    def initialize(status, schema)
+    def initialize(operation, status, schema)
+      @operation = operation
       @status = status
       @schema = schema.follow_refs
     end
