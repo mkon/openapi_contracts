@@ -22,7 +22,7 @@ module OpenapiContracts
       "<#{self.class.name}#{to_a}>"
     end
 
-    delegate :any?, :empty?, to: :@segments
+    delegate :any?, :empty?, :[], to: :@segments
 
     def navigate(*segments)
       self.class[to_a + segments]

@@ -20,13 +20,17 @@ module OpenapiContracts
       @filenesting = build_file_list
       @filenesting.each_with_object({}) do |(path, pointer), schema|
         target = pointer.to_a.reduce(schema) { |d, k| d[k] ||= {} }
-        target.delete('$ref') # ref file pointers must be replaced
+        target.delete('$ref') # ref file pointers should be in the file list so save to delete
         target.merge! file_to_data(path, pointer)
       end
     end
 
     private
 
+    # file list consists of
+    # - root file
+    # - all files in components/
+    # - all path files referenced by the root file
     def build_file_list
       list = {@rootfile.relative_path_from(@cwd) => Doc::Pointer[]}
       Dir[File.expand_path('components/**/*.yaml', @cwd)].each do |file|

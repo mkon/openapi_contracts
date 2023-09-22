@@ -10,6 +10,9 @@ module OpenapiContracts
       @path = path
       @spec = spec
       @supported_methods = HTTP_METHODS & @spec.keys
+      @operations = @supported_methods.to_h do |verb|
+        [verb, Doc::Operation.new(self, @spec.navigate(verb))]
+      end
     end
 
     def dynamic?
@@ -17,7 +20,7 @@ module OpenapiContracts
     end
 
     def operations
-      @supported_methods.each.lazy.map { |m| Doc::Operation.new(self, @spec.navigate(m)) }
+      @operations.each_value
     end
 
     def path_regexp
@@ -34,13 +37,15 @@ module OpenapiContracts
     end
 
     def supports_method?(method)
-      @supported_methods.include?(method)
+      @operations.key?(method)
+    end
+
+    def to_s
+      @path
     end
 
     def with_method(method)
-      return unless supports_method?(method)
-
-      Doc::Operation.new(self, @spec.navigate(method))
+      @operations[method]
     end
   end
 end
