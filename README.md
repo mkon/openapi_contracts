@@ -74,6 +74,33 @@ result = OpenapiContracts.match($doc, response, options = {})
 raise result.errors.merge("/n") unless result.valid?
 ```
 
+## Coverage reporting
+
+You can generate a coverage report, giving an indication how many of your OpenApi operations and
+responses are verified.
+
+To enable the report, set the configuration `OpenapiContracts.collect_coverage = true`.
+
+After the tests completed, you can generate the JSON file, for example:
+
+```ruby
+RSpec.configure do |c|
+  c.after(:suite) do
+    $your_api_doc.coverage.report.generate(Rails.root.join("openapi_coverage.json"))
+  end
+end
+```
+
+In case you run tests on multiple nodes and need to merge reports:
+
+```ruby
+OpenapiContracts::Coverage.merge_reports(
+  $your_api_doc,
+  *Dir[Rails.root.join("openapi_coverage_*.json")]
+).generate(Rails.root.join("openapi_coverage.json"))
+
+```
+
 ## How it works
 
 It uses the `request.path`, `request.method`, `status` and `headers` on the test subject
