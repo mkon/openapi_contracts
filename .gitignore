@@ -1,4 +1,4 @@
 .byebug_history
-coverage
+/coverage/
 Gemfile.lock
 *.gem

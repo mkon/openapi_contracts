@@ -1,14 +1,12 @@
-require 'rubygems'
-require 'bundler'
-Bundler.require :default, 'test'
-
-require 'rack'
-
 require 'simplecov'
 SimpleCov.start do
   add_filter '/spec'
 end
 SimpleCov.minimum_coverage 99
+
+require 'rubygems'
+require 'bundler'
+Bundler.require :default, 'test'
 
 require 'json_spec'
 
