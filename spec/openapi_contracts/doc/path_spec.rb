@@ -5,8 +5,11 @@ RSpec.describe OpenapiContracts::Doc::Path do
   let(:schema) do
     {
       'paths' => {
-        '/messages/{id}' => {
+        '/messages/{id}'             => {
           'parameters' => [id_param].compact
+        },
+        '/messages/{id}/{second_id}' => {
+          'parameters' => [id_param, second_id_param].compact
         }
       }
     }
@@ -14,6 +17,15 @@ RSpec.describe OpenapiContracts::Doc::Path do
   let(:id_param) do
     {
       'name'     => 'id',
+      'in'       => 'path',
+      'required' => true,
+      'schema'   => id_schema
+    }
+  end
+
+  let(:second_id_param) do
+    {
+      'name'     => 'second_id',
       'in'       => 'path',
       'required' => true,
       'schema'   => id_schema
@@ -43,6 +55,24 @@ RSpec.describe OpenapiContracts::Doc::Path do
         expect(param).to be_a(OpenapiContracts::Doc::Parameter)
         expect(param.name).to eq('id')
         expect(param).to be_in_path
+      end
+    end
+  end
+
+  describe '#path_regexp' do
+    context 'when there are two parameters' do
+      subject { doc.with_path('/messages/{id}/{second_id}').path_regexp.match('/messages/123/abc').captures }
+
+      it 'matches both parameters' do
+        expect(subject).to eq %w(123 abc)
+      end
+    end
+
+    context 'when there is a trailing path' do
+      subject { doc.with_path('/messages/{id}').path_regexp.match?('/messages/123/trailing') }
+
+      it 'does not match' do
+        expect(subject).to be false
       end
     end
   end

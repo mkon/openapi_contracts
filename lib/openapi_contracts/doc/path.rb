@@ -25,10 +25,10 @@ module OpenapiContracts
 
     def path_regexp
       @path_regexp ||= begin
-        re = /\{(\S+)\}/
+        re = /\{([^\}]+)\}/
         @path.gsub(re) { |placeholder|
           placeholder.match(re) { |m| "(?<#{m[1]}>[^/]*)" }
-        }.then { |str| Regexp.new(str) }
+        }.then { |str| Regexp.new("^#{str}$") }
       end
     end
 
