@@ -60,19 +60,18 @@ RSpec.describe OpenapiContracts::Doc::Path do
   end
 
   describe '#path_regexp' do
-    context "when there are two parameters" do
+    context 'when there are two parameters' do
       subject { doc.with_path('/messages/{id}/{second_id}').path_regexp.match('/messages/123/abc').captures }
 
       it 'matches both parameters' do
         expect(subject).to eq %w(123 abc)
       end
-
     end
 
-    context "when there is a trailing path" do
+    context 'when there is a trailing path' do
       subject { doc.with_path('/messages/{id}').path_regexp.match?('/messages/123/trailing') }
 
-      it 'it does not match' do
+      it 'does not match' do
         expect(subject).to be false
       end
     end
