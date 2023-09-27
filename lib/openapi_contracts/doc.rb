@@ -14,7 +14,7 @@ module OpenapiContracts
       new Parser.call(dir, filename)
     end
 
-    attr_reader :schema
+    attr_reader :coverage, :schema
 
     def initialize(raw)
       @schema = Schema.new(raw)
@@ -22,6 +22,7 @@ module OpenapiContracts
         [path, Path.new(path, @schema.at_pointer(Doc::Pointer['paths', path]))]
       end
       @dynamic_paths = paths.select(&:dynamic?)
+      @coverage = Coverage.new(self)
     end
 
     # Returns an Enumerator over all paths
@@ -33,14 +34,21 @@ module OpenapiContracts
       OperationRouter.new(self).route(path, method.downcase)
     end
 
+    # Returns an Enumerator over all Operations
+    def operations(&block)
+      return enum_for(:operations) unless block_given?
+
+      paths.each do |path|
+        path.operations.each(&block)
+      end
+    end
+
     # Returns an Enumerator over all Responses
     def responses(&block)
       return enum_for(:responses) unless block_given?
 
-      paths.each do |path|
-        path.operations.each do |operation|
-          operation.responses.each(&block)
-        end
+      operations.each do |operation|
+        operation.responses.each(&block)
       end
     end
 
