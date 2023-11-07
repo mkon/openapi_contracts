@@ -1,0 +1,27 @@
+# This file instructs Redocly's linter to ignore the rules contained for specific parts of your API.
+# See https://redoc.ly/docs/cli/ for more information.
+spec/fixtures/openapi/openapi.yaml:
+  operation-4xx-response:
+    - '#/paths/~1numbers/get/responses'
+    - '#/paths/~1pets/get/responses'
+  security-defined:
+    - '#/paths/~1health/get'
+    - '#/paths/~1numbers/get'
+    - '#/paths/~1pets/get'
+spec/fixtures/openapi/paths/comment.yaml:
+  operation-4xx-response:
+    - '#/get/responses'
+    - '#/patch/responses'
+  security-defined:
+    - '#/get'
+    - '#/patch'
+spec/fixtures/openapi/paths/messages_last.yaml:
+  security-defined:
+    - '#/get'
+spec/fixtures/openapi/paths/message.yaml:
+  security-defined:
+    - '#/get'
+spec/fixtures/openapi/paths/user.yaml:
+  security-defined:
+    - '#/get'
+    - '#/post'

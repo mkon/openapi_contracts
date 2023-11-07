@@ -29,6 +29,9 @@ module OpenapiContracts::Validators
       validation_schemer(schema).validate(data).map do |err|
         error_to_message(err)
       end
+    rescue JSONSchemer::UnknownRef => e
+      # This usually happens when discriminators encounter unknown types
+      ["Could not resolve pointer #{e.message.inspect}"]
     end
   end
 end

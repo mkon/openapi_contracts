@@ -1,0 +1,25 @@
+Pet:
+  type: object
+  properties:
+    type:
+      type: string
+      enum: [cat, dog]
+  discriminator:
+    propertyName: type
+    mapping:
+      dog: '#/Dog'
+      cat: '#/Cat'
+
+Cat:
+  description: A cat
+  allOf:
+    - $ref: '#/Pet'
+
+Dog:
+  description: A dog
+  allOf:
+    - $ref: '#/Pet'
+    - type: object
+      properties:
+        leash:
+          type: boolean

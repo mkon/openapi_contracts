@@ -36,9 +36,9 @@ RSpec.describe OpenapiContracts::Coverage do
     it 'can generate a report' do
       data = subject.as_json
       expect(data.dig('meta', 'operations', 'covered')).to eq(3)
-      expect(data.dig('meta', 'operations', 'total')).to eq(8)
+      expect(data.dig('meta', 'operations', 'total')).to eq(9)
       expect(data.dig('meta', 'responses', 'covered')).to eq(4)
-      expect(data.dig('meta', 'responses', 'total')).to eq(15)
+      expect(data.dig('meta', 'responses', 'total')).to eq(16)
     end
   end
 
@@ -58,9 +58,9 @@ RSpec.describe OpenapiContracts::Coverage do
     it 'can generate a report', :aggregate_failures do
       data = subject.as_json
       expect(data.dig('meta', 'operations', 'covered')).to eq(3)
-      expect(data.dig('meta', 'operations', 'total')).to eq(8)
+      expect(data.dig('meta', 'operations', 'total')).to eq(9)
       expect(data.dig('meta', 'responses', 'covered')).to eq(4)
-      expect(data.dig('meta', 'responses', 'total')).to eq(15)
+      expect(data.dig('meta', 'responses', 'total')).to eq(16)
     end
   end
 end
