@@ -66,6 +66,20 @@ paths:
     $ref: 'paths/messages_last.yaml'
   /messages/{id}:
     $ref: 'paths/message.yaml'
+  /pets:
+    get:
+      operationId: pets
+      summary: Pets
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  oneOf:
+                    - $ref: 'components/schemas/Polymorphism.yaml#/Pet'
   /comments/{id}:
     $ref: 'paths/comment.yaml'
   /user:

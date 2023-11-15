@@ -1,12 +1,24 @@
 module OpenapiContracts::Parser::Transformers
   class Pointer < Base
     def call(object)
+      transform_discriminator(object)
+      transform_refs(object)
+    end
+
+    private
+
+    def transform_discriminator(object)
+      mappings = object.dig('discriminator', 'mapping')
+      return unless mappings.present?
+
+      mappings.transform_values! { |p| transform_pointer(p) }
+    end
+
+    def transform_refs(object)
       return unless object['$ref'].present?
 
       object['$ref'] = transform_pointer(object['$ref'])
     end
-
-    private
 
     def transform_pointer(target)
       if %r{^#/(?<pointer>.*)} =~ target

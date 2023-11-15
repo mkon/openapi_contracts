@@ -21,6 +21,46 @@ RSpec.describe 'RSpec integration' do
     it { is_expected.to match_openapi_doc(doc).with_http_status(:bad_request) }
   end
 
+  context 'when using polymorphism with discriminators' do
+    let(:path) { '/pets' }
+    let(:response_status) { 200 }
+    let(:response_json) do
+      [
+        {
+          type: 'cat'
+        },
+        {
+          type: 'dog'
+        }
+      ]
+    end
+
+    it { is_expected.to match_openapi_doc(doc).with_http_status(:ok) }
+
+    context 'when encountering unknown types' do
+      let(:response_json) do
+        [
+          {type: 'other'}
+        ]
+      end
+
+      it { is_expected.to_not match_openapi_doc(doc) }
+    end
+
+    context 'when not matching' do
+      let(:response_json) do
+        [
+          {
+            type:  'dog',
+            leash: 'missing'
+          }
+        ]
+      end
+
+      it { is_expected.to_not match_openapi_doc(doc) }
+    end
+  end
+
   context 'when using referenced responses' do
     let(:path) { '/messages/last' }
     let(:response_status) { 400 }
