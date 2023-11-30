@@ -1,0 +1,6 @@
+[[language]]
+name = "ruby"
+auto-format = true
+language-servers = [
+  { name = "rubocop" }
+]
