@@ -26,7 +26,7 @@ module OpenapiContracts::Parser::Transformers
         generate_absolute_pointer(pointer)
       elsif %r{^(?<relpath>[^#]+)(?:#/(?<pointer>.*))?} =~ target
         ptr = @parser.filenesting[@cwd.join(relpath)]
-        tgt = ptr.to_json_pointer
+        tgt = ptr
         tgt += "/#{pointer}" if pointer
         tgt
       else
