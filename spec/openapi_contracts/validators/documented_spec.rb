@@ -2,7 +2,7 @@ RSpec.describe OpenapiContracts::Validators::Documented do
   subject { described_class.new(stack, env) }
 
   let(:env) do
-    OpenapiContracts::Env.new(operation: operation, response: response, request: response.request)
+    OpenapiContracts::Env.new(operation:, response:, request: response.request)
   end
   let(:operation) { doc.operation_for(path, method) }
   let(:stack) { ->(errors) { errors } }

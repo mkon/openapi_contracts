@@ -35,20 +35,20 @@ module OpenapiContracts
     end
 
     # Returns an Enumerator over all Operations
-    def operations(&block)
+    def operations(&block) # rubocop:disable Naming/BlockForwarding
       return enum_for(:operations) unless block_given?
 
       paths.each do |path|
-        path.operations.each(&block)
+        path.operations.each(&block) # rubocop:disable Naming/BlockForwarding
       end
     end
 
     # Returns an Enumerator over all Responses
-    def responses(&block)
+    def responses(&block) # rubocop:disable Naming/BlockForwarding
       return enum_for(:responses) unless block_given?
 
       operations.each do |operation|
-        operation.responses.each(&block)
+        operation.responses.each(&block) # rubocop:disable Naming/BlockForwarding
       end
     end
 

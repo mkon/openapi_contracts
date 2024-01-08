@@ -1,7 +1,7 @@
 RSpec.describe OpenapiContracts::Validators::ResponseBody do
   subject { described_class.new(stack, env) }
 
-  let(:env) { OpenapiContracts::Env.new(operation: operation, response: response) }
+  let(:env) { OpenapiContracts::Env.new(operation:, response:) }
   let(:operation) { doc.operation_for(path, method) }
   let(:stack) { ->(errors) { errors } }
 
