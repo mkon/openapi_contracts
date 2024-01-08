@@ -1,7 +1,7 @@
 RSpec.shared_context 'when using GET /user' do
   let(:response) do
     TestResponse[response_status, response_headers, response_body].tap do |resp|
-      resp.request = TestRequest.build(path, method: method)
+      resp.request = TestRequest.build(path, method:)
     end
   end
   let(:doc) { OpenapiContracts::Doc.parse(FIXTURES_PATH.join('openapi')) }
@@ -32,7 +32,7 @@ end
 RSpec.shared_context 'when using POST /user' do
   let(:response) do
     TestResponse[response_status, response_headers, response_body].tap do |resp|
-      resp.request = TestRequest.build(path, method: method, input: request_body)
+      resp.request = TestRequest.build(path, method:, input: request_body)
       resp.request.set_header('CONTENT_TYPE', content_type)
     end
   end
@@ -77,7 +77,7 @@ end
 RSpec.shared_context 'when using PATCH /comments/{id}' do
   let(:response) do
     TestResponse[response_status, response_headers, response_body].tap do |resp|
-      resp.request = TestRequest.build(path, method: method)
+      resp.request = TestRequest.build(path, method:)
     end
   end
   let(:doc) { OpenapiContracts::Doc.parse(FIXTURES_PATH.join('openapi')) }

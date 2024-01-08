@@ -36,7 +36,7 @@ module OpenapiContracts
     def matchers
       env = Env.new(
         options:   @options,
-        operation: operation,
+        operation:,
         request:   @request,
         response:  @response
       )
