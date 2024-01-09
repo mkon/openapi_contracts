@@ -34,14 +34,14 @@ module OpenapiContracts
     def build_file_list
       list = {@rootfile.relative_path_from(@cwd) => Doc::Pointer[]}
       Dir[File.expand_path('components/**/*.yaml', @cwd)].each do |file|
-        pathname = Pathname(file).relative_path_from(@cwd)
+        pathname = Pathname(file).relative_path_from(@cwd).cleanpath
         pointer = Doc::Pointer.from_path pathname.sub_ext('')
         list.merge! pathname => pointer
       end
       YAML.safe_load_file(@rootfile).fetch('paths') { {} }.each_pair do |k, v|
         next unless v['$ref'] && !v['$ref'].start_with?('#')
 
-        list.merge! Pathname(v['$ref']) => Doc::Pointer['paths', k]
+        list.merge! Pathname(v['$ref']).cleanpath => Doc::Pointer['paths', k]
       end
       list
     end

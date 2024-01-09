@@ -46,7 +46,7 @@ paths:
         '200':
           description: OK
         '400':
-          $ref: components/responses/BadRequest.yaml
+          $ref: ./components/responses/BadRequest.yaml
         '409':
           $ref: '#/components/responses/GenericError'
         '500':
