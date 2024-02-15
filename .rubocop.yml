@@ -36,3 +36,9 @@ Style/PercentLiteralDelimiters:
   PreferredDelimiters:
     '%i': ()
     '%w': ()
+
+# Broken when trying to be compatibale with ruby < 3.3 and >= 3.3
+Naming/BlockForwarding:
+  Enabled: false
+Style/ArgumentsForwarding:
+  Enabled: false
