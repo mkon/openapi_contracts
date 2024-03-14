@@ -30,7 +30,7 @@ module OpenapiContracts
     # file list consists of
     # - root file
     # - all files in components/
-    # - all path files referenced by the root file
+    # - all path & webhook files referenced by the root file
     def build_file_list
       list = {@rootfile.relative_path_from(@cwd) => Doc::Pointer[]}
       Dir[File.expand_path('components/**/*.yaml', @cwd)].each do |file|
@@ -38,16 +38,21 @@ module OpenapiContracts
         pointer = Doc::Pointer.from_path pathname.sub_ext('')
         list.merge! pathname => pointer
       end
-      YAML.safe_load_file(@rootfile).fetch('paths') { {} }.each_pair do |k, v|
-        next unless v['$ref'] && !v['$ref'].start_with?('#')
+      rootdata = YAML.safe_load_file(@rootfile)
+      %w(paths webhooks).each do |name|
+        rootdata.fetch(name) { {} }.each_pair do |k, v|
+          next unless v['$ref'] && !v['$ref'].start_with?('#')
 
-        list.merge! Pathname(v['$ref']).cleanpath => Doc::Pointer['paths', k]
+          list.merge! Pathname(v['$ref']).cleanpath => Doc::Pointer[name, k]
+        end
       end
       list
     end
 
     def file_to_data(pathname, pointer)
       YAML.safe_load_file(@cwd.join(pathname)).tap do |data|
+        break {} unless data.present?
+
         transform_objects!(data, pathname.parent, pointer)
       end
     end

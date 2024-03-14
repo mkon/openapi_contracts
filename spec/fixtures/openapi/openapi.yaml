@@ -37,6 +37,9 @@ components:
                 type: array
                 items:
                   type: object
+webhooks:
+  one:
+    $ref: webhooks/one.yaml
 paths:
   /health:
     get:
