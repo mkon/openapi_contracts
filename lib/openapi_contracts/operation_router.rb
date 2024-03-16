@@ -9,7 +9,6 @@ module OpenapiContracts
       @doc.with_path(actual_path)&.then { |p| return p.with_method(method) }
 
       @dynamic_paths.each do |path|
-        debugger
         next unless path.supports_method?(method)
         next unless m = path.path_regexp.match(actual_path)
 
