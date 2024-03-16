@@ -45,8 +45,9 @@ post:
                   type: object
                   properties:
                     name:
-                      type: string
-                      nullable: true
+                      type:
+                        - string
+                        - null
                     email:
                       $ref: ../components/schemas/Email.yaml
                   additionalProperties: false
