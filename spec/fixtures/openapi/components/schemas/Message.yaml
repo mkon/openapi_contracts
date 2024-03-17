@@ -9,13 +9,15 @@ properties:
     type: object
     properties:
       author:
-        type: object
-        nullable: true
+        type:
+          - object
+          - null
       body:
         type: string
       title:
-        type: string
-        nullable: true
+        type:
+          - string
+          - null
     additionalProperties: false
     required:
       - body

@@ -1,4 +1,4 @@
-openapi: 3.0.2
+openapi: 3.1.0
 info:
   version: 1.0.0
   title: Example.com
@@ -37,6 +37,9 @@ components:
                 type: array
                 items:
                   type: object
+webhooks:
+  one:
+    $ref: webhooks/one.yaml
 paths:
   /health:
     get:

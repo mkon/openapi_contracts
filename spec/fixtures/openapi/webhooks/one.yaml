@@ -1,0 +1,14 @@
+post:
+  operationId: WebhookOne
+  summary: A webhook.
+  requestBody:
+    description: Webhook payload.
+    content:
+      application/json:
+        schema:
+          type: object
+  responses:
+    "204":
+      description: No Content
+    "400":
+      description: Bad Request

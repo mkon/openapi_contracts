@@ -9,8 +9,9 @@ properties:
     type: object
     properties:
       name:
-        type: string
-        nullable: true
+        type:
+          - string
+          - null
       addresses:
         oneOf:
           - type: array
