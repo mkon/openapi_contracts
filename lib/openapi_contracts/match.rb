@@ -1,6 +1,9 @@
 module OpenapiContracts
   class Match
-    DEFAULT_OPTIONS = {request_body: false}.freeze
+    DEFAULT_OPTIONS = {
+      parameters:   false,
+      request_body: false
+    }.freeze
     MIN_REQUEST_ANCESTORS = %w(Rack::Request::Env Rack::Request::Helpers).freeze
     MIN_RESPONSE_ANCESTORS = %w(Rack::Response::Helpers).freeze
 
@@ -42,6 +45,7 @@ module OpenapiContracts
       )
       validators = Validators::ALL.dup
       validators.delete(Validators::HttpStatus) unless @options[:status]
+      validators.delete(Validators::Parameters) unless @options[:parameters]
       validators.delete(Validators::RequestBody) unless @options[:request_body]
       validators.reverse
                 .reduce(->(err) { err }) { |s, m| m.new(s, env) }

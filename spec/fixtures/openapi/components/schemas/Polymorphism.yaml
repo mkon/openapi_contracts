@@ -9,6 +9,8 @@ Pet:
     mapping:
       dog: '#/Dog'
       cat: '#/Cat'
+  required:
+    - type
 
 Cat:
   description: A cat

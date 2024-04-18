@@ -73,6 +73,15 @@ paths:
     get:
       operationId: pets
       summary: Pets
+      parameters:
+        - in: query
+          name: order
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+          required: false
       responses:
         '200':
           description: Ok

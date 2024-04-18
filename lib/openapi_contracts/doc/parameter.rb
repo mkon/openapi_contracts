@@ -14,6 +14,10 @@ module OpenapiContracts
       @in == 'path'
     end
 
+    def in_query?
+      @in == 'query'
+    end
+
     def matches?(value)
       case @spec.dig('schema', 'type')
       when 'integer'
@@ -25,10 +29,18 @@ module OpenapiContracts
       end
     end
 
+    def required?
+      @required == true
+    end
+
+    def schema_for_validation
+      @spec.navigate('schema')
+    end
+
     private
 
     def schemer
-      @schemer ||= Validators::SchemaValidation.validation_schemer(@spec.navigate('schema'))
+      @schemer ||= Validators::SchemaValidation.validation_schemer(schema_for_validation)
     end
 
     def integer_parameter_matches?(value)
