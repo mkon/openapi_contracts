@@ -62,6 +62,12 @@ it { is_expected.to match_openapi_doc($doc, path: '/messages/{id}').with_http_st
 it { is_expected.to match_openapi_doc($doc, request_body: true).with_http_status(:created) }
 ```
 
+* `parameters` can be set to `true` to validate request parameters against the parameter definitions
+
+```ruby
+it { is_expected.to match_openapi_doc($doc, parameters: true) }
+```
+
 Both options can as well be used simultaneously.
 
 ### Without RSpec
