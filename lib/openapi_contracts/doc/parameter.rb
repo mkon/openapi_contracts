@@ -19,14 +19,10 @@ module OpenapiContracts
     end
 
     def matches?(value)
-      case @spec.dig('schema', 'type')
-      when 'integer'
-        integer_parameter_matches?(value)
-      when 'number'
-        number_parameter_matches?(value)
-      else
-        schemer.valid?(value)
-      end
+      converted = OpenapiParameters::Converter.convert(value, schema_for_validation)
+      errors = schemer.validate(converted)
+      # debug errors.to_a here
+      errors.none?
     end
 
     def required?
@@ -41,18 +37,6 @@ module OpenapiContracts
 
     def schemer
       @schemer ||= Validators::SchemaValidation.validation_schemer(schema_for_validation)
-    end
-
-    def integer_parameter_matches?(value)
-      return false unless /^-?\d+$/.match?(value)
-
-      schemer.valid?(value.to_i)
-    end
-
-    def number_parameter_matches?(value)
-      return false unless /^-?(\d+\.)?\d+$/.match?(value)
-
-      schemer.valid?(value.to_f)
     end
   end
 end

@@ -23,6 +23,29 @@ RSpec.describe OpenapiContracts::Validators::Parameters do
                     type: 'string',
                     enum: %w(asc desc)
                   }
+                },
+                {
+                  in:       'query',
+                  name:     'page',
+                  required: false,
+                  schema:   {
+                    type: 'integer'
+                  }
+                },
+                {
+                  in:       'query',
+                  name:     'settings',
+                  style:    'deepObject',
+                  required: false,
+                  schema:   {
+                    type:       'object',
+                    properties: {
+                      page: {
+                        type: 'integer'
+                      }
+                    },
+                    required:   ['page']
+                  }
                 }
               ],
               responses:  {
@@ -73,6 +96,33 @@ RSpec.describe OpenapiContracts::Validators::Parameters do
 
     it 'has errors' do
       expect(subject.call).to contain_exactly '"bad" is not a valid value for the query parameter "order"'
+    end
+  end
+
+  context 'when passing invalid integer parameter' do
+    let(:path) { '/pets?page=word' }
+    let(:required) { false }
+
+    it 'has errors' do
+      expect(subject.call).to contain_exactly '"word" is not a valid value for the query parameter "page"'
+    end
+  end
+
+  context 'when passing valid objects' do
+    let(:path) { '/pets?settings[page]=1' }
+    let(:required) { false }
+
+    it 'has no errors' do
+      expect(subject.call).to be_empty
+    end
+  end
+
+  context 'when passing invalid objects' do
+    let(:path) { '/pets?settings[page]=one' }
+    let(:required) { false }
+
+    it 'has errors' do
+      expect(subject.call).to contain_exactly '{"page"=>"one"} is not a valid value for the query parameter "settings"'
     end
   end
 end

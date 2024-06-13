@@ -9,7 +9,7 @@ module OpenapiContracts::Validators
       operation.parameters.select(&:in_query?).each do |parameter|
         if request.GET.key?(parameter.name)
           value = request.GET[parameter.name]
-          unless parameter.matches?(request.GET[parameter.name])
+          unless parameter.matches?(value)
             @errors << "#{value.inspect} is not a valid value for the query parameter #{parameter.name.inspect}"
           end
         elsif parameter.required?
