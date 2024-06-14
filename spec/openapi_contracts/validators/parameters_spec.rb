@@ -125,4 +125,13 @@ RSpec.describe OpenapiContracts::Validators::Parameters do
       expect(subject.call).to contain_exactly '{"page"=>"one"} is not a valid value for the query parameter "settings"'
     end
   end
+
+  context 'when passing non-objects as object' do
+    let(:path) { '/pets?settings=false' }
+    let(:required) { false }
+
+    it 'has errors' do
+      expect(subject.call).to contain_exactly '"false" is not a valid value for the query parameter "settings"'
+    end
+  end
 end

@@ -19,8 +19,7 @@ module OpenapiContracts
     end
 
     def matches?(value)
-      converted = OpenapiParameters::Converter.convert(value, schema_for_validation)
-      errors = schemer.validate(converted)
+      errors = schemer.validate(convert_value(value))
       # debug errors.to_a here
       errors.none?
     end
@@ -34,6 +33,12 @@ module OpenapiContracts
     end
 
     private
+
+    def convert_value(original)
+      OpenapiParameters::Converter.convert(original, schema_for_validation)
+    rescue StandardError
+      original
+    end
 
     def schemer
       @schemer ||= Validators::SchemaValidation.validation_schemer(schema_for_validation)
