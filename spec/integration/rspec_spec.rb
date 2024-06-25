@@ -153,4 +153,27 @@ RSpec.describe 'RSpec integration' do
 
     it { is_expected.to_not match_openapi_doc(doc, path: '/user', request_body: true).with_http_status(:ok) }
   end
+
+  context 'when input parameters are validated' do
+    let(:path) { '/pets?order=asc' }
+    let(:response_json) do
+      [
+        {
+          type: 'cat'
+        },
+        {
+          type: 'dog'
+        }
+      ]
+    end
+    let(:response_status) { 200 }
+
+    it { is_expected.to match_openapi_doc(doc, parameters: true) }
+
+    context 'when input parameters are not valid' do
+      let(:path) { '/pets?order=wrong' }
+
+      it { is_expected.to_not match_openapi_doc(doc, parameters: true) }
+    end
+  end
 end

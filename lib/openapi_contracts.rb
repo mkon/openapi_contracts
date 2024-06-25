@@ -7,6 +7,7 @@ require 'active_support/core_ext/string'
 require 'rubygems/version'
 
 require 'json_schemer'
+require 'openapi_parameters'
 require 'rack'
 require 'yaml'
 

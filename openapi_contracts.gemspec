@@ -15,12 +15,13 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'activesupport', '>= 6.1', '< 8'
   s.add_dependency 'json_schemer', '>= 2', '< 2.2'
+  s.add_dependency 'openapi_parameters', '>= 0.3.3', '< 0.4'
   s.add_dependency 'rack', '>= 2.0.0'
 
   s.add_development_dependency 'json_spec', '~> 1.1.5'
   s.add_development_dependency 'rspec', '~> 3.13.0'
-  s.add_development_dependency 'rubocop', '1.60.2'
-  s.add_development_dependency 'rubocop-rspec', '2.26.1'
+  s.add_development_dependency 'rubocop', '1.64.1'
+  s.add_development_dependency 'rubocop-rspec', '2.31.0'
   s.add_development_dependency 'simplecov', '~> 0.22.0'
   s.metadata['rubygems_mfa_required'] = 'true'
 end
