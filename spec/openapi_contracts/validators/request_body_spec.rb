@@ -28,9 +28,19 @@ RSpec.describe OpenapiContracts::Validators::RequestBody do
       }
     end
 
+    let(:error_disallowed_additional_property) do
+      # The exact wording of the error messages changed after version 2.2 of json_schemer gem
+      # https://github.com/davishmcclurg/json_schemer/compare/v2.1.1...v2.3.0#diff-fbfde32a749d1a55202956b04373a19b8612259773aff9e2dadd525215c4a7f5R303
+      if Gem.loaded_specs['json_schemer'].version < Gem::Version.create('2.2')
+        'object property at `/data/id` is not defined and schema does not allow additional properties'
+      else
+        'object property at `/data/id` is a disallowed additional property'
+      end
+    end
+
     it 'returns all errors' do
       expect(subject.call).to contain_exactly(
-        'object property at `/data/id` is not defined and schema does not allow additional properties',
+        error_disallowed_additional_property,
         'null at `/data/type` is not a string',
         'object at `/data/attributes` is missing required properties: email'
       )
