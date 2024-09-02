@@ -54,6 +54,18 @@ paths:
           $ref: '#/components/responses/GenericError'
         '500':
           description: Server Error
+  /html:
+    get:
+      operationId: get_html
+      summary: HTML test
+      responses:
+        '200':
+          description: Empty string
+          content:
+            text/html:
+              schema:
+                type: string
+                maxLength: 1
   /numbers:
     get:
       operationId: numbers

@@ -36,4 +36,5 @@ module OpenapiContracts
 
   PayloadParser.register(%r{(/|\+)json$}, ->(raw) { JSON(raw) })
   PayloadParser.register('application/x-www-form-urlencoded', ->(raw) { Rack::Utils.parse_nested_query(raw) })
+  PayloadParser.register(%r{^text/}, ->(raw) { raw })
 end

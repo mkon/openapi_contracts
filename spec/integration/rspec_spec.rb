@@ -176,4 +176,24 @@ RSpec.describe 'RSpec integration' do
       it { is_expected.to_not match_openapi_doc(doc, parameters: true) }
     end
   end
+
+  context 'when validating html responses' do
+    let(:method) { 'GET' }
+    let(:path) { '/html' }
+    let(:response_body) { ' ' }
+    let(:response_headers) do
+      {
+        'Content-Type' => 'text/html;charset=utf-8',
+        'X-Request-Id' => 'some-request-id'
+      }
+    end
+
+    it { is_expected.to match_openapi_doc(doc).with_http_status(:ok) }
+
+    context 'when the response is too long' do
+      let(:response_body) { 'too long' }
+
+      it { is_expected.to_not match_openapi_doc(doc).with_http_status(:ok) }
+    end
+  end
 end

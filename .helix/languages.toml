@@ -1,6 +1,11 @@
+[language-server.solargraph]
+config.diagnostics=false
+config.formatting=false
+
 [[language]]
 name = "ruby"
-auto-format = true
+auto-format = false
 language-servers = [
-  { name = "rubocop" }
+  { name = "rubocop" },
+  { name="solargraph" }
 ]
