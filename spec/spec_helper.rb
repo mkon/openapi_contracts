@@ -1,8 +1,10 @@
-require 'simplecov'
-SimpleCov.start do
-  add_filter '/spec'
+if ENV['COVERAGE']
+  require 'simplecov'
+  SimpleCov.start do
+    add_filter '/spec'
+  end
+  SimpleCov.minimum_coverage 99
 end
-SimpleCov.minimum_coverage 99
 
 require 'rubygems'
 require 'bundler'
