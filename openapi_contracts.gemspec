@@ -13,7 +13,7 @@ Gem::Specification.new do |s|
 
   s.files = Dir['lib/**/*', 'README.md']
 
-  s.add_dependency 'activesupport', '>= 6.1', '< 8'
+  s.add_dependency 'activesupport', '>= 6.1', '< 8.1'
   s.add_dependency 'json_schemer', '>= 2', '< 2.4'
   s.add_dependency 'openapi_parameters', '>= 0.3.3', '< 0.4'
   s.add_dependency 'rack', '>= 2.0.0'
