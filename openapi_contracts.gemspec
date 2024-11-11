@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
   s.homepage    = 'https://github.com/mkon/openapi_contracts'
   s.summary     = 'Openapi schemas as API contracts'
   s.license     = 'MIT'
-  s.required_ruby_version = '>= 3.1', '< 3.4'
+  s.required_ruby_version = '>= 3.2', '< 3.4'
 
   s.files = Dir['lib/**/*', 'README.md']
 
