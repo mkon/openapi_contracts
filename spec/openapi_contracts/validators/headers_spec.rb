@@ -13,6 +13,16 @@ RSpec.describe OpenapiContracts::Validators::Headers do
     end
   end
 
+  context 'when header has multiple values' do
+    before do
+      response_headers['X-Request-Id'] = %w(val1 val2)
+    end
+
+    it 'has no errors' do
+      expect(subject.call).to be_empty
+    end
+  end
+
   context 'when missing a header' do
     before do
       response_headers.delete('X-Request-Id')
