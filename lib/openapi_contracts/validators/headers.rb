@@ -14,7 +14,7 @@ module OpenapiContracts::Validators
         # support multi-value headers, so we join them into a single string.
         #
         # @see https://github.com/rack/rack/issues/1598
-        value = value.join('\n') if value.is_a?(Array)
+        value = value.join("\n") if value.is_a?(Array)
 
         if value.blank?
           @errors << "Missing header #{header.name}" if header.required?
