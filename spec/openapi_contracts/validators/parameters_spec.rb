@@ -122,7 +122,7 @@ RSpec.describe OpenapiContracts::Validators::Parameters do
     let(:required) { false }
 
     it 'has errors' do
-      expect(subject.call).to contain_exactly '{"page"=>"one"} is not a valid value for the query parameter "settings"'
+      expect(subject.call).to contain_exactly "#{{"page" => "one"}.inspect} is not a valid value for the query parameter \"settings\""
     end
   end
 
