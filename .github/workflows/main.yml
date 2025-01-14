@@ -12,9 +12,12 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        activesupport: ['6.1', '7.1', '7.2', '8.0']
+        activesupport: ['6.1', '7.2', '8.0']
         json_schemer: ['2.1', '2.2', '2.3']
         ruby: ['3.2', '3.3', '3.4']
+        exclude:
+        - activesupport: '6.1'
+          ruby: '3.4'
     env:
       ACTIVESUPPORT: '${{ matrix.activesupport }}'
       COVERAGE: 'true'
