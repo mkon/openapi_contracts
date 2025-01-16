@@ -27,10 +27,13 @@ RSpec.describe 'RSpec integration' do
     let(:response_json) do
       [
         {
-          type: 'cat'
+          type: 'cat',
+          age:  2
         },
         {
-          type: 'dog'
+          type:  'dog',
+          age:   3,
+          leash: false
         }
       ]
     end
@@ -58,6 +61,20 @@ RSpec.describe 'RSpec integration' do
       end
 
       it { is_expected.to_not match_openapi_doc(doc) }
+    end
+
+    context 'when using compound objects' do
+      let(:path) { '/dog' }
+      let(:response_status) { 200 }
+      let(:response_json) do
+        {
+          type:  'dog',
+          age:   3,
+          leash: true
+        }
+      end
+
+      it { is_expected.to match_openapi_doc(doc) }
     end
   end
 
@@ -159,10 +176,13 @@ RSpec.describe 'RSpec integration' do
     let(:response_json) do
       [
         {
-          type: 'cat'
+          type: 'cat',
+          age:  2
         },
         {
-          type: 'dog'
+          type:  'dog',
+          age:   3,
+          leash: false
         }
       ]
     end

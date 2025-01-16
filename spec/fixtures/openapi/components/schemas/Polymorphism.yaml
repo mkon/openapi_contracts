@@ -1,27 +1,35 @@
 Pet:
   type: object
-  properties:
-    type:
-      type: string
-      enum: [cat, dog]
   discriminator:
     propertyName: type
     mapping:
       dog: '#/Dog'
       cat: '#/Cat'
+
+Animal:
+  properties:
+    type:
+      type: string
+      enum: [cat, dog]
+    age:
+      type: number
   required:
+    - age
     - type
 
 Cat:
   description: A cat
   allOf:
-    - $ref: '#/Pet'
+    - $ref: '#/Animal'
+  unevaluatedProperties: false
 
 Dog:
   description: A dog
   allOf:
-    - $ref: '#/Pet'
+    - $ref: '#/Animal'
     - type: object
       properties:
         leash:
           type: boolean
+      required: [leash]
+  unevaluatedProperties: false

@@ -104,6 +104,17 @@ paths:
                 items:
                   oneOf:
                     - $ref: 'components/schemas/Polymorphism.yaml#/Pet'
+  /dog:
+    get:
+      operationId: dog
+      summary: Dog
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: 'components/schemas/Polymorphism.yaml#/Dog'
   /comments/{id}:
     $ref: 'paths/comment.yaml'
   /user:
