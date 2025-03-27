@@ -42,7 +42,7 @@ RSpec.describe OpenapiContracts::Validators::Headers do
 
     it 'returns the error' do
       expect(subject.call).to eq [
-        'Header x-request-id does not match'
+        'Header x-request-id validation error: value at root is not a string (value: 1)'
       ]
     end
   end
