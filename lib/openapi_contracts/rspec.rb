@@ -29,7 +29,9 @@ RSpec::Matchers.define :match_openapi_doc do |doc, options = {}| # rubocop:disab
 
   def with_http_status(status)
     if status.is_a? Symbol
-      @status = Rack::Utils::SYMBOL_TO_STATUS_CODE[status]
+      @status = Rack::Utils::SYMBOL_TO_STATUS_CODE.fetch(status) do
+        raise ArgumentError, "Unknown status #{status.inspect}"
+      end
     else
       @status = status
     end
