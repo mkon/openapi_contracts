@@ -41,7 +41,8 @@ RSpec.describe OpenapiContracts::Validators::Parameters do
                     type:       'object',
                     properties: {
                       page: {
-                        type: 'integer'
+                        type:    'string',
+                        pattern: '^\d+$'
                       }
                     },
                     required:   ['page']
