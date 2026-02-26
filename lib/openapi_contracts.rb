@@ -21,11 +21,9 @@ module OpenapiContracts
   autoload :PayloadParser,   'openapi_contracts/payload_parser'
   autoload :Validators,      'openapi_contracts/validators'
 
-  include ActiveSupport::Configurable
+  mattr_accessor :collect_coverage, default: false
 
   Env = Struct.new(:operation, :options, :request, :response, keyword_init: true)
-
-  config_accessor(:collect_coverage) { false }
 
   module_function
 
