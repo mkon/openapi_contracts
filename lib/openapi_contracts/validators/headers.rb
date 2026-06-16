@@ -19,6 +19,9 @@ module OpenapiContracts::Validators
         if value.blank?
           @errors << "Missing header #{header.name}" if header.required?
         else
+          # Header values arrive as strings; deserialize to the schema's type
+          # (per `style: simple`) before validating, as Doc::Parameter does.
+          value = OpenapiParameters::Converter.convert(value, header.schema)
           schemer = JSONSchemer.schema(header.schema)
           unless schemer.valid?(value)
             validation_errors = schemer.validate(value).to_a

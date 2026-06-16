@@ -97,6 +97,10 @@ paths:
       responses:
         '200':
           description: Ok
+          headers:
+            x-rate-limit:
+              schema:
+                type: integer
           content:
             application/json:
               schema:
