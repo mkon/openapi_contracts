@@ -70,4 +70,26 @@ RSpec.describe OpenapiContracts::Validators::Headers do
       end
     end
   end
+
+  context 'with a non-string header type (style: simple)' do
+    include_context 'when using GET /pets'
+
+    context 'when the value parses to the declared type' do
+      before { response_headers['x-rate-limit'] = '300' }
+
+      it 'deserializes the value and has no errors' do
+        expect(subject.call).to be_empty
+      end
+    end
+
+    context 'when the value does not parse to the declared type' do
+      before { response_headers['x-rate-limit'] = 'not-a-number' }
+
+      it 'returns the error' do
+        expect(subject.call).to eq [
+          'Header x-rate-limit validation error: value at root is not an integer (value: not-a-number)'
+        ]
+      end
+    end
+  end
 end
