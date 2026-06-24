@@ -11,11 +11,9 @@ module OpenapiContracts
     end
 
     def headers
-      return @headers if instance_variable_defined? :@headers
-
-      @headers = @schema.fetch('headers', {}).map do |(key, val)|
-        Doc::Header.new(key, val)
-      end
+      @headers ||= Array.wrap(
+        @schema.navigate('headers')&.each&.map { |key, schema| Doc::Header.new(key, schema.to_h) }
+      )
     end
 
     def schema_for(media_type)

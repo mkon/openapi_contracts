@@ -1,0 +1,4 @@
+description: Distributed trace identifier.
+schema:
+  type: string
+  format: uuid
