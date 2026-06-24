@@ -59,5 +59,24 @@ RSpec.describe OpenapiContracts::Doc::Response do
         it { is_expected.to be_nil }
       end
     end
+
+    describe '#headers' do
+      context 'when a header is defined inline' do
+        subject(:header) { response.headers.find { |h| h.name == 'x-request-id' } }
+
+        it 'exposes its schema' do
+          expect(header.schema).to eq('type' => 'string')
+          expect(header.required?).to be true
+        end
+      end
+
+      context 'when a header is defined via $ref' do
+        subject(:header) { response.headers.find { |h| h.name == 'x-trace-id' } }
+
+        it 'follows the ref and exposes the referenced schema' do
+          expect(header.schema).to eq('type' => 'string', 'format' => 'uuid')
+        end
+      end
+    end
   end
 end

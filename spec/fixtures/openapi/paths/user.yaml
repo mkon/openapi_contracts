@@ -12,6 +12,8 @@ get:
           schema:
             type: string
           required: true
+        x-trace-id:
+          $ref: ../components/headers/TraceId.yaml
       content:
         application/json:
           schema:
